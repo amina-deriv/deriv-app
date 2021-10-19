@@ -214,6 +214,7 @@ export default class CashierStore extends BaseStore {
     @observable should_percentage_reset = false;
     @observable percentage = 0;
     @observable is_withdraw_confirmed = false;
+    @observable show_p2p_in_cashier_default = false;
 
     @observable config = {
         account_transfer: new ConfigAccountTransfer(),
@@ -271,6 +272,21 @@ export default class CashierStore extends BaseStore {
     }
 
     @action.bound
+    showP2pInCashierDefault() {
+        const is_p2p_restricted = this.p2p_advertiser_error === 'RestrictedCountry';
+        const has_usd_currency = this.root_store.client.account_list.some(account => account.title === 'USD');
+        const has_user_fiat_currency = this.root_store.client.account_list.some(
+            account => !isCryptocurrency(account.title) && account.title !== 'Real'
+        );
+
+        if (is_p2p_restricted || this.root_store.client.is_virtual || (has_user_fiat_currency && !has_usd_currency)) {
+            this.show_p2p_in_cashier_default = false;
+        } else {
+            this.show_p2p_in_cashier_default = true;
+        }
+    }
+
+    @action.bound
     attachCashierToMenu() {
         if (!this.has_set_currency) {
             this.setHasSetCurrency();
@@ -305,9 +321,10 @@ export default class CashierStore extends BaseStore {
 
     @action.bound
     setHasSetCurrency() {
-        this.has_set_currency = this.root_store.client.account_list
-            .filter(account => !account.is_virtual)
-            .some(account => account.title !== 'Real');
+        this.has_set_currency =
+            this.root_store.client.account_list
+                .filter(account => !account.is_virtual)
+                .some(account => account.title !== 'Real') || !this.root_store.client.has_active_real_account;
     }
 
     @action.bound
@@ -510,7 +527,12 @@ export default class CashierStore extends BaseStore {
     @action.bound
     async getAdvertizerError() {
         const advertiser_info = await this.WS.authorized.p2pAdvertiserInfo();
-        this.p2p_advertiser_error = getPropertyValue(advertiser_info, ['error', 'code']);
+        this.setP2pAdvertiserError(getPropertyValue(advertiser_info, ['error', 'code']));
+    }
+
+    @action.bound
+    setP2pAdvertiserError(value) {
+        this.p2p_advertiser_error = value;
     }
 
     @action.bound
