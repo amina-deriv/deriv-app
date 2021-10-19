@@ -12,6 +12,7 @@ const RadioButtonGroup = ({
     item_count,
     description,
     has_fiat,
+    deposit_warning_msg,
 }) => {
     const [is_currency_selected, setIsCurrencySelected] = useState(false);
 
@@ -44,6 +45,9 @@ const RadioButtonGroup = ({
             >
                 {children}
             </div>
+            {is_fiat && !is_currency_selected && deposit_warning_msg && (
+                <p className='currency-selector__description'>{deposit_warning_msg}</p>
+            )}
             {is_fiat && is_currency_selected && <p className='currency-selector__description'>{description}</p>}
         </div>
     );

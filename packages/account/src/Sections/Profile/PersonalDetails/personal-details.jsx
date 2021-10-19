@@ -352,7 +352,6 @@ export class PersonalDetailsForm extends React.Component {
         WS.wait('landing_company', 'get_account_status', 'get_settings').then(() => {
             const { is_dashboard } = this.context;
             const { getChangeableFields, is_virtual, account_settings, is_mf, is_eu } = this.props;
-
             // Convert to boolean
             account_settings.email_consent = !!account_settings.email_consent;
             const hidden_settings = [

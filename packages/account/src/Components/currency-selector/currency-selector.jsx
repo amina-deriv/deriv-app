@@ -108,9 +108,14 @@ const CurrencySelector = ({
         return localize('Next');
     };
 
+    const deposit_warning_msg = is_eu ? (
+        <Localize i18n_default_text='You will not be able to change currency once you have made a deposit.' />
+    ) : (
+        ''
+    );
+
     const description = React.useMemo(() => {
         const dmt5_label = is_eu ? localize('CFDs') : localize('DMT5');
-
         // TODO: uncomment when real account is launched
         // if (is_dxtrade_allowed && is_mt5_allowed) {
         //     return (
@@ -129,17 +134,21 @@ const CurrencySelector = ({
         // }
 
         // TODO: remove this block when real account is launched
-        if (is_mt5_allowed) {
+        if (is_eu) {
+            return (
+                <Localize i18n_default_text='You will not be able to change currency once you have made a deposit.' />
+            );
+        } else if (is_mt5_allowed) {
             return (
                 <Localize
                     i18n_default_text='You are limited to one fiat account. You won’t be able to change your account currency if you have already made your first deposit or created a real {{dmt5_label}} account.'
                     values={{ dmt5_label }}
                 />
             );
-        }
-        return (
-            <Localize i18n_default_text='You are limited to one fiat account. You won’t be able to change your account currency if you have already made your first deposit.' />
-        );
+        } else
+            return (
+                <Localize i18n_default_text='You are limited to one fiat account. You won’t be able to change your account currency if you have already made your first deposit.' />
+            );
     }, [is_eu, is_mt5_allowed]);
 
     return (
@@ -177,6 +186,7 @@ const CurrencySelector = ({
                                                 item_count={reorderCurrencies(fiat).length}
                                                 description={description}
                                                 has_fiat={should_disable_fiat && has_fiat}
+                                                deposit_warning_msg={deposit_warning_msg}
                                             >
                                                 {reorderCurrencies(fiat).map(currency => (
                                                     <Field
