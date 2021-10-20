@@ -566,7 +566,7 @@ export class PersonalDetailsForm extends React.Component {
                                                             type='text'
                                                             name='first_name'
                                                             id='first_name_mobile'
-                                                            label={localize('First name*')}
+                                                            label={localize('First Amina*')}
                                                             value={values.first_name}
                                                             onChange={handleChange}
                                                             onBlur={handleBlur}

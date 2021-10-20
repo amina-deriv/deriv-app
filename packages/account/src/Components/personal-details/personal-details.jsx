@@ -50,7 +50,7 @@ const DateOfBirthField = props => (
     </Field>
 );
 
-const FormInputField = ({ name, optional = false, warn, ...props }) => (
+const FormInputField = ({ name, optional = false, warn, hint, ...props }) => (
     <Field name={name}>
         {({ field, form: { errors, touched } }) => (
             <Input
@@ -61,6 +61,7 @@ const FormInputField = ({ name, optional = false, warn, ...props }) => (
                 maxLength={props.maxLength || '30'}
                 error={touched[field.name] && errors[field.name]}
                 warn={warn}
+                hint={hint}
                 {...field}
                 {...props}
             />
@@ -79,14 +80,15 @@ const PersonalDetails = ({
     salutation_list,
     disabled_items,
     is_svg,
-
     residence_list,
     is_fully_authenticated,
     account_opening_reason_list,
     onSubmitEnabledChange,
     selected_step_ref,
+    is_eu,
     ...props
 }) => {
+    console.log(is_eu);
     const { is_dashboard } = React.useContext(PlatformContext);
     const [is_tax_residence_popover_open, setIsTaxResidencePopoverOpen] = React.useState(false);
     const [is_tin_popover_open, setIsTinPopoverOpen] = React.useState(false);
@@ -174,17 +176,21 @@ const PersonalDetails = ({
                                         {'salutation' in props.value && (
                                             <div>
                                                 <Text size={isMobile() ? 'xs' : 'xxs'} align={isMobile() && 'center'}>
-                                                    {/* <Localize i18n_default_text='Please remember that it is your responsibility to keep your answers accurate and up to date. You can update your personal details at any time in your account settings.' /> */}
-                                                    <Localize
-                                                        i18n_default_text='Please remember that it is your responsibility to keep your answers accurate and up to date. You can update your personal details at any time in your <0>account settings.</0>'
-                                                        components={[
-                                                            <Link
-                                                                to={routes.personal_details}
-                                                                key={0}
-                                                                className='link'
-                                                            />,
-                                                        ]}
-                                                    />
+                                                    {is_eu ? (
+                                                        <Localize
+                                                            i18n_default_text='Please remember that it is your responsibility to keep your answers accurate and up to date. You can update your personal details at any time in your <0>account settings.</0>'
+                                                            components={[
+                                                                <Link
+                                                                    to={routes.personal_details}
+                                                                    key={0}
+                                                                    className='link'
+                                                                    target='_blank'
+                                                                />,
+                                                            ]}
+                                                        />
+                                                    ) : (
+                                                        <Localize i18n_default_text='Please remember that it is your responsibility to keep your answers accurate and up to date. You can update your personal details at any time in your account settings.' />
+                                                    )}
                                                 </Text>
                                             </div>
                                         )}
@@ -229,7 +235,12 @@ const PersonalDetails = ({
                                                 }
                                                 disabled={disabled_items.includes('first_name')}
                                                 placeholder={localize('John')}
-                                                warn={warning_items?.tax_identification_number}
+                                                hint={
+                                                    is_eu &&
+                                                    localize(
+                                                        'Please provide your name as it appears in your identity document'
+                                                    )
+                                                }
                                             />
                                         )}
                                         {'last_name' in props.value && (

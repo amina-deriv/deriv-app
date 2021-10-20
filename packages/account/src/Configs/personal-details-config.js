@@ -172,7 +172,7 @@ const personal_details_config = ({ residence_list, account_settings, is_dashboar
 };
 
 const personalDetailsConfig = (
-    { upgrade_info, real_account_signup_target, residence_list, account_settings },
+    { upgrade_info, real_account_signup_target, residence_list, account_settings, is_eu },
     PersonalDetails,
     is_dashboard = false
 ) => {
@@ -192,6 +192,7 @@ const personalDetailsConfig = (
                 transformConfig(config, { real_account_signup_target })
             ),
             is_svg: upgrade_info?.can_upgrade_to === 'svg',
+            is_eu: is_eu,
             account_opening_reason_list: [
                 {
                     text: localize('Hedging'),

@@ -241,7 +241,8 @@ const AccountWizard = props => {
             .then(response => {
                 props.setIsRiskWarningVisible(false);
                 if (props.real_account_signup_target === 'maltainvest') {
-                    props.onFinishSuccess(response.new_account_maltainvest.currency.toLowerCase());
+                    console.log('amina');
+                    // props.onFinishSuccess(response.new_account_maltainvest.currency.toLowerCase());
                 } else if (props.real_account_signup_target === 'samoa') {
                     props.onOpenWelcomeModal(response.new_account_samoa.currency.toLowerCase());
                 } else {
@@ -328,6 +329,7 @@ AccountWizard.propTypes = {
     realAccountSignup: PropTypes.func,
     residence: PropTypes.string,
     residence_list: PropTypes.array,
+    is_eu: PropTypes.bool,
 };
 
 export default connect(({ client, ui }) => ({
@@ -346,4 +348,5 @@ export default connect(({ client, ui }) => ({
     refreshNotifications: client.refreshNotifications,
     fetchFinancialAssessment: client.fetchFinancialAssessment,
     financial_assessment: client.financial_assessment,
+    is_eu: client.is_eu,
 }))(AccountWizard);

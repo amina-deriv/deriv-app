@@ -254,6 +254,7 @@ class CFDDashboard extends React.Component {
             disableApp,
             mt5_verification_code,
             dxtrade_verification_code,
+            openRealAccountSignup,
         } = this.props;
 
         const should_show_missing_real_account =
@@ -375,6 +376,7 @@ class CFDDashboard extends React.Component {
                                                     can_have_more_real_synthetic_mt5={can_have_more_real_synthetic_mt5}
                                                     residence={residence}
                                                     residence_list={residence_list}
+                                                    openRealAccountSignup={openRealAccountSignup}
                                                 />
                                             </React.Fragment>
                                         </div>
@@ -626,5 +628,6 @@ export default withRouter(
         toggleResetTradingPasswordModal: ui.setResetTradingPasswordModalOpen,
         mt5_verification_code: client.verification_code.trading_platform_mt5_password_reset,
         dxtrade_verification_code: client.verification_code.trading_platform_dxtrade_password_reset,
+        openRealAccountSignup: ui.openRealAccountSignup,
     }))(CFDDashboard)
 );

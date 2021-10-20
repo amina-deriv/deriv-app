@@ -49,6 +49,7 @@ const CFDRealAccountDisplay = ({
     can_have_more_real_synthetic_mt5,
     residence,
     residence_list,
+    openRealAccountSignup,
 }) => {
     const should_show_trade_servers =
         is_logged_in &&
@@ -101,7 +102,8 @@ const CFDRealAccountDisplay = ({
     };
     const onSelectRealFinancial = () => {
         if (is_eu && !has_maltainvest_account) {
-            openAccountNeededModal('maltainvest', localize('Deriv Multipliers'), localize('real CFDs'));
+            // openAccountNeededModal('maltainvest', localize('Deriv Multipliers'), localize('real CFDs'));
+            openRealAccountSignup('maltainvest');
         } else {
             onSelectAccount({ type: 'financial', category: 'real' });
         }
