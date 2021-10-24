@@ -1432,4 +1432,77 @@
     }
 }
 
+//
+
+//
+
+.mul-cfd-compare-table-row,
+.mul-cfd-compare-table-row-items {
+    grid-template-columns: 50% 50%;
+    padding-top: 31px;
+    position: relative;
+
+    @include desktop {
+        justify-content: center;
+        grid-template-columns: 22% 38.5% 38.5%;
+        padding-top: 0;
+    }
+
+    .mul-cfd-compare-table-col:first-of-type {
+        position: absolute;
+
+        @include desktop {
+            position: static;
+        }
+    }
+}
+.mul-cfd-compare-table-row-items {
+    @include desktop {
+        grid-template-columns: 22% 38.5% 38.5%;
+    }
+
+    .mul-cfd-compare-table-col {
+        justify-content: initial;
+
+        @include mobile {
+            display: flex;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+        @include desktop {
+            justify-content: center;
+        }
+
+        .mul-cfd-compare-table-item {
+            @include mobile {
+                width: 33.3%;
+                height: 4.8rem;
+                justify-content: flex-start;
+                padding: 0;
+            }
+        }
+    }
+}
+
+.mul-cfd-compare-table-col {
+    padding: 1.6rem 0;
+    justify-content: center;
+}
+
+.mul-cfd-compare-table-item {
+    padding: 0 0.7rem;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    @include desktop {
+        padding: 0.8rem;
+    }
+
+    &__text {
+        padding-top: 0.4rem;
+    }
+}
+
 /* stylelint-enable */
