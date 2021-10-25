@@ -135,24 +135,24 @@ const ModalContent = ({}) => {
             <ThemedScrollbars
                 className='cfd-compare-accounts'
                 style={{
-                    '--cfd-compare-accounts-template-columns': '0.5fr 0.5fr 10fr',
+                    '--cfd-compare-accounts-template-columns': '1.5fr 2fr 3fr',
                 }}
             >
                 <div className='cfd-compare-accounts__table-wrapper'>
                     <Table className='cfd-compare-accounts__table'>
                         <Table.Header>
-                            {/* <Table.Row className='cfd-compare-accounts__table-row'> */}
-                            <DesktopWrapper>
-                                <Table.Head />
-                            </DesktopWrapper>
+                            <Table.Row className='cfd-compare-accounts__table-row'>
+                                <DesktopWrapper>
+                                    <Table.Head />
+                                </DesktopWrapper>
 
-                            <Table.Head>
-                                <Icon icon='IcCrossSolid' size={48} />
-                            </Table.Head>
-                            <Table.Head>
-                                <Icon icon='IcPercentSolid' size={48} />
-                            </Table.Head>
-                            {/* </Table.Row> */}
+                                <Table.Head>
+                                    <Icon icon='IcCrossSolid' size={48} />
+                                </Table.Head>
+                                <Table.Head>
+                                    <Icon icon='IcPercentSolid' size={48} />
+                                </Table.Head>
+                            </Table.Row>
                         </Table.Header>
                         <Table.Body>
                             {data.map((row, rowIndex) => (
