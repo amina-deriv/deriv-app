@@ -30,7 +30,7 @@ const data = [
                 icon: 'IcBrandDmt5',
             },
         ],
-        has_items: false,
+        has_icons: false,
     },
 
     {
@@ -38,40 +38,40 @@ const data = [
         multiplier: [
             {
                 title: localize('Synthetics'),
-                icon: 'IcMt5Synthetics',
+                icon: 'IcBrandDtrader',
             },
             {
                 title: localize('Forex'),
-                icon: 'IcMt5Forex',
+                icon: 'IcBrandDtrader',
             },
         ],
         cfd: [
             {
                 title: localize('Synthetics'),
-                icon: 'IcMt5Synthetics',
+                icon: 'IcBrandDtrader',
             },
             {
                 title: localize('Forex'),
-                icon: 'IcMt5Forex',
+                icon: 'IcBrandDtrader',
             },
-            // {
-            //     title: localize('Stocks'),
-            //     icon: 'IcMt5Stocks',
-            // },
-            // {
-            //     title: localize('Indices'),
-            //     icon: 'IcMt5Indices',
-            // },
-            // {
-            //     title: localize('Commodities'),
-            //     icon: 'IcMt5Commodities',
-            // },
-            // {
-            //     title: localize('Cryptos'),
-            //     icon: 'IcMt5Cryptos',
-            // },
+            {
+                title: localize('Stocks'),
+                icon: 'IcBrandDtrader',
+            },
+            {
+                title: localize('Indices'),
+                icon: 'IcBrandDtrader',
+            },
+            {
+                title: localize('Commodities'),
+                icon: 'IcBrandDtrader',
+            },
+            {
+                title: localize('Cryptos'),
+                icon: 'IcBrandDtrader',
+            },
         ],
-        has_items: true,
+        has_icons: true,
     },
     {
         title: localize('Assets'),
@@ -79,7 +79,7 @@ const data = [
         cfd: localize(
             '5+ Synthetic indices 30+Forex pairs 40+ Stocks 10+ Stock indices 10+ Cryptocurrency/fiat pairs 10+Commodities'
         ),
-        has_items: false,
+        has_icons: false,
     },
 ];
 const Items = ({ items }) =>
@@ -98,9 +98,9 @@ const Items = ({ items }) =>
         </div>
     ));
 
-const Row = ({ title, multiplier, cfd, has_items }) => (
+const Row = ({ title, multiplier, cfd, has_icons }) => (
     <>
-        <Table.Row className={has_items ? 'mul-cfd-compare-table-row-items' : 'mul-cfd-compare-table-row'}>
+        <Table.Row className={has_icons ? 'mul-cfd-compare-table-row-items' : 'mul-cfd-compare-table-row'}>
             <Table.Cell className='mul-cfd-compare-table-col'>
                 <Text as='p' weight='bold' align='center' color='prominent' size='xs'>
                     {title}
@@ -135,7 +135,7 @@ const ModalContent = ({}) => {
             <ThemedScrollbars
                 className='mul-cfd-compare-accounts'
                 style={{
-                    '--mul-cfd-compare-accounts-template-columns': '1.5fr 2fr 3fr',
+                    '--mul-cfd-compare-accounts-template-columns': '1.5fr 1.5fr 3fr',
                 }}
             >
                 <div className='mul-cfd-compare-accounts__table-wrapper'>
@@ -147,10 +147,41 @@ const ModalContent = ({}) => {
                                 </DesktopWrapper>
 
                                 <Table.Head>
-                                    <Icon icon='IcCrossSolid' size={48} />
+                                    <div className='mul-cfd-compare-accounts__table-head'>
+                                        <Icon icon='IcCrossSolid' size={48} />
+                                        <Text
+                                            as='p'
+                                            align='center'
+                                            color='prominent'
+                                            weight='bold'
+                                            size={isMobile() ? 'xxs' : 'sm'}
+                                        >
+                                            {'Multipliers'}
+                                        </Text>
+                                        <Text
+                                            as='p'
+                                            align='center'
+                                            color='less-prominent'
+                                            size={isMobile() ? 'xxxs' : 'xxxs'}
+                                            className='mul-cfd-compare-accounts__table-desc'
+                                        >
+                                            {'You are currently using this in demo'}
+                                        </Text>
+                                    </div>
                                 </Table.Head>
                                 <Table.Head>
-                                    <Icon icon='IcPercentSolid' size={48} />
+                                    <div>
+                                        <Icon icon='IcPercentSolid' size={48} />
+                                        <Text
+                                            as='p'
+                                            align='center'
+                                            color='prominent'
+                                            weight='bold'
+                                            size={isMobile() ? 'xxs' : 'sm'}
+                                        >
+                                            {'CFDs'}
+                                        </Text>
+                                    </div>
                                 </Table.Head>
                             </Table.Row>
                         </Table.Header>
@@ -189,7 +220,7 @@ const ModalContent = ({}) => {
                             </Table.Row>
                         </Table.Footer>
                     </Table>
-                    <Text as='p' size='xxs' color='less-prominent'>
+                    <Text as='p' size='xxs' color='less-prominent' align='center'>
                         {'You can add the other account later'}
                     </Text>
                 </div>

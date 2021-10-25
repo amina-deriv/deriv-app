@@ -1571,7 +1571,7 @@
 
     @include desktop {
         justify-content: center;
-        grid-template-columns: 22% 38.5% 38.5%;
+        grid-template-columns: 20% 30% 50%;
         padding-top: 0;
     }
 
@@ -1585,7 +1585,7 @@
 }
 .mul-cfd-compare-table-row-items {
     @include desktop {
-        grid-template-columns: 22% 38.5% 38.5%;
+        grid-template-columns: 20% 30% 50%;
     }
 
     .mul-cfd-compare-table-col {
@@ -1624,7 +1624,7 @@
     flex-direction: column;
 
     @include desktop {
-        padding: 0.8rem;
+        padding: 0.9rem;
     }
 
     &__text {
@@ -1648,17 +1648,36 @@
 
     &__table-row {
         justify-content: center;
-        grid-template-columns: 22% 38.5% 38.5%;
+        grid-template-columns: 20% 30% 50%;
         // grid-template-columns:  var(--mul-cfd-compare-accounts-template-columns);
         box-shadow: inset 0 -1px 0 0 var(--general-section-1);
     }
+    &__table-head {
+        padding: 0 0.7rem;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
 
+        @include desktop {
+            padding: 0.8rem;
+        }
+
+        &__text {
+            padding-top: 0.4rem;
+            background-color: var(--brand-red-coral);
+        }
+    }
+    .mul-cfd-compare-accounts__table-desc {
+        background: (var(--brand-red-coral));
+        color: var(--text-colored-background);
+    }
     .dc-table {
         padding: 0 30px;
 
         &__header {
             border-bottom: none;
-            height: 50px;
+            height: 126px;
             position: sticky;
             top: 0;
             background: var(--general-main-2);
@@ -1679,8 +1698,8 @@
         }
         &__cell {
             border-bottom: none;
-            align-items: normal;
-            padding: 1rem 0.8rem;
+            align-items: center;
+            padding: 1.5rem 0rem;
         }
         &--scrollbar {
             display: block; // Safari needs this to work properly!
