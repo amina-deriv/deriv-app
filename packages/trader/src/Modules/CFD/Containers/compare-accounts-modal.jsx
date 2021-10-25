@@ -30,7 +30,7 @@ const data = [
                 icon: 'IcBrandDmt5',
             },
         ],
-        has_icons: false,
+        has_icons: true,
     },
 
     {
@@ -75,10 +75,15 @@ const data = [
     },
     {
         title: localize('Assets'),
-        multiplier: localize('5+ Synthetic indices 10+Forex pairs'),
-        cfd: localize(
-            '5+ Synthetic indices 30+Forex pairs 40+ Stocks 10+ Stock indices 10+ Cryptocurrency/fiat pairs 10+Commodities'
-        ),
+        multiplier: [localize('5+ Synthetic indices'), localize('10+Forex pairs')],
+        cfd: [
+            localize('5+ Synthetic indices'),
+            localize('30+ Forex pairs'),
+            localize('40+ Stocks'),
+            localize('10+ Stock indices'),
+            localize('10+ Cryptocurrency/fiat pairs'),
+            localize('10+ Commodities'),
+        ],
         has_icons: false,
     },
 ];
@@ -97,6 +102,12 @@ const Items = ({ items }) =>
             </Text>
         </div>
     ));
+const MultilineRowItems = ({ items }) =>
+    items.map(item => (
+        <Text as='p' weight='bold' align='center' color='prominent' size='xxs'>
+            {item}
+        </Text>
+    ));
 
 const Row = ({ title, multiplier, cfd, has_icons }) => (
     <>
@@ -108,21 +119,21 @@ const Row = ({ title, multiplier, cfd, has_icons }) => (
             </Table.Cell>
 
             <Table.Cell className='mul-cfd-compare-table-col'>
-                {Array.isArray(multiplier) ? (
+                {has_icons ? (
                     <Items items={multiplier} />
                 ) : (
-                    <Text as='p' weight='bold' align='center' color='prominent' size='xxs'>
-                        {multiplier}
-                    </Text>
+                    <div>
+                        <MultilineRowItems items={multiplier}></MultilineRowItems>
+                    </div>
                 )}
             </Table.Cell>
             <Table.Cell className='mul-cfd-compare-table-col'>
-                {Array.isArray(cfd) ? (
+                {has_icons ? (
                     <Items items={cfd} />
                 ) : (
-                    <Text as='p' weight='bold' align='center' color='prominent' size='xxs'>
-                        {cfd}
-                    </Text>
+                    <div>
+                        <MultilineRowItems items={cfd}></MultilineRowItems>
+                    </div>
                 )}
             </Table.Cell>
         </Table.Row>
