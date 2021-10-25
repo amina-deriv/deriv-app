@@ -133,15 +133,15 @@ const ModalContent = ({}) => {
     return (
         <Div100vhContainer height_offset='40px' is_bypassed={isDesktop()}>
             <ThemedScrollbars
-                className='cfd-compare-accounts'
+                className='mul-cfd-compare-accounts'
                 style={{
-                    '--cfd-compare-accounts-template-columns': '1.5fr 2fr 3fr',
+                    '--mul-cfd-compare-accounts-template-columns': '1.5fr 2fr 3fr',
                 }}
             >
-                <div className='cfd-compare-accounts__table-wrapper'>
-                    <Table className='cfd-compare-accounts__table'>
+                <div className='mul-cfd-compare-accounts__table-wrapper'>
+                    <Table className='mul-cfd-compare-accounts__table'>
                         <Table.Header>
-                            <Table.Row className='cfd-compare-accounts__table-row'>
+                            <Table.Row className='mul-cfd-compare-accounts__table-row'>
                                 <DesktopWrapper>
                                     <Table.Head />
                                 </DesktopWrapper>
@@ -160,9 +160,9 @@ const ModalContent = ({}) => {
                             ))}
                         </Table.Body>
                         <Table.Footer>
-                            <Table.Row className='cfd-compare-accounts__table-row'>
+                            <Table.Row className='mul-cfd-compare-accounts__table-row'>
                                 <DesktopWrapper>
-                                    <Table.Cell className='platform-table-col' />
+                                    <Table.Cell />
                                 </DesktopWrapper>
                                 <Table.Cell>
                                     <Button
@@ -175,7 +175,7 @@ const ModalContent = ({}) => {
                                         {localize('Add real account')}
                                     </Button>
                                 </Table.Cell>
-                                <Table.Cell className='platform-table-col'>
+                                <Table.Cell>
                                     <Button
                                         type='button'
                                         secondary
@@ -231,7 +231,7 @@ const CompareAccountsModal = ({
                         <ModalContent />
                     </Modal>
                 </DesktopWrapper>
-                <MobileWrapper>
+                {/* <MobileWrapper>
                     <MobileDialog
                         portal_element_id='deriv_app'
                         title={localize('Compare accounts')}
@@ -241,7 +241,7 @@ const CompareAccountsModal = ({
                     >
                         <ModalContent />
                     </MobileDialog>
-                </MobileWrapper>
+                </MobileWrapper> */}
             </React.Suspense>
         </div>
     );
