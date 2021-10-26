@@ -1442,6 +1442,9 @@
     height: 100%;
     position: relative;
 
+    .dc-modal-header__title {
+        font-size: var(--text-size-m);
+    }
     &__table {
         @include mobile {
             overflow-x: auto;
@@ -1563,6 +1566,124 @@
 
 //
 
+.dc-modal-header__title {
+    font-size: var(--text-size-m);
+}
+@include mobile {
+    font-size: var(--text-size-xs);
+}
+
+.mul-cfd-compare-accounts {
+    display: flex;
+    flex-flow: column nowrap;
+    flex-grow: 1;
+    background: inherit;
+    position: relative;
+    padding-top: 2rem;
+    &__table {
+        @include mobile {
+            overflow-x: auto;
+        }
+    }
+
+    &__table-row {
+        justify-content: center;
+        grid-template-columns: 16% 31% 53%;
+        border-bottom: none;
+    }
+    &__table-head {
+        padding: 0 0.7rem;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+
+        @include desktop {
+            padding: 0.8rem;
+        }
+
+        &__text {
+            padding-top: 0.4rem;
+            background-color: var(--brand-red-coral);
+        }
+    }
+
+    .dc-table {
+        padding: 0 30px;
+
+        &__header {
+            border-bottom: 1px solid var(--general-section-1);
+            height: 126px;
+            position: sticky;
+            top: 0;
+            background: var(--general-main-2);
+            z-index: 10;
+        }
+        &__cell,
+        &__head {
+            justify-content: center;
+            padding: 0.8rem;
+            margin: 0.7rem;
+            &--fixed {
+                padding-left: 1.6rem;
+
+                @include mobile {
+                    background-color: var(--general-section-2);
+                }
+            }
+        }
+        &__cell {
+            align-items: center;
+            padding: 1rem 0rem;
+        }
+
+        &--scrollbar {
+            display: block; // Safari needs this to work properly!
+        }
+
+        @include desktop {
+            &__header {
+                background-color: var(--general-main-2);
+            }
+        }
+    }
+    &-modal {
+        &__wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: 2.4rem;
+        }
+    }
+    @include mobile {
+        background: var(--general-main-1);
+        height: 100%;
+        font-size: 1.2rem;
+
+        .dc-table {
+            padding: 0;
+            height: inherit;
+
+            &__cell {
+                font-size: 1.2rem;
+            }
+            &__row {
+                padding: 0;
+            }
+            &__head {
+                font-size: 1.2rem;
+                border-bottom: 2px solid var(--border-disabled);
+                background-color: var(--general-main-1);
+                margin-top: -1px;
+            }
+            &__header,
+            &__row {
+                width: 150vw;
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+            }
+        }
+    }
+}
+
 .mul-cfd-compare-table-row,
 .mul-cfd-compare-table-row-items {
     grid-template-columns: 50% 50%;
@@ -1631,124 +1752,12 @@
         padding-top: 0.4rem;
     }
 }
-
-.mul-cfd-compare-accounts {
-    display: flex;
-    flex-flow: column nowrap;
-    flex-grow: 1;
-    background: inherit;
-
-    position: relative;
-
-    &__table {
-        @include mobile {
-            overflow-x: auto;
-        }
-    }
-
-    &__table-row {
-        justify-content: center;
-        grid-template-columns: 16% 31% 53%;
-        box-shadow: inset 0 -1px 0 0 var(--general-section-1);
-    }
-    &__table-head {
-        padding: 0 0.7rem;
-        justify-content: center;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-
-        @include desktop {
-            padding: 0.8rem;
-        }
-
-        &__text {
-            padding-top: 0.4rem;
-            background-color: var(--brand-red-coral);
-        }
-    }
-
-    .mul-cfd-compare-accounts__table-desc {
-        background: (var(--brand-red-coral));
-        color: var(--text-colored-background);
-    }
-    .mul-cfd-compare-accounts__table-footer {
-        width: 100%;
-    }
-    .dc-table {
-        padding: 0 30px;
-
-        &__header {
-            border-bottom: none;
-            height: 126px;
-            position: sticky;
-            top: 0;
-            background: var(--general-main-2);
-            z-index: 10;
-        }
-        &__cell,
-        &__head {
-            justify-content: center;
-            padding: 0.8rem;
-            margin: 0.7rem;
-            &--fixed {
-                padding-left: 1.6rem;
-
-                @include mobile {
-                    background-color: var(--general-section-2);
-                }
-            }
-        }
-        &__cell {
-            border-bottom: none;
-            align-items: center;
-            padding: 1rem 0rem;
-        }
-        &--scrollbar {
-            display: block; // Safari needs this to work properly!
-        }
-
-        @include desktop {
-            &__header {
-                background-color: var(--general-main-2);
-            }
-        }
-    }
-    &-modal {
-        &__wrapper {
-            display: flex;
-            justify-content: center;
-            margin-top: 2.4rem;
-        }
-    }
-    @include mobile {
-        background: var(--general-main-1);
-        height: 100%;
-        font-size: 1.2rem;
-
-        .dc-table {
-            padding: 0;
-            height: inherit;
-
-            &__cell {
-                font-size: 1.2rem;
-            }
-            &__row {
-                padding: 0;
-            }
-            &__head {
-                font-size: 1.2rem;
-                border-bottom: 2px solid var(--border-disabled);
-                background-color: var(--general-main-1);
-                margin-top: -1px;
-            }
-            &__header,
-            &__row {
-                width: 150vw;
-                grid-template-columns: 1fr 1fr 1fr 1fr;
-            }
-        }
-    }
+.mul-cfd-compare-accounts__table-desc {
+    background: (var(--brand-red-coral));
+    color: var(--text-colored-background);
+}
+.mul-cfd-compare-accounts__table-footer {
+    width: 100%;
 }
 
 /* stylelint-enable */

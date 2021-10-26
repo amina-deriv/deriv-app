@@ -248,7 +248,6 @@ const CompareAccountsModal = ({
 }) => {
     return (
         <div className='cfd-compare-accounts-modal__wrapper' style={{ marginTop: '5rem' }}>
-            //
             <Button
                 className='cfd-dashboard__welcome-message--button'
                 has_effect
@@ -257,7 +256,7 @@ const CompareAccountsModal = ({
                 secondary
                 disabled={is_loading}
             />
-            //
+
             <React.Suspense fallback={<UILoader />}>
                 <DesktopWrapper>
                     <Modal
