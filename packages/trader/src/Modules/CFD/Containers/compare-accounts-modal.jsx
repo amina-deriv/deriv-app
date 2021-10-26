@@ -38,37 +38,37 @@ const data = [
         multiplier: [
             {
                 title: localize('Synthetics'),
-                icon: 'IcBrandDtrader',
+                icon: 'IcAssetsSynthetics',
             },
             {
                 title: localize('Forex'),
-                icon: 'IcBrandDtrader',
+                icon: 'IcAssetsForex',
             },
         ],
         cfd: [
             {
                 title: localize('Synthetics'),
-                icon: 'IcBrandDtrader',
+                icon: 'IcAssetsSynthetics',
             },
             {
                 title: localize('Forex'),
-                icon: 'IcBrandDtrader',
+                icon: 'IcAssetsForex',
             },
             {
                 title: localize('Stocks'),
-                icon: 'IcBrandDtrader',
+                icon: 'IcAssetsStocks',
             },
             {
                 title: localize('Indices'),
-                icon: 'IcBrandDtrader',
+                icon: 'IcAssetsIndices',
             },
             {
                 title: localize('Commodities'),
-                icon: 'IcBrandDtrader',
+                icon: 'IcAssetsCommodities',
             },
             {
                 title: localize('Cryptos'),
-                icon: 'IcBrandDtrader',
+                icon: 'IcAssetsCrypto',
             },
         ],
         has_icons: true,
@@ -103,8 +103,8 @@ const Items = ({ items }) =>
         </div>
     ));
 const MultilineRowItems = ({ items }) =>
-    items.map(item => (
-        <Text as='p' weight='bold' align='center' color='prominent' size='xxs'>
+    items.map((item, index) => (
+        <Text key={index} as='p' weight='bold' align='center' color='prominent' size='xxs'>
             {item}
         </Text>
     ));
@@ -142,33 +142,29 @@ const Row = ({ title, multiplier, cfd, has_icons }) => (
 
 const ModalContent = ({}) => {
     return (
-        <Div100vhContainer height_offset='40px' is_bypassed={isDesktop()}>
-            <ThemedScrollbars
-                className='mul-cfd-compare-accounts'
-                style={{
-                    '--mul-cfd-compare-accounts-template-columns': '1.5fr 1.5fr 3fr',
-                }}
-            >
-                <div className='mul-cfd-compare-accounts__table-wrapper'>
-                    <Table className='mul-cfd-compare-accounts__table'>
-                        <Table.Header>
-                            <Table.Row className='mul-cfd-compare-accounts__table-row'>
-                                <DesktopWrapper>
-                                    <Table.Head />
-                                </DesktopWrapper>
+        // <Div100vhContainer height_offset='40px' is_bypassed={isDesktop()}>
+        <ThemedScrollbars className='mul-cfd-compare-accounts'>
+            <div className='mul-cfd-compare-accounts__table-wrapper'>
+                <Table className='mul-cfd-compare-accounts__table'>
+                    <Table.Header>
+                        <Table.Row className='mul-cfd-compare-accounts__table-row'>
+                            <DesktopWrapper>
+                                <Table.Head />
+                            </DesktopWrapper>
 
-                                <Table.Head>
-                                    <div className='mul-cfd-compare-accounts__table-head'>
-                                        <Icon icon='IcCrossSolid' size={48} />
-                                        <Text
-                                            as='p'
-                                            align='center'
-                                            color='prominent'
-                                            weight='bold'
-                                            size={isMobile() ? 'xxs' : 'sm'}
-                                        >
-                                            {'Multipliers'}
-                                        </Text>
+                            <Table.Head>
+                                <div className='mul-cfd-compare-accounts__table-head'>
+                                    <Icon icon='IcCrossSolid' size={48} />
+                                    <Text
+                                        as='p'
+                                        align='center'
+                                        color='prominent'
+                                        weight='bold'
+                                        size={isMobile() ? 'xxs' : 'sm'}
+                                    >
+                                        {'Multipliers'}
+                                    </Text>
+                                    <div>
                                         <Text
                                             as='p'
                                             align='center'
@@ -179,64 +175,67 @@ const ModalContent = ({}) => {
                                             {'You are currently using this in demo'}
                                         </Text>
                                     </div>
-                                </Table.Head>
-                                <Table.Head>
-                                    <div>
-                                        <Icon icon='IcPercentSolid' size={48} />
-                                        <Text
-                                            as='p'
-                                            align='center'
-                                            color='prominent'
-                                            weight='bold'
-                                            size={isMobile() ? 'xxs' : 'sm'}
-                                        >
-                                            {'CFDs'}
-                                        </Text>
-                                    </div>
-                                </Table.Head>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {data.map((row, rowIndex) => (
-                                <Row key={row.title} {...row} />
-                            ))}
-                        </Table.Body>
-                        <Table.Footer>
-                            <Table.Row className='mul-cfd-compare-accounts__table-row'>
-                                <DesktopWrapper>
-                                    <Table.Cell />
-                                </DesktopWrapper>
-                                <Table.Cell>
-                                    <Button
-                                        type='button'
-                                        secondary
-                                        onClick={() => {
-                                            history.push(routes.mt5);
-                                        }}
+                                </div>
+                            </Table.Head>
+                            <Table.Head>
+                                <div>
+                                    <Icon icon='IcPercentSolid' size={48} />
+                                    <Text
+                                        as='p'
+                                        align='center'
+                                        color='prominent'
+                                        weight='bold'
+                                        size={isMobile() ? 'xxs' : 'sm'}
                                     >
-                                        {localize('Add real account')}
-                                    </Button>
-                                </Table.Cell>
-                                <Table.Cell>
-                                    <Button
-                                        type='button'
-                                        secondary
-                                        onClick={() => {
-                                            history.push(routes.dxtrade);
-                                        }}
-                                    >
-                                        {localize('Add real account')}
-                                    </Button>
-                                </Table.Cell>
-                            </Table.Row>
-                        </Table.Footer>
-                    </Table>
-                    <Text as='p' size='xxs' color='less-prominent' align='center'>
-                        {'You can add the other account later'}
-                    </Text>
-                </div>
-            </ThemedScrollbars>
-        </Div100vhContainer>
+                                        {'CFDs'}
+                                    </Text>
+                                </div>
+                            </Table.Head>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {data.map((row, rowIndex) => (
+                            <Row key={row.title} {...row} />
+                        ))}
+                    </Table.Body>
+                    <Table.Footer>
+                        <Table.Row className='mul-cfd-compare-accounts__table-row'>
+                            <DesktopWrapper>
+                                <Table.Cell />
+                            </DesktopWrapper>
+                            <Table.Cell>
+                                <Button
+                                    className='mul-cfd-compare-accounts__table-footer'
+                                    type='button'
+                                    secondary
+                                    onClick={() => {
+                                        history.push(routes.mt5);
+                                    }}
+                                >
+                                    {localize('Add real account')}
+                                </Button>
+                            </Table.Cell>
+                            <Table.Cell>
+                                <Button
+                                    className='mul-cfd-compare-accounts__table-footer'
+                                    type='button'
+                                    secondary
+                                    onClick={() => {
+                                        history.push(routes.dxtrade);
+                                    }}
+                                >
+                                    {localize('Add real account')}
+                                </Button>
+                            </Table.Cell>
+                        </Table.Row>
+                    </Table.Footer>
+                </Table>
+                <Text as='p' size='xxs' color='less-prominent' align='center'>
+                    {'You can add the other account later'}
+                </Text>
+            </div>
+        </ThemedScrollbars>
+        // </Div100vhContainer>
     );
 };
 
