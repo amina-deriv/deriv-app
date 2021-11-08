@@ -90,7 +90,7 @@ const data = [
         has_icons: false,
     },
 ];
-const Items = ({ items }) =>
+const Items = ({ items = [] }) =>
     items.map(({ title, icon }) => (
         <div key={title} className='mul-cfd-compare-table-item'>
             <Icon icon={icon} size='24' />
