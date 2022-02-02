@@ -16,10 +16,9 @@ jest.mock('@deriv/components', () => {
     };
 });
 describe('<IconWithMessage />', () => {
-
     const props = {
         icon: 'string',
-        message: "title"
+        message: 'title',
     };
 
     it('should render the IconWithMessage component', () => {
@@ -48,18 +47,23 @@ describe('<IconWithMessage />', () => {
     it('Should trigger click on the button', () => {
         const new_props = {
             icon: 'string',
-            message: "title",
+            message: 'title',
             has_button: true,
             has_real_account: true,
-
         };
         const toggleShouldShowRealAccountsList = jest.fn();
         const toggleAccountsDialog = jest.fn();
-        render(<IconWithMessage {...new_props} toggleAccountsDialog={toggleAccountsDialog} toggleShouldShowRealAccountsList={toggleShouldShowRealAccountsList} />);
+        render(
+            <IconWithMessage
+                {...new_props}
+                toggleAccountsDialog={toggleAccountsDialog}
+                toggleShouldShowRealAccountsList={toggleShouldShowRealAccountsList}
+            />
+        );
         const btn = screen.getByTestId('icon-with-message-button');
         expect(btn).toBeInTheDocument();
         fireEvent.click(btn);
         expect(toggleShouldShowRealAccountsList).toHaveBeenCalledTimes(1);
         expect(toggleAccountsDialog).toHaveBeenCalledTimes(1);
     });
-})
+});
