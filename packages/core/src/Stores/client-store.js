@@ -65,6 +65,7 @@ export default class ClientStore extends BaseStore {
     @observable has_logged_out = false;
     @observable is_landing_company_loaded = false;
     @observable is_account_setting_loaded = false;
+    @observable has_two_fa_enabled = false;
     // this will store the landing_company API response, including
     // financial_company: {}
     // gaming_company: {}
@@ -581,8 +582,8 @@ export default class ClientStore extends BaseStore {
         const mt_gaming_shortcode = mt_gaming_company?.financial.shortcode || mt_gaming_company?.swap_free.shortcode;
         return financial_shortcode || gaming_shortcode || mt_gaming_shortcode
             ? eu_shortcode_regex.test(financial_shortcode) ||
-            eu_shortcode_regex.test(gaming_shortcode) ||
-            eu_shortcode_regex.test(mt_gaming_shortcode)
+                  eu_shortcode_regex.test(gaming_shortcode) ||
+                  eu_shortcode_regex.test(mt_gaming_shortcode)
             : eu_excluded_regex.test(this.residence);
     }
 
@@ -1050,18 +1051,18 @@ export default class ClientStore extends BaseStore {
                 ...response,
                 ...(is_maltainvest_account
                     ? {
-                        new_account_maltainvest: {
-                            ...response.new_account_maltainvest,
-                            currency,
-                        },
-                    }
+                          new_account_maltainvest: {
+                              ...response.new_account_maltainvest,
+                              currency,
+                          },
+                      }
                     : {}),
                 ...(is_samoa_account
                     ? {
-                        new_account_samoa: {
-                            currency,
-                        },
-                    }
+                          new_account_samoa: {
+                              currency,
+                          },
+                      }
                     : {}),
             });
         }
@@ -1297,6 +1298,8 @@ export default class ClientStore extends BaseStore {
         this.selectCurrency('');
 
         this.responsePayoutCurrencies(await WS.authorized.payoutCurrencies());
+        await this.getTwoFAStatus();
+
         if (this.is_logged_in) {
             WS.storage.mt5LoginList().then(this.responseMt5LoginList);
             WS.tradingServers(CFD_PLATFORMS.MT5).then(this.responseMT5TradingServers);
@@ -2238,6 +2241,27 @@ export default class ClientStore extends BaseStore {
 
             runInAction(() => (this.financial_assessment = get_financial_assessment));
             resolve(get_financial_assessment);
+        });
+    }
+
+    @action.bound
+    getTwoFAStatus() {
+        return new Promise(resolve => {
+            WS.authorized.accountSecurity({ account_security: 1, totp_action: 'status' }).then(status_response => {
+                runInAction(() => {
+                    if (status_response.error) {
+                        resolve(false);
+                    } else {
+                        this.has_two_fa_enabled = !!getPropertyValue(status_response, [
+                            'account_security',
+                            'totp',
+                            'is_enabled',
+                        ]);
+                        resolve(this.has_two_fa_enabled);
+                    }
+                    console.log(this.has_two_fa_enabled);
+                });
+            });
         });
     }
 }

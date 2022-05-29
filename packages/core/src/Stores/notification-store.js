@@ -183,6 +183,7 @@ export default class NotificationStore extends BaseStore {
             loginid,
             obj_total_balance,
             website_status,
+            has_two_fa_enabled,
         } = this.root_store.client;
         const { is_p2p_visible } = this.root_store.modules.cashier.general_store;
         const { is_10k_withdrawal_limit_reached } = this.root_store.modules.cashier.withdraw;
@@ -215,8 +216,12 @@ export default class NotificationStore extends BaseStore {
                 withdrawal_locked,
             } = getStatusValidations(status || []);
 
-            if (obj_total_balance.amount_real > 0) {
-                this.addNotificationMessage(this.client_notifications.two_f_a);
+            if (!has_two_fa_enabled) {
+                if (obj_total_balance.amount_real > 0) {
+                    this.addNotificationMessage(this.client_notifications.two_f_a);
+                }
+            } else {
+                this.removeNotificationMessageByKey({ key: this.client_notifications.two_f_a.key });
             }
 
             if (loginid !== LocalStore.get('active_loginid')) return;
