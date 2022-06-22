@@ -505,7 +505,6 @@ const AccountSwitcher = props => {
                                                     sub_account_type: account.sub_account_type,
                                                     platform: CFD_PLATFORMS.MT5,
                                                     is_eu: props.is_eu,
-                                                    shortcode: account.landing_company_short,
                                                 })}`}
                                                 country_standpoint={props.country_standpoint}
                                                 has_balance={'balance' in account}
@@ -711,7 +710,6 @@ const AccountSwitcher = props => {
                                                     sub_account_type: account.sub_account_type,
                                                     platform: CFD_PLATFORMS.MT5,
                                                     is_eu: props.is_eu,
-                                                    shortcode: account.landing_company_short,
                                                 })}`}
                                                 country_standpoint={props.country_standpoint}
                                                 has_balance={'balance' in account}

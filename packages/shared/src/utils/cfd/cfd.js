@@ -105,8 +105,8 @@ export const getCFDAccountDisplay = ({ market_type, sub_account_type, platform, 
     return CFD_text_translated[cfd_account_key]();
 };
 
-export const getCFDAccount = ({ market_type, sub_account_type, platform, is_eu, shortcode }) => {
-    let cfd_account_key = getCFDAccountKey({ market_type, sub_account_type, platform, shortcode });
+export const getCFDAccount = ({ market_type, sub_account_type, platform, is_eu }) => {
+    let cfd_account_key = getCFDAccountKey({ market_type, sub_account_type, platform });
     if (!cfd_account_key) return undefined;
 
     if (cfd_account_key === 'financial' && is_eu) {
