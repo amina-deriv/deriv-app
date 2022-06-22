@@ -66,20 +66,25 @@ const CFDDemoAccountDisplay = ({
     platform,
     current_list,
     has_cfd_account,
+    toggleDerivAccountNeededModal,
     openPasswordManager,
     residence,
 }: TCFDDemoAccountDisplayProps) => {
     const is_eu_user = (is_logged_in && is_eu) || (!is_logged_in && is_eu_country);
 
     const openCFDAccount = () => {
-        if (is_eu && !has_maltainvest_account && standpoint.iom) {
-            openAccountNeededModal('maltainvest', localize('Deriv Multipliers'), localize('demo CFDs'));
-        } else {
-            onSelectAccount({
-                category: 'demo',
-                type: 'financial',
-            });
-        }
+        // if (is_eu && !has_maltainvest_account && standpoint.iom) {
+        // openAccountNeededModal('maltainvest', localize('Deriv Multipliers'), localize('demo CFDs'));
+        // } else {
+        //     onSelectAccount({
+        //         category: 'demo',
+        //         type: 'financial',
+        //     });
+        // }
+        console.log('heree');
+
+        toggleDerivAccountNeededModal()
+
     };
 
     const financial_specs = React.useMemo(() => {
@@ -112,9 +117,9 @@ const CFDDemoAccountDisplay = ({
                     is_logged_in={is_logged_in}
                     existing_data={
                         current_list[
-                            Object.keys(current_list).find((key: string) =>
-                                key.startsWith(`${platform}.demo.synthetic`)
-                            ) || ''
+                        Object.keys(current_list).find((key: string) =>
+                            key.startsWith(`${platform}.demo.synthetic`)
+                        ) || ''
                         ]
                     }
                     commission_message={localize('No commission')}
@@ -128,9 +133,9 @@ const CFDDemoAccountDisplay = ({
                     onClickFund={() =>
                         openAccountTransfer(
                             current_list[
-                                Object.keys(current_list).find((key: string) =>
-                                    key.startsWith(`${platform}.demo.synthetic`)
-                                ) || ''
+                            Object.keys(current_list).find((key: string) =>
+                                key.startsWith(`${platform}.demo.synthetic`)
+                            ) || ''
                             ],
                             {
                                 category: 'demo',
@@ -161,9 +166,9 @@ const CFDDemoAccountDisplay = ({
                     }}
                     existing_data={
                         current_list[
-                            Object.keys(current_list).find((key: string) =>
-                                key.startsWith(`${platform}.demo.financial@`)
-                            ) || ''
+                        Object.keys(current_list).find((key: string) =>
+                            key.startsWith(`${platform}.demo.financial@`)
+                        ) || ''
                         ]
                     }
                     commission_message={localize('No commission')}
@@ -172,9 +177,9 @@ const CFDDemoAccountDisplay = ({
                     onClickFund={() =>
                         openAccountTransfer(
                             current_list[
-                                Object.keys(current_list).find((key: string) =>
-                                    key.startsWith(`${platform}.demo.financial@`)
-                                ) || ''
+                            Object.keys(current_list).find((key: string) =>
+                                key.startsWith(`${platform}.demo.financial@`)
+                            ) || ''
                             ],
                             {
                                 category: 'demo',
@@ -201,9 +206,9 @@ const CFDDemoAccountDisplay = ({
                     is_logged_in={is_logged_in}
                     existing_data={
                         current_list[
-                            Object.keys(current_list).find((key: string) =>
-                                key.startsWith(`${platform}.demo.financial_stp@`)
-                            ) || ''
+                        Object.keys(current_list).find((key: string) =>
+                            key.startsWith(`${platform}.demo.financial_stp@`)
+                        ) || ''
                         ]
                     }
                     commission_message={localize('No commission')}
@@ -217,9 +222,9 @@ const CFDDemoAccountDisplay = ({
                     onClickFund={() =>
                         openAccountTransfer(
                             current_list[
-                                Object.keys(current_list).find((key: string) =>
-                                    key.startsWith(`${platform}.demo.financial_stp@`)
-                                ) || ''
+                            Object.keys(current_list).find((key: string) =>
+                                key.startsWith(`${platform}.demo.financial_stp@`)
+                            ) || ''
                             ],
                             {
                                 category: 'demo',

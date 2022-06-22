@@ -156,6 +156,7 @@ type TCFDDashboardProps = {
     setCurrentAccount: (data: DetailsOfEachMT5Loginid, meta: TOpenAccountTransferMeta) => void;
     setAccountType: (account_type: TOpenAccountTransferMeta) => void;
     mt5_status_server: TMt5StatusServer;
+    toggleDerivAccountNeededModal: () => void;
 };
 
 const CFDDashboard = (props: TCFDDashboardProps) => {
@@ -389,6 +390,7 @@ const CFDDashboard = (props: TCFDDashboardProps) => {
         mt5_verification_code,
         dxtrade_verification_code,
         mt5_status_server,
+        toggleDerivAccountNeededModal,
     } = props;
 
     const should_show_missing_real_account =
@@ -556,6 +558,7 @@ const CFDDashboard = (props: TCFDDashboardProps) => {
                                             openPasswordManager={togglePasswordManagerModal}
                                             platform={platform}
                                             residence={residence}
+                                            toggleDerivAccountNeededModal={toggleDerivAccountNeededModal}
                                         />
                                     </div>
                                 )}
@@ -751,5 +754,6 @@ export default withRouter(
         mt5_verification_code: client.verification_code.trading_platform_mt5_password_reset,
         dxtrade_verification_code: client.verification_code.trading_platform_dxtrade_password_reset,
         mt5_status_server: client.website_status.mt5_status,
+        toggleDerivAccountNeededModal: ui.toggleDerivAccountNeededModal,
     }))(CFDDashboard)
 );
