@@ -219,7 +219,8 @@ const AccountSwitcher = props => {
             existing_cfd_accounts,
             props.mt5_trading_servers,
             platform,
-            is_eu
+            is_eu,
+            props.trading_platform_available_accounts
         );
         const financial_config = getCFDConfig(
             'financial',
@@ -229,7 +230,8 @@ const AccountSwitcher = props => {
             existing_cfd_accounts,
             props.mt5_trading_servers,
             platform,
-            is_eu
+            is_eu,
+            props.trading_platform_available_accounts
         );
         // Handling CFD for EU
         // TODO: Move this logic inside getCFDConfig when CFD added to landing_companies API
@@ -503,6 +505,7 @@ const AccountSwitcher = props => {
                                                     sub_account_type: account.sub_account_type,
                                                     platform: CFD_PLATFORMS.MT5,
                                                     is_eu: props.is_eu,
+                                                    shortcode: account.landing_company_short,
                                                 })}`}
                                                 country_standpoint={props.country_standpoint}
                                                 has_balance={'balance' in account}
@@ -510,6 +513,7 @@ const AccountSwitcher = props => {
                                                 loginid={account.display_login}
                                                 redirectAccount={() => redirectToMt5Demo(account.market_type)}
                                                 platform={CFD_PLATFORMS.MT5}
+                                                shortcode={account.landing_company_short}
                                             />
                                         ))}
                                     </div>
@@ -707,6 +711,7 @@ const AccountSwitcher = props => {
                                                     sub_account_type: account.sub_account_type,
                                                     platform: CFD_PLATFORMS.MT5,
                                                     is_eu: props.is_eu,
+                                                    shortcode: account.landing_company_short,
                                                 })}`}
                                                 country_standpoint={props.country_standpoint}
                                                 has_balance={'balance' in account}
@@ -720,6 +725,7 @@ const AccountSwitcher = props => {
                                                 }}
                                                 server={findServerForAccount(account)}
                                                 platform={CFD_PLATFORMS.MT5}
+                                                shortcode={account.landing_company_short}
                                             />
                                         ))}
                                     </div>
@@ -931,6 +937,7 @@ AccountSwitcher.propTypes = {
     toggleAccountsDialog: PropTypes.func,
     togglePositionsDrawer: PropTypes.func,
     toggleSetCurrencyModal: PropTypes.func,
+    trading_platform_available_accounts: PropTypes.array,
     updateMt5LoginList: PropTypes.func,
 };
 
@@ -986,6 +993,7 @@ const account_switcher = withRouter(
         toggleSetCurrencyModal: ui.toggleSetCurrencyModal,
         should_show_real_accounts_list: ui.should_show_real_accounts_list,
         toggleShouldShowRealAccountsList: ui.toggleShouldShowRealAccountsList,
+        trading_platform_available_accounts: client.trading_platform_available_accounts,
     }))(AccountSwitcher)
 );
 
