@@ -1,6 +1,6 @@
 import { localize } from '@deriv/translations';
 import { generateValidationFunction, getDefaultFields } from '@deriv/shared';
-import ProofOfIdentityForm from './proof-of-identity.jsx';
+// import ProofOfIdentityForm from './proof-of-identity.jsx';
 
 const proof_of_identity_config = {
     poi_state: {
@@ -10,11 +10,11 @@ const proof_of_identity_config = {
     },
 };
 
-export const proofOfIdentityConfig = ({ real_account_signup_target }) => {
+export const proofOfIdentityConfig = ({ real_account_signup_target, ProofOfIdentityForm }) => {
     return {
         header: {
-            active_title: localize('Identity information'),
-            title: localize('Identity information'),
+            active_title: localize('Complete your proof of identity'),
+            title: localize('Proof of identity'),
         },
         body: ProofOfIdentityForm,
         form_value: getDefaultFields(real_account_signup_target, proof_of_identity_config),
@@ -24,3 +24,5 @@ export const proofOfIdentityConfig = ({ real_account_signup_target }) => {
         passthrough: ['refreshNotifications'],
     };
 };
+
+export default proofOfIdentityConfig;

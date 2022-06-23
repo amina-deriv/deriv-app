@@ -1,12 +1,15 @@
 import { Formik } from 'formik';
 import PropTypes from 'prop-types';
 import React from 'react';
-import ProofOfIdentityContainer from '@deriv/account';
+import { IdvDocumentSubmit } from '@deriv/account';
 import { AutoHeightWrapper, FormSubmitButton } from '@deriv/components';
 import { isMobile } from '@deriv/shared';
 import { localize } from '@deriv/translations';
+// import IdvDocumentSubmit from './idv-submit-form'
 
-const ProofOfIdentityForm = ({ form_error, index, onCancel, onSubmit, value }) => {
+
+
+const ProofOfIdentityForm = ({ form_error, getCurrentStep, goToPreviousStep, index, onCancel, onSave, onSubmit, value }) => {
     const [poi_state, setPoiState] = React.useState('none');
 
     const validateForm = () => {
@@ -16,6 +19,11 @@ const ProofOfIdentityForm = ({ form_error, index, onCancel, onSubmit, value }) =
         }
 
         return errors;
+    };
+    const handleCancel = () => {
+        const current_step = getCurrentStep() - 1;
+        // onSave(current_step, values);
+        onCancel(current_step, goToPreviousStep);
     };
 
     return (
@@ -30,10 +38,39 @@ const ProofOfIdentityForm = ({ form_error, index, onCancel, onSubmit, value }) =
                         <form ref={setRef} className='cfd-proof-of-identity' onSubmit={handleSubmit}>
                             <div className='details-form'>
                                 <input type='hidden' name='poi_state' value={poi_state} readOnly />
-                                <ProofOfIdentityContainer
-                                    height={height}
-                                    onStateChange={() => setPoiState({ status })}
+                                <IdvDocumentSubmit
+                                    selected_country={{
+                                        "identity": {
+                                            "services": {
+                                                "idv": {
+                                                    "documents_supported": {
+                                                        "national_id": {
+                                                            "display_name": "National ID",
+                                                            "format": "^[0-9]{8,9}[a-zA-Z]{1}[0-9]{2}$"
+                                                        }
+                                                    },
+                                                    "has_visual_sample": 1,
+                                                    "is_country_supported": 1
+                                                },
+                                                "onfido": {
+                                                    "documents_supported": {
+                                                        "national_identity_card": {
+                                                            "display_name": "National Identity Card"
+                                                        },
+                                                        "passport": {
+                                                            "display_name": "Passport"
+                                                        }
+                                                    },
+                                                    "is_country_supported": 1
+                                                }
+                                            }
+                                        },
+                                        "phone_idd": "263",
+                                        "text": "Zimbabwe",
+                                        "value": "zw"
+                                    }}
                                     is_from_external={true}
+
                                 />
                                 <FormSubmitButton
                                     has_cancel
@@ -41,15 +78,16 @@ const ProofOfIdentityForm = ({ form_error, index, onCancel, onSubmit, value }) =
                                     is_disabled={!['pending', 'verified'].includes(poi_state)}
                                     is_absolute={isMobile()}
                                     label={localize('Next')}
-                                    onCancel={onCancel}
+                                    onCancel={handleCancel}
                                     form_error={form_error}
                                 />
                             </div>
                         </form>
                     )}
                 </AutoHeightWrapper>
-            )}
-        </Formik>
+            )
+            }
+        </Formik >
     );
 };
 

@@ -14,7 +14,7 @@ const CFDRealAccountRequiredModal = ({
 
     const createAccount = () => {
         onClose();
-        openRealAccountSignup('set_currency');
+        openRealAccountSignup();
     };
 
     return (

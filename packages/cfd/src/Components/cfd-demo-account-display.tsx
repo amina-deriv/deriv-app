@@ -81,7 +81,6 @@ const CFDDemoAccountDisplay = ({
         //         type: 'financial',
         //     });
         // }
-        console.log('heree');
 
         toggleDerivAccountNeededModal()
 
