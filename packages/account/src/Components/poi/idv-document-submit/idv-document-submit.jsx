@@ -2,14 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Autocomplete, Button, DesktopWrapper, Input, MobileWrapper, Text, SelectNative } from '@deriv/components';
-import { Formik, Field } from 'formik';
+import { useFormikContext, Field, } from 'formik';
 import { localize, Localize } from '@deriv/translations';
 import { formatInput, WS } from '@deriv/shared';
 import { getDocumentData, getRegex } from './utils';
 import DocumentSubmitLogo from '../../../Assets/ic-document-submit-icon.svg';
 
 const IdvDocumentSubmit = ({ selected_country, is_from_external }) => {
-    // const IdvDocumentSubmit = ({ handleBack, handleViewComplete, selected_country, is_from_external }) => {
     const [document_list, setDocumentList] = React.useState([]);
     const [document_image, setDocumentImage] = React.useState(null);
     const [is_input_disable, setInputDisable] = React.useState(true);
@@ -35,8 +34,7 @@ const IdvDocumentSubmit = ({ selected_country, is_from_external }) => {
             filtered_documents.map(key => {
                 const { display_name, format } = document_data[key];
                 const { new_display_name, example_format, sample_image } = getDocumentData(country_code, key) || {};
-                console.log(country_code, key);
-                console.log(getDocumentData(country_code, key));
+
                 return {
                     id: key,
                     text: new_display_name || display_name,
@@ -96,196 +94,163 @@ const IdvDocumentSubmit = ({ selected_country, is_from_external }) => {
                     localize('Please enter the correct format. ') + getExampleFormat(document_type.example_format);
             }
         }
-
         return errors;
     };
 
-    // const submitHandler = (values, { setSubmitting, setStatus }) => {
-    //     setSubmitting(true);
-    //     const { document_number, document_type } = values;
-    //     const submit_data = {
-    //         identity_verification_document_add: 1,
-    //         document_number,
-    //         document_type: document_type.id,
-    //         issuing_country: country_code,
-    //     };
+    const submitHandler = (values, { setSubmitting, setStatus }) => {
+        setSubmitting(true);
+        const { document_number, document_type } = values;
+        const submit_data = {
+            identity_verification_document_add: 1,
+            document_number,
+            document_type: document_type.id,
+            issuing_country: country_code,
+        };
 
-    //     WS.send(submit_data).then(response => {
-    //         setSubmitting(false);
-    //         if (response.error) {
-    //             setStatus(response.error);
-    //             return;
-    //         }
-    //         handleViewComplete();
-    //     });
-    // };
+        WS.send(submit_data).then(response => {
+            setSubmitting(false);
+            if (response.error) {
+                setStatus(response.error);
+                return;
+            }
+            // handleViewComplete();
+        });
+    };
 
+    const { errors, handleBlur, handleChange, setFieldValue, touched, isSubmitting, values } = useFormikContext();
+    console.log(errors, handleBlur, handleChange, setFieldValue, touched, isSubmitting, values)
     return (
-        <Formik initialValues={initial_form_values} validate={validateFields}>
-            {({
-                dirty,
-                errors,
-                handleBlur,
-                handleChange,
-                handleSubmit,
-                isSubmitting,
-                isValid,
-                setFieldValue,
-                touched,
-                values,
-            }) => (
-                <div className='cfd-proof-of-identity__fields'>
-                    <div className='proof-of-identity__container'>
-                        <DocumentSubmitLogo className='icon' />
-                        <Text className='proof-of-identity btm-spacer' align='center' weight='bold'>
-                            {localize('Identity information')}
-                        </Text>
-                        <Text className='proof-of-identity__text btm-spacer' size='xs'>
-                            {localize('Please select the document type and enter the ID number.')}
-                        </Text>
-                        <div className='proof-of-identity__inner-container btm-spacer'>
-                            <div className='proof-of-identity__fieldset-container'>
-                                <fieldset className='proof-of-identity__fieldset'>
-                                    <Field name='document'>
-                                        {({ field }) => (
-                                            <React.Fragment>
-                                                <DesktopWrapper>
-                                                    <div className='document-dropdown'>
-                                                        <Autocomplete
-                                                            {...field}
-                                                            name='document_type'
-                                                            data-lpignore='true'
-                                                            error={touched.document_type && errors.document_type}
-                                                            autoComplete='off'
-                                                            type='text'
-                                                            label={localize('Choose the document type')}
-                                                            list_items={document_list}
-                                                            value={values.document_type.text}
-                                                            onBlur={e => {
-                                                                handleBlur(e);
-                                                                if (!getDocument(e.target.value)) {
-                                                                    resetDocumentItemSelected(setFieldValue);
-                                                                }
-                                                            }}
-                                                            onChange={handleChange}
-                                                            onItemSelection={item => {
-                                                                if (item.text === 'No results found' || !item.text) {
-                                                                    setDocSelected(false);
-                                                                    resetDocumentItemSelected(setFieldValue);
-                                                                } else {
-                                                                    setFieldValue('document_type', item, true);
-                                                                    setDocSelected(true);
-                                                                    if (has_visual_sample) {
-                                                                        setDocumentImage(item.sample_image || '');
-                                                                    }
-                                                                }
-                                                            }}
-                                                            required
-                                                        />
-                                                    </div>
-                                                </DesktopWrapper>
-                                                <MobileWrapper>
-                                                    <SelectNative
-                                                        {...field}
-                                                        name='document_type'
-                                                        error={touched.document_type && errors.document_type}
-                                                        label={localize('Choose the document type')}
-                                                        list_items={document_list}
-                                                        value={values.document_type.text}
-                                                        onChange={e => {
-                                                            handleChange(e);
-                                                            const selected_document = getDocument(e.target.value);
-                                                            if (selected_document) {
-                                                                setDocSelected(true);
-                                                                setFieldValue('document_type', selected_document, true);
-                                                                if (has_visual_sample) {
-                                                                    setDocumentImage(selected_document.sample_image);
-                                                                }
+        <div className='cfd-proof-of-identity__fields'>
+            <div className='proof-of-identity__container'>
+                <DocumentSubmitLogo className='icon' />
+                <Text className='proof-of-identity btm-spacer' align='center' weight='bold'>
+                    {localize('Identity information')}
+                </Text>
+                <Text className='proof-of-identity__text btm-spacer' size='xs'>
+                    {localize('Please select the document type and enter the ID number.')}
+                </Text>
+                <div className='proof-of-identity__inner-container btm-spacer'>
+                    {/* <div className='proof-of-identity__fieldset-container'>
+                        <fieldset className='proof-of-identity__fieldset'>
+                            <Field name='document'>
+                                {({ field }) => (
+                                    <React.Fragment>
+                                        <DesktopWrapper>
+                                            <div className='document-dropdown'>
+                                                <Autocomplete
+                                                    {...field}
+                                                    name='document_type'
+                                                    data-lpignore='true'
+                                                    error={touched.document_type && errors.document_type}
+                                                    autoComplete='off'
+                                                    type='text'
+                                                    label={localize('Choose the document type')}
+                                                    list_items={document_list}
+                                                    value={values.document_type.text}
+                                                    onBlur={e => {
+                                                        handleBlur(e);
+                                                        if (!getDocument(e.target.value)) {
+                                                            resetDocumentItemSelected(setFieldValue);
+                                                        }
+                                                    }}
+                                                    onChange={handleChange}
+                                                    onItemSelection={item => {
+                                                        if (item.text === 'No results found' || !item.text) {
+                                                            setDocSelected(false);
+                                                            resetDocumentItemSelected(setFieldValue);
+                                                        } else {
+                                                            setFieldValue('document_type', item, true);
+                                                            setDocSelected(true);
+                                                            if (has_visual_sample) {
+                                                                setDocumentImage(item.sample_image || '');
                                                             }
-                                                        }}
-                                                        use_text={true}
-                                                        required
-                                                    />
-                                                </MobileWrapper>
-                                            </React.Fragment>
-                                        )}
-                                    </Field>
-                                </fieldset>
-                                <fieldset className='proof-of-identity__fieldset-input'>
-                                    <Field name='document_number'>
-                                        {({ field }) => (
-                                            <Input
+                                                        }
+                                                    }}
+                                                    required
+                                                />
+                                            </div>
+                                        </DesktopWrapper>
+                                        <MobileWrapper>
+                                            <SelectNative
                                                 {...field}
-                                                name='document_number'
-                                                bottom_label={
-                                                    values.document_type &&
-                                                    getExampleFormat(values.document_type.example_format)
-                                                }
-                                                disabled={is_input_disable}
-                                                error={touched.document_number && errors.document_number}
-                                                autoComplete='off'
-                                                placeholder='Enter your document number'
-                                                value={values.document_number}
-                                                onBlur={handleBlur}
-                                                onChange={handleChange}
-                                                onKeyUp={e => {
-                                                    const { example_format } = values.document_type;
-                                                    const current_input = example_format.includes('-')
-                                                        ? formatInput(example_format, current_input || e.target.value, '-')
-                                                        : e.target.value;
-                                                    setFieldValue('document_number', current_input, true);
-                                                    validateFields(values);
+                                                name='document_type'
+                                                error={touched.document_type && errors.document_type}
+                                                label={localize('Choose the document type')}
+                                                list_items={document_list}
+                                                value={values.document_type.text}
+                                                onChange={e => {
+                                                    handleChange(e);
+                                                    const selected_document = getDocument(e.target.value);
+                                                    if (selected_document) {
+                                                        setDocSelected(true);
+                                                        setFieldValue('document_type', selected_document, true);
+                                                        if (has_visual_sample) {
+                                                            setDocumentImage(selected_document.sample_image);
+                                                        }
+                                                    }
                                                 }}
+                                                use_text={true}
                                                 required
                                             />
-                                        )}
-                                    </Field>
-                                </fieldset>
-                            </div>
-                            {document_image && (
-                                <div
-                                    className={classNames('proof-of-identity__sample-container', {
-                                        'proof-of-identity__sample-container-external': is_from_external,
-                                    })}
-                                >
-                                    <Text size='xxs' weight='bold'>
-                                        {localize('Sample:')}
-                                    </Text>
-                                    <div className='proof-of-identity__image-container'>
-                                        <img
-                                            className='proof-of-identity__image'
-                                            src={document_image}
-                                            alt='document sample image'
-                                        />
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                        {is_doc_selected && (
-                            <Text
-                                className={classNames('proof-of-identity__text btm-spacer', {
-                                    'top-spacer': is_from_external,
-                                })}
-                                align='center'
-                                size='xs'
-                            >
-                                <Localize i18n_default_text='Please ensure all your personal details are the same as in your chosen document. If you wish to update your personal details, go to account settings.' />
+                                        </MobileWrapper>
+                                    </React.Fragment>
+                                )}
+                            </Field>
+                        </fieldset>
+                        <fieldset className='proof-of-identity__fieldset-input'>
+                            <Field name='document_number'>
+                                {({ field }) => (
+                                    <Input
+                                        {...field}
+                                        name='document_number'
+                                        bottom_label={
+                                            values.document_type &&
+                                            getExampleFormat(values.document_type.example_format)
+                                        }
+                                        disabled={is_input_disable}
+                                        error={touched.document_number && errors.document_number}
+                                        autoComplete='off'
+                                        placeholder='Enter your document number'
+                                        value={values.document_number}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        onKeyUp={e => {
+                                            const { example_format } = values.document_type;
+                                            const current_input = example_format?.includes('-')
+                                                ? formatInput(example_format, current_input || e.target.value, '-')
+                                                : e.target.value;
+                                            setFieldValue('document_number', current_input, true);
+                                            validateFields(values);
+                                        }}
+                                        required
+                                    />
+                                )}
+                            </Field>
+                        </fieldset>
+                    </div>
+                    {document_image && (
+                        <div
+                            className={classNames('proof-of-identity__sample-container', {
+                                'proof-of-identity__sample-container-external': is_from_external,
+                            })}
+                        >
+                            <Text size='xxs' weight='bold'>
+                                {localize('Sample:')}
                             </Text>
-                        )}
-
-                    </div >
+                            <div className='proof-of-identity__image-container'>
+                                <img
+                                    className='proof-of-identity__image'
+                                    src={document_image}
+                                    alt='document sample image'
+                                />
+                            </div>
+                        </div>
+                    )} */}
                 </div>
-            )
-            }
-        </Formik >
+            </div >
+        </div>
     );
 };
 
-// IdvDocumentSubmit.propTypes = {
-//     handleBack: PropTypes.func,
-//     handleViewComplete: PropTypes.func,
-//     is_from_external: PropTypes.bool,
-//     selected_country: PropTypes.object,
-// };
 
 export default IdvDocumentSubmit;

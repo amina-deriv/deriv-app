@@ -1,7 +1,7 @@
 import { Formik, Form } from 'formik';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { IdvDocumentSubmit } from '@deriv/account';
+import IdvDocumentSubmit from '../idv-document-submit'
 import { AutoHeightWrapper, FormSubmitButton } from '@deriv/components';
 import { isMobile } from '@deriv/shared';
 import { localize } from '@deriv/translations';
