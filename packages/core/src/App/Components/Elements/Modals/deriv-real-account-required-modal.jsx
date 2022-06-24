@@ -4,14 +4,7 @@ import { Dialog } from '@deriv/components';
 import { localize } from '@deriv/translations';
 import { connect } from 'Stores/connect';
 
-const CFDRealAccountRequiredModal = ({
-    is_open,
-    onClose,
-    disableApp,
-    enableApp,
-    openRealAccountSignup,
-}) => {
-
+const DerivRealAccountRequiredModal = ({ is_open, onClose, disableApp, enableApp, openRealAccountSignup }) => {
     const createAccount = () => {
         onClose();
         openRealAccountSignup();
@@ -35,7 +28,7 @@ const CFDRealAccountRequiredModal = ({
     );
 };
 
-CFDRealAccountRequiredModal.propTypes = {
+DerivRealAccountRequiredModal.propTypes = {
     is_open: PropTypes.bool,
     onClose: PropTypes.func,
     disableApp: PropTypes.func,
@@ -49,4 +42,4 @@ export default connect(({ ui }) => ({
     disableApp: ui.disableApp,
     enableApp: ui.enableApp,
     openRealAccountSignup: ui.openRealAccountSignup,
-}))(CFDRealAccountRequiredModal);
+}))(DerivRealAccountRequiredModal);

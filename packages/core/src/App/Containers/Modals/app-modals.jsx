@@ -2,7 +2,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import MT5AccountNeededModal from 'App/Components/Elements/Modals/mt5-account-needed-modal.jsx';
 import RedirectNoticeModal from 'App/Components/Elements/Modals/RedirectNotice';
-import CFDRealAccountRequiredModal from 'App/Components/Elements/Modals/cfd-real-account-required-modal.jsx'
+import DerivRealAccountRequiredModal from 'App/Components/Elements/Modals/deriv-real-account-required-modal.jsx';
 import { connect } from 'Stores/connect';
 import { moduleLoader } from '@deriv/shared';
 
@@ -92,7 +92,7 @@ const AppModals = ({
     }
 
     if (is_deriv_account_needed_modal_visible) {
-        ComponentToLoad = <CFDRealAccountRequiredModal />;
+        ComponentToLoad = <DerivRealAccountRequiredModal />;
     }
 
     return (
