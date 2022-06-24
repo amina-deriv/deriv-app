@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Autocomplete, Button, DesktopWrapper, Input, MobileWrapper, Text, SelectNative, FormSubmitButton } from '@deriv/components';
+import { Autocomplete, Button, DesktopWrapper, Input, MobileWrapper, Text, SelectNative } from '@deriv/components';
 import { Formik, Field } from 'formik';
 import { localize, Localize } from '@deriv/translations';
 import { formatInput, WS } from '@deriv/shared';
@@ -10,7 +10,7 @@ import { getDocumentData, getRegex } from './utils';
 import BackButtonIcon from '../../../Assets/ic-poi-back-btn.svg';
 import DocumentSubmitLogo from '../../../Assets/ic-document-submit-icon.svg';
 
-const IdvDocumentSubmit = ({ handleBack, handleViewComplete, selected_country, is_from_external }) => {
+const IdvDocumentSubmit = ({ handleBack, handleViewComplete, selected_country, is_from_external, on_sign_up = false }) => {
     const [document_list, setDocumentList] = React.useState([]);
     const [document_image, setDocumentImage] = React.useState(null);
     const [is_input_disable, setInputDisable] = React.useState(true);
@@ -101,8 +101,6 @@ const IdvDocumentSubmit = ({ handleBack, handleViewComplete, selected_country, i
     };
 
     const submitHandler = (values, { setSubmitting, setStatus }) => {
-
-        console.log('submitHandler');
         setSubmitting(true);
         const { document_number, document_type } = values;
         const submit_data = {
@@ -111,17 +109,14 @@ const IdvDocumentSubmit = ({ handleBack, handleViewComplete, selected_country, i
             document_type: document_type.id,
             issuing_country: country_code,
         };
-        setSubmitting(false);
-        handleViewComplete();
-        // WS.send(submit_data).then(response => {
-        //     setSubmitting(false);
-        //     console.log(response);
-        //     // if (response.error) {
-        //     //     setStatus(response.error);
-        //     //     return;
-        //     // }
-
-        // });
+        WS.send(submit_data).then(response => {
+            setSubmitting(false);
+            if (response.error && !on_sign_up) {
+                setStatus(response.error);
+                return;
+            }
+            handleViewComplete();
+        });
     };
 
     return (
@@ -277,7 +272,15 @@ const IdvDocumentSubmit = ({ handleBack, handleViewComplete, selected_country, i
                     )}
                     <FormFooter className='proof-of-identity__footer'>
                         <Button className='back-btn' onClick={handleBack} type='button' has_effect large secondary>
-                            <BackButtonIcon className='back-btn-icon' /> {localize('Previous')}
+
+                            {!on_sign_up ?
+                                <>
+                                    <BackButtonIcon className='back-btn-icon' />
+                                    {localize('Go Back')}
+                                </> :
+                                localize('Previous')
+                            }
+
                         </Button>
                         <Button
                             className='proof-of-identity__submit-button'
@@ -285,31 +288,23 @@ const IdvDocumentSubmit = ({ handleBack, handleViewComplete, selected_country, i
                             onClick={handleSubmit}
                             has_effect
                             is_disabled={!dirty || isSubmitting || !isValid}
-                            text={localize('Next')}
+                            text={on_sign_up ? localize('Next') : localize('Verify')}
                             large
                             primary
                         />
-                        {/* <FormSubmitButton
-                            is_disabled={!dirty || isSubmitting || !isValid}
-                            label={localize('Next')}
-                            is_absolute={isMobile()}
-                            has_cancel
-                            cancel_label={localize('Previous')}
-                            onCancel={() => handleBack(values)}
-                        /> */}
                     </FormFooter>
-
-
-
-
-
-
                 </div>
             )}
         </Formik>
     );
 };
 
-
+IdvDocumentSubmit.propTypes = {
+    handleBack: PropTypes.func,
+    handleViewComplete: PropTypes.func,
+    is_from_external: PropTypes.bool,
+    selected_country: PropTypes.object,
+    on_sign_up: PropTypes.bool,
+};
 
 export default IdvDocumentSubmit;

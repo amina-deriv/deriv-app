@@ -13,8 +13,8 @@ const proof_of_identity_config = {
 export const proofOfIdentityConfig = ({ real_account_signup_target }) => {
     return {
         header: {
-            active_title: localize('Identity information'),
-            title: localize('Identity information'),
+            active_title: localize('Complete your proof of identity'),
+            title: localize('Proof of identity'),
         },
         body: ProofOfIdentityForm,
         form_value: getDefaultFields(real_account_signup_target, proof_of_identity_config),

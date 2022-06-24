@@ -15,13 +15,17 @@ import AddressDetails from './address-details.jsx';
 const shouldShowFinancialDetails = ({ real_account_signup_target }) => real_account_signup_target === 'maltainvest';
 const shouldShowPersonalAndAddressDetailsAndCurrency = ({ real_account_signup_target }) =>
     real_account_signup_target !== 'samoa';
+const shouldShowIdentityInformation = ({ citizen, residence_list }) => {
+    const country = residence_list.find(residence => residence.value === 'ke');
+    return country.identity.services.idv.is_country_supported;
+};
 
 export const getItems = props => {
     return [
         ...(shouldShowPersonalAndAddressDetailsAndCurrency(props)
             ? [currencySelectorConfig(props, CurrencySelector)]
             : []),
-        proofOfIdentityConfig(props),
+        ...(shouldShowIdentityInformation(props) ? [proofOfIdentityConfig(props)] : []),
         ...(shouldShowPersonalAndAddressDetailsAndCurrency(props)
             ? [personalDetailsConfig(props, PersonalDetails)]
             : []),
