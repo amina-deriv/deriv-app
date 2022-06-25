@@ -2,9 +2,11 @@ import { Formik } from 'formik';
 import PropTypes from 'prop-types';
 import React from 'react';
 import IdvDocumentSubmit from '../idv-document-submit'
-import { AutoHeightWrapper } from '@deriv/components';
+import { AutoHeightWrapper, Div100vhContainer } from '@deriv/components';
+import { isDesktop } from '@deriv/shared';
 
-const ProofOfIdentityForm = ({ getCurrentStep, goToPreviousStep, goToNextStep, index, onCancel, onSave, onSubmit, value }) => {
+
+export const ProofOfIdentityFormOnSignup = ({ getCurrentStep, goToPreviousStep, goToNextStep, index, onCancel, onSave, onSubmit, value }) => {
     const [poi_state, setPoiState] = React.useState('none');
 
     const initial_form_values = {
@@ -26,56 +28,62 @@ const ProofOfIdentityForm = ({ getCurrentStep, goToPreviousStep, goToNextStep, i
             {({ handleSubmit }) => (
                 <AutoHeightWrapper default_height={200}>
                     {({ setRef }) => (
-                        <form ref={setRef} className='cfd-proof-of-identity'>
+                        <form ref={setRef} className='poi-form-on-signup'>
                             <div className='details-form'>
-                                <input type='hidden' name='poi_state' value={poi_state} readOnly />
-                                <IdvDocumentSubmit
-                                    selected_country={{
-                                        "identity": {
-                                            "services": {
-                                                "idv": {
-                                                    "documents_supported": {
-                                                        "national_id": {
-                                                            "display_name": "National ID",
-                                                            "format": "^[0-9]{13}$"
+                                <Div100vhContainer
+                                    className='poi-form-on-signup__fields'
+                                    height_offset='180px'
+                                    is_disabled={isDesktop()}
+                                >
+                                    <input type='hidden' name='poi_state' value={poi_state} readOnly />
+                                    <IdvDocumentSubmit
+                                        selected_country={{
+                                            "identity": {
+                                                "services": {
+                                                    "idv": {
+                                                        "documents_supported": {
+                                                            "national_id": {
+                                                                "display_name": "National ID",
+                                                                "format": "^[0-9]{13}$"
+                                                            },
+                                                            "national_id_no_photo": {
+                                                                "display_name": "National ID no photo",
+                                                                "format": "^[0-9]{13}$"
+                                                            }
                                                         },
-                                                        "national_id_no_photo": {
-                                                            "display_name": "National ID no photo",
-                                                            "format": "^[0-9]{13}$"
-                                                        }
+                                                        "has_visual_sample": 1,
+                                                        "is_country_supported": 1
                                                     },
-                                                    "has_visual_sample": 1,
-                                                    "is_country_supported": 1
-                                                },
-                                                "onfido": {
-                                                    "documents_supported": {
-                                                        "driving_licence": {
-                                                            "display_name": "Driving Licence"
+                                                    "onfido": {
+                                                        "documents_supported": {
+                                                            "driving_licence": {
+                                                                "display_name": "Driving Licence"
+                                                            },
+                                                            "national_identity_card": {
+                                                                "display_name": "National Identity Card"
+                                                            },
+                                                            "passport": {
+                                                                "display_name": "Passport"
+                                                            }
                                                         },
-                                                        "national_identity_card": {
-                                                            "display_name": "National Identity Card"
-                                                        },
-                                                        "passport": {
-                                                            "display_name": "Passport"
-                                                        }
-                                                    },
-                                                    "is_country_supported": 1
+                                                        "is_country_supported": 1
+                                                    }
                                                 }
-                                            }
-                                        },
-                                        "phone_idd": "27",
-                                        "text": "South Africa",
-                                        "tin_format": [
-                                            "^[01239]\d{9}$"
-                                        ],
-                                        "value": "za"
+                                            },
+                                            "phone_idd": "27",
+                                            "text": "South Africa",
+                                            "tin_format": [
+                                                "^[01239]\d{9}$"
+                                            ],
+                                            "value": "za"
 
-                                    }}
-                                    is_from_external={true}
-                                    handleBack={handleCancel}
-                                    handleViewComplete={handleSubmit}
-                                    on_sign_up={true}
-                                />
+                                        }}
+                                        is_from_external={true}
+                                        handleBack={handleCancel}
+                                        handleViewComplete={handleSubmit}
+                                        on_signup={true}
+                                    />
+                                </Div100vhContainer>
 
                             </div>
                         </form>
@@ -87,7 +95,7 @@ const ProofOfIdentityForm = ({ getCurrentStep, goToPreviousStep, goToNextStep, i
     );
 };
 
-ProofOfIdentityForm.propTypes = {
+ProofOfIdentityFormOnSignup.propTypes = {
     form_error: PropTypes.string,
     index: PropTypes.number,
     onCancel: PropTypes.func,
@@ -95,4 +103,4 @@ ProofOfIdentityForm.propTypes = {
     value: PropTypes.object,
 };
 
-export default ProofOfIdentityForm;
+

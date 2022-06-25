@@ -7,6 +7,7 @@ import {
     termsOfUseConfig,
     TermsOfUse,
     proofOfIdentityConfig,
+    ProofOfIdentityFormOnSignup,
 } from '@deriv/account';
 import CurrencySelector from './currency-selector.jsx';
 import FinancialDetails from './financial-details.jsx';
@@ -25,10 +26,12 @@ export const getItems = props => {
         ...(shouldShowPersonalAndAddressDetailsAndCurrency(props)
             ? [currencySelectorConfig(props, CurrencySelector)]
             : []),
-        ...(shouldShowIdentityInformation(props) ? [proofOfIdentityConfig(props)] : []),
+        ...(shouldShowIdentityInformation(props) ? [proofOfIdentityConfig(props, ProofOfIdentityFormOnSignup)] : []),
+
         ...(shouldShowPersonalAndAddressDetailsAndCurrency(props)
             ? [personalDetailsConfig(props, PersonalDetails)]
             : []),
+
         ...(shouldShowPersonalAndAddressDetailsAndCurrency(props) ? [addressDetailsConfig(props, AddressDetails)] : []),
 
         ...(shouldShowFinancialDetails(props) ? [financialDetailsConfig(props, FinancialDetails)] : []),

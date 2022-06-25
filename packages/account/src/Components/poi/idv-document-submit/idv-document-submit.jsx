@@ -10,7 +10,7 @@ import { getDocumentData, getRegex } from './utils';
 import BackButtonIcon from '../../../Assets/ic-poi-back-btn.svg';
 import DocumentSubmitLogo from '../../../Assets/ic-document-submit-icon.svg';
 
-const IdvDocumentSubmit = ({ handleBack, handleViewComplete, selected_country, is_from_external, on_sign_up = false }) => {
+const IdvDocumentSubmit = ({ handleBack, handleViewComplete, selected_country, is_from_external, on_signup = false }) => {
     const [document_list, setDocumentList] = React.useState([]);
     const [document_image, setDocumentImage] = React.useState(null);
     const [is_input_disable, setInputDisable] = React.useState(true);
@@ -111,7 +111,7 @@ const IdvDocumentSubmit = ({ handleBack, handleViewComplete, selected_country, i
         };
         WS.send(submit_data).then(response => {
             setSubmitting(false);
-            if (response.error && !on_sign_up) {
+            if (response.error && !on_signup) {
                 setStatus(response.error);
                 return;
             }
@@ -136,7 +136,7 @@ const IdvDocumentSubmit = ({ handleBack, handleViewComplete, selected_country, i
                 <div className='proof-of-identity__container'>
                     <DocumentSubmitLogo className='icon' />
                     <Text className='proof-of-identity btm-spacer' align='center' weight='bold'>
-                        {localize('Verify your identity')}
+                        {on_signup ? localize('Identity information') : localize('Verify your identity')}
                     </Text>
                     <Text className='proof-of-identity__text btm-spacer' size='xs'>
                         {localize('Please select the document type and enter the ID number.')}
@@ -259,7 +259,7 @@ const IdvDocumentSubmit = ({ handleBack, handleViewComplete, selected_country, i
                             </div>
                         )}
                     </div>
-                    {is_doc_selected && (
+                    {is_doc_selected &&
                         <Text
                             className={classNames('proof-of-identity__text btm-spacer', {
                                 'top-spacer': is_from_external,
@@ -269,11 +269,11 @@ const IdvDocumentSubmit = ({ handleBack, handleViewComplete, selected_country, i
                         >
                             <Localize i18n_default_text='Please ensure all your personal details are the same as in your chosen document. If you wish to update your personal details, go to account settings.' />
                         </Text>
-                    )}
-                    <FormFooter className='proof-of-identity__footer'>
+                    }
+                    <FormFooter className='amina'>
                         <Button className='back-btn' onClick={handleBack} type='button' has_effect large secondary>
 
-                            {!on_sign_up ?
+                            {!on_signup ?
                                 <>
                                     <BackButtonIcon className='back-btn-icon' />
                                     {localize('Go Back')}
@@ -288,7 +288,7 @@ const IdvDocumentSubmit = ({ handleBack, handleViewComplete, selected_country, i
                             onClick={handleSubmit}
                             has_effect
                             is_disabled={!dirty || isSubmitting || !isValid}
-                            text={on_sign_up ? localize('Next') : localize('Verify')}
+                            text={on_signup ? localize('Next') : localize('Verify')}
                             large
                             primary
                         />

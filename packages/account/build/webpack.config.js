@@ -56,6 +56,7 @@ module.exports = function (env) {
             'terms-of-use': 'Components/terms-of-use',
             'terms-of-use-config': 'Configs/terms-of-use-config',
             'proof-of-identity-config': 'Configs/proof-of-identity-config',
+            'proof-of-identity-form-on-signup': 'Components/poi/poi-form-on-signup',
         },
         mode: IS_RELEASE ? 'production' : 'development',
         module: {
