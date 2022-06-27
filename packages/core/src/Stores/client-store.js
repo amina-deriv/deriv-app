@@ -41,6 +41,7 @@ export default class ClientStore extends BaseStore {
     @observable upgrade_info;
     @observable email;
     @observable accounts = {};
+    @observable tradingPlatformAvailableAccounts = [];
     @observable pre_switch_broadcast = false;
     @observable switched = '';
     @observable is_switching = false;
@@ -49,6 +50,7 @@ export default class ClientStore extends BaseStore {
     @observable currencies_list = {};
     @observable residence_list = [];
     @observable states_list = [];
+    @observable citizen = '';
     @observable selected_currency = '';
     @observable is_populating_account_list = false;
     @observable is_populating_mt5_account_list = true;
@@ -1227,9 +1229,23 @@ export default class ClientStore extends BaseStore {
         const search = window.location.search;
         const search_params = new URLSearchParams(search);
         const redirect_url = search_params?.get('redirect_url');
+        const code_param = search_params?.get('code');
+        const action_param = search_params?.get('action');
 
         this.setIsLoggingIn(true);
         const authorize_response = await this.setUserLogin(login_new_user);
+
+        if (search) {
+            if (code_param && action_param) this.setVerificationCode(code_param, action_param);
+            document.addEventListener('DOMContentLoaded', () => {
+                setTimeout(() => {
+                    // timeout is needed to get the token (code) from the URL before we hide it from the URL
+                    // and from LiveChat that gets the URL from Window, particularly when initialized via HTML script on mobile
+                    history.replaceState(null, null, window.location.search.replace(/&?code=[^&]*/i, ''));
+                }, 0);
+            });
+        }
+
         this.setDeviceData();
 
         // On case of invalid token, no need to continue with additional api calls.
@@ -1271,7 +1287,7 @@ export default class ClientStore extends BaseStore {
             if (redirect_url) {
                 const redirect_route = routes[redirect_url].length > 1 ? routes[redirect_url] : '';
                 const has_action = ['payment_agent_withdraw', 'payment_withdraw', 'reset_password'].includes(
-                    search_params?.get('action')
+                    action_param
                 );
 
                 if (has_action) {
@@ -1293,6 +1309,7 @@ export default class ClientStore extends BaseStore {
             if (language !== 'EN' && language !== LocalStore.get(LANGUAGE_KEY)) {
                 window.location.replace(urlForLanguage(authorize_response.authorize.preferred_language));
             }
+            if (this.citizen) this.onSetCitizen(this.citizen);
         }
 
         this.selectCurrency('');
@@ -1302,6 +1319,7 @@ export default class ClientStore extends BaseStore {
             WS.storage.mt5LoginList().then(this.responseMt5LoginList);
             WS.tradingServers(CFD_PLATFORMS.MT5).then(this.responseMT5TradingServers);
 
+            WS.tradingPlatformAvailableAccounts(CFD_PLATFORMS.MT5).then(this.responseTradingPlatformAvailableAccounts);
             WS.tradingPlatformAccountsList(CFD_PLATFORMS.DXTRADE).then(this.responseTradingPlatformAccountsList);
             WS.tradingServers(CFD_PLATFORMS.DXTRADE).then(this.responseDxtradeTradingServers);
 
@@ -1631,6 +1649,11 @@ export default class ClientStore extends BaseStore {
     }
 
     @action.bound
+    setCitizen(citizen) {
+        this.citizen = citizen;
+    }
+
+    @action.bound
     setEmail(email) {
         this.accounts[this.loginid].email = email;
         this.email = email;
@@ -1928,8 +1951,17 @@ export default class ClientStore extends BaseStore {
     }
 
     @action.bound
-    onSignup({ password, residence }, cb) {
-        if (!this.verification_code.signup || !password || !residence) return;
+    onSetCitizen(citizen) {
+        if (!citizen) return;
+        WS.setSettings({
+            set_settings: 1,
+            citizen,
+        });
+    }
+
+    @action.bound
+    onSignup({ citizenship, password, residence }, cb) {
+        if (!this.verification_code.signup || !password || !residence || !citizenship) return;
         WS.newAccountVirtual(this.verification_code.signup, password, residence, this.getSignupParams()).then(
             async response => {
                 if (response.error) {
@@ -1938,8 +1970,8 @@ export default class ClientStore extends BaseStore {
                     cb();
                     // Initialize client store with new user login
                     const { client_id, currency, oauth_token } = response.new_account_virtual;
+                    await this.setCitizen(citizenship);
                     await this.switchToNewlyCreatedAccount(client_id, oauth_token, currency);
-
                     // GTM Signup event
                     this.root_store.gtm.pushDataLayer({
                         event: 'virtual_signup',
@@ -2095,6 +2127,13 @@ export default class ClientStore extends BaseStore {
                 });
             }
         });
+    }
+
+    @action.bound
+    responseTradingPlatformAvailableAccounts(response) {
+        if (!response.error) {
+            this.tradingPlatformAvailableAccounts = response.trading_platform_available_accounts;
+        }
     }
 
     @action.bound

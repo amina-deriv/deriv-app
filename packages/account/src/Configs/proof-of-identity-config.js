@@ -1,27 +1,14 @@
 import { localize } from '@deriv/translations';
-import { generateValidationFunction, getDefaultFields } from '@deriv/shared';
-// import ProofOfIdentityForm from '../Components/poi/poi-form-on-signup';
 
-const proof_of_identity_config = {
-    poi_state: {
-        supported_in: ['maltainvest', 'malta', 'svg', 'iom'],
-        default_value: '',
-        rules: [],
-    },
-};
-
-const proofOfIdentityConfig = ({ real_account_signup_target }, ProofOfIdentityForm) => {
+const proofOfIdentityConfig = ({ account_settings, residence_list }, ProofOfIdentityForm) => {
     return {
         header: {
             active_title: localize('Identity information'),
             title: localize('Identity information'),
         },
         body: ProofOfIdentityForm,
-        form_value: getDefaultFields(real_account_signup_target, proof_of_identity_config),
-        props: {
-            validate: generateValidationFunction(real_account_signup_target, proof_of_identity_config),
-        },
-        passthrough: ['refreshNotifications'],
+        props: { citizen: account_settings.citizen },
+        passthrough: ['refreshNotifications', 'residence_list'],
     };
 };
 

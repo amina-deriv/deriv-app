@@ -109,9 +109,15 @@ const IdvDocumentSubmit = ({ handleBack, handleViewComplete, selected_country, i
             document_type: document_type.id,
             issuing_country: country_code,
         };
+        if (on_signup) {
+            handleViewComplete();
+            return;
+        }
+
+
         WS.send(submit_data).then(response => {
             setSubmitting(false);
-            if (response.error && !on_signup) {
+            if (response.error) {
                 setStatus(response.error);
                 return;
             }

@@ -6,8 +6,7 @@ import { AutoHeightWrapper, Div100vhContainer } from '@deriv/components';
 import { isDesktop } from '@deriv/shared';
 
 
-export const ProofOfIdentityFormOnSignup = ({ getCurrentStep, goToPreviousStep, goToNextStep, index, onCancel, onSave, onSubmit, value }) => {
-    const [poi_state, setPoiState] = React.useState('none');
+export const ProofOfIdentityFormOnSignup = ({ getCurrentStep, goToPreviousStep, goToNextStep, index, onCancel, onSave, onSubmit, value, residence_list, citizen, }) => {
 
     const initial_form_values = {
         ...value,
@@ -19,11 +18,11 @@ export const ProofOfIdentityFormOnSignup = ({ getCurrentStep, goToPreviousStep, 
         onSave(current_step, values);
         onCancel(current_step, goToPreviousStep);
     };
-
+    const citizenship = residence_list.find(residence => residence.value === citizen);
     return (
         <Formik
             initialValues={initial_form_values}
-            onSubmit={actions => onSubmit(index, { poi_state }, actions.setSubmitting, goToNextStep)}
+            onSubmit={actions => onSubmit(index, {}, actions.setSubmitting, goToNextStep)}
         >
             {({ handleSubmit }) => (
                 <AutoHeightWrapper default_height={200}>
@@ -35,49 +34,8 @@ export const ProofOfIdentityFormOnSignup = ({ getCurrentStep, goToPreviousStep, 
                                     height_offset='180px'
                                     is_disabled={isDesktop()}
                                 >
-                                    <input type='hidden' name='poi_state' value={poi_state} readOnly />
                                     <IdvDocumentSubmit
-                                        selected_country={{
-                                            "identity": {
-                                                "services": {
-                                                    "idv": {
-                                                        "documents_supported": {
-                                                            "national_id": {
-                                                                "display_name": "National ID",
-                                                                "format": "^[0-9]{13}$"
-                                                            },
-                                                            "national_id_no_photo": {
-                                                                "display_name": "National ID no photo",
-                                                                "format": "^[0-9]{13}$"
-                                                            }
-                                                        },
-                                                        "has_visual_sample": 1,
-                                                        "is_country_supported": 1
-                                                    },
-                                                    "onfido": {
-                                                        "documents_supported": {
-                                                            "driving_licence": {
-                                                                "display_name": "Driving Licence"
-                                                            },
-                                                            "national_identity_card": {
-                                                                "display_name": "National Identity Card"
-                                                            },
-                                                            "passport": {
-                                                                "display_name": "Passport"
-                                                            }
-                                                        },
-                                                        "is_country_supported": 1
-                                                    }
-                                                }
-                                            },
-                                            "phone_idd": "27",
-                                            "text": "South Africa",
-                                            "tin_format": [
-                                                "^[01239]\d{9}$"
-                                            ],
-                                            "value": "za"
-
-                                        }}
+                                        selected_country={citizenship}
                                         is_from_external={true}
                                         handleBack={handleCancel}
                                         handleViewComplete={handleSubmit}
