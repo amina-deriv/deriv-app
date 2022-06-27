@@ -259,7 +259,7 @@ const IdvDocumentSubmit = ({ handleBack, handleViewComplete, selected_country, i
                             </div>
                         )}
                     </div>
-                    {is_doc_selected &&
+                    {(is_doc_selected && !on_signup) &&
                         <Text
                             className={classNames('proof-of-identity__text btm-spacer', {
                                 'top-spacer': is_from_external,
@@ -270,7 +270,7 @@ const IdvDocumentSubmit = ({ handleBack, handleViewComplete, selected_country, i
                             <Localize i18n_default_text='Please ensure all your personal details are the same as in your chosen document. If you wish to update your personal details, go to account settings.' />
                         </Text>
                     }
-                    <FormFooter className='amina'>
+                    <FormFooter className={on_signup ? 'poi-on-signup__footer' : 'proof-of-identity__footer'}>
                         <Button className='back-btn' onClick={handleBack} type='button' has_effect large secondary>
 
                             {!on_signup ?

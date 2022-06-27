@@ -73,16 +73,16 @@ const CFDDemoAccountDisplay = ({
     const is_eu_user = (is_logged_in && is_eu) || (!is_logged_in && is_eu_country);
 
     const openCFDAccount = () => {
-        // if (is_eu && !has_maltainvest_account && standpoint.iom) {
-        // openAccountNeededModal('maltainvest', localize('Deriv Multipliers'), localize('demo CFDs'));
-        // } else {
-        //     onSelectAccount({
-        //         category: 'demo',
-        //         type: 'financial',
-        //     });
-        // }
+        if (is_eu && !has_maltainvest_account && standpoint.iom) {
+            openAccountNeededModal('maltainvest', localize('Deriv Multipliers'), localize('demo CFDs'));
+        } else {
+            onSelectAccount({
+                category: 'demo',
+                type: 'financial',
+            });
+        }
 
-        toggleDerivAccountNeededModal()
+        // toggleDerivAccountNeededModal()
 
     };
 
