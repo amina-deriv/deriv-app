@@ -19,7 +19,7 @@ const shouldShowPersonalAndAddressDetailsAndCurrency = ({ real_account_signup_ta
 const shouldShowIdentityInformation = ({ account_settings, residence_list }) => {
     const citizen = { account_settings };
     const country = residence_list.find(residence => residence.value === account_settings.citizen);
-    return citizen && country.identity.services.idv.is_country_supported;
+    return citizen && country?.identity?.services?.idv?.is_country_supported;
 };
 
 export const getItems = props => {
@@ -34,7 +34,6 @@ export const getItems = props => {
 
         ...(shouldShowPersonalAndAddressDetailsAndCurrency(props) ? [addressDetailsConfig(props, AddressDetails)] : []),
         ...(shouldShowIdentityInformation(props) ? [proofOfIdentityConfig(props, ProofOfIdentityFormOnSignup)] : []),
-
         ...(shouldShowFinancialDetails(props) ? [financialDetailsConfig(props, FinancialDetails)] : []),
         termsOfUseConfig(props, TermsOfUse),
     ];
