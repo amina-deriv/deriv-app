@@ -82,7 +82,7 @@
                 .icon {
                     width: 12.8rem;
                     height: 12.8rem;
-                    margin: 1.6rem 0 2.4rem 0;
+                    margin: 1.6rem 0 2.4rem;
                 }
                 .dc-input__bottom-label {
                     margin: unset;
@@ -95,13 +95,6 @@
                 }
             }
 
-            // &__header {
-            //     margin: 0 0 1.6rem;
-            // }
-            // &__country-text {
-            //     text-align: center;
-            //     margin-bottom: 1.6rem;
-            // }
             &__inner-container {
                 display: unset;
                 flex-direction: unset;
@@ -175,8 +168,8 @@
 .poi-on-signup__footer {
     background-color: var(--general-main-1);
     z-index: 1;
-    margin-top: 7rem;
-    width: 89rem;
+    margin-top: 7.5rem;
+    width: 88rem;
     border-top: 2px solid var(--general-section-1);
     display: flex;
     justify-content: flex-end;
