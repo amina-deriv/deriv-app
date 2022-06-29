@@ -57,6 +57,8 @@ module.exports = function (env) {
             'terms-of-use-config': 'Configs/terms-of-use-config',
             'proof-of-identity-config': 'Configs/proof-of-identity-config',
             'proof-of-identity-form-on-signup': 'Components/poi/poi-form-on-signup',
+            'idv-document-submit': 'Components/poi/idv-document-submit',
+            'idv-container-without-route': 'Components/poi/poi-form-on-signup/idv-doc',
         },
         mode: IS_RELEASE ? 'production' : 'development',
         module: {

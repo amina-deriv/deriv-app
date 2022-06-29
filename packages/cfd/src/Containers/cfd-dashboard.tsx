@@ -29,6 +29,8 @@ import { general_messages } from '../Constants/cfd-shared-strings';
 import CFDFinancialStpPendingDialog from '../Components/cfd-financial-stp-pending-dialog';
 import { CFDDemoAccountDisplay } from '../Components/cfd-demo-account-display';
 import { CFDRealAccountDisplay } from '../Components/cfd-real-account-display';
+
+import VerificationModal from './verification-modal'
 import { getPlatformMt5DownloadLink, getPlatformDXTradeDownloadLink } from '../Helpers/constants';
 import 'Sass/cfd-dashboard.scss';
 import RootStore from 'Stores/index';
@@ -160,6 +162,7 @@ type TCFDDashboardProps = {
     setAccountType: (account_type: TOpenAccountTransferMeta) => void;
     mt5_status_server: TMt5StatusServer;
     openDerivRealAccountNeededModal: () => void;
+    openVerificationModal: () => void;
 };
 
 const CFDDashboard = (props: TCFDDashboardProps) => {
@@ -394,6 +397,7 @@ const CFDDashboard = (props: TCFDDashboardProps) => {
         dxtrade_verification_code,
         mt5_status_server,
         openDerivRealAccountNeededModal,
+        openVerificationModal,
     } = props;
 
     const should_show_missing_real_account =
@@ -503,8 +507,8 @@ const CFDDashboard = (props: TCFDDashboardProps) => {
                                                     platform === CFD_PLATFORMS.MT5
                                                         ? is_suspended_mt5_real_server || mt5_disabled_signup_types.real
                                                         : is_suspended_mt5_real_server ||
-                                                          dxtrade_disabled_signup_types.real ||
-                                                          !!dxtrade_accounts_list_error
+                                                        dxtrade_disabled_signup_types.real ||
+                                                        !!dxtrade_accounts_list_error
                                                 }
                                                 openAccountNeededModal={openAccountNeededModal}
                                                 current_list={current_list}
@@ -547,8 +551,8 @@ const CFDDashboard = (props: TCFDDashboardProps) => {
                                                 platform === CFD_PLATFORMS.MT5
                                                     ? is_suspended_mt5_demo_server || mt5_disabled_signup_types.demo
                                                     : is_suspended_mt5_demo_server ||
-                                                      dxtrade_disabled_signup_types.demo ||
-                                                      !!dxtrade_accounts_list_error
+                                                    dxtrade_disabled_signup_types.demo ||
+                                                    !!dxtrade_accounts_list_error
                                             }
                                             openAccountNeededModal={openAccountNeededModal}
                                             standpoint={standpoint}
@@ -568,7 +572,11 @@ const CFDDashboard = (props: TCFDDashboardProps) => {
                                 )}
                             </LoadTab>
                             <CompareAccountsModal platform={platform} is_demo_tab={is_demo_tab} />
-                            <JurisdictionModal platform={platform} openPasswordModal={openRealPasswordModal} />
+                            <JurisdictionModal
+                                platform={platform}
+                                openPasswordModal={openRealPasswordModal}>
+                            </JurisdictionModal>
+                            <VerificationModal></VerificationModal>
                             <div className='cfd-dashboard__maintenance'>
                                 <Icon
                                     icon='IcAlertWarning'
@@ -761,5 +769,6 @@ export default withRouter(
         dxtrade_verification_code: client.verification_code.trading_platform_dxtrade_password_reset,
         mt5_status_server: client.website_status.mt5_status,
         openDerivRealAccountNeededModal: ui.openDerivRealAccountNeededModal,
+        openVerificationModal: ui.openVerificationModal
     }))(CFDDashboard)
 );

@@ -45,6 +45,7 @@ const AppModals = ({
     is_eu,
     is_logged_in,
     is_deriv_account_needed_modal_visible,
+    is_verification_modal_open,
 }) => {
     const url_params = new URLSearchParams(useLocation().search);
     const url_action_param = url_params.get('action');
@@ -94,6 +95,7 @@ const AppModals = ({
     if (is_deriv_account_needed_modal_visible) {
         ComponentToLoad = <DerivRealAccountRequiredModal />;
     }
+
 
     return (
         <>

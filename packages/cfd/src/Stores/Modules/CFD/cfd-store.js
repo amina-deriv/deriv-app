@@ -30,6 +30,8 @@ export default class CFDStore extends BaseStore {
 
     @observable error_type = undefined;
 
+    @observable is_verification_modal_open = false;
+
     constructor({ root_store }) {
         super({ root_store });
     }
@@ -528,5 +530,11 @@ export default class CFDStore extends BaseStore {
         }
 
         return response?.error?.message;
+    }
+
+    @action.bound
+    openVerificationModal() {
+        this.is_verification_modal_open = !this.is_verification_modal_open;
+        console.log(this.is_verification_modal_open);
     }
 }

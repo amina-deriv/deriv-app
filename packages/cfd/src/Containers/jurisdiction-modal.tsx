@@ -54,6 +54,7 @@ type TJurisdictionModalProps = TCompareAccountsReusedProps & {
     trading_platform_available_accounts: TTradingPlatformAvailableAccount[];
     is_fully_authenticated: boolean;
     openPasswordModal: (account_type: TOpenAccountTransferMeta) => void;
+    openVerificationModal: () => void;
 };
 
 const JurisdictionModal = ({
@@ -69,6 +70,7 @@ const JurisdictionModal = ({
     trading_platform_available_accounts,
     is_fully_authenticated,
     openPasswordModal,
+    openVerificationModal,
 }: TJurisdictionModalProps) => {
     const [checked, setChecked] = React.useState<boolean>(false);
 
@@ -83,8 +85,8 @@ const JurisdictionModal = ({
     const modal_title = is_eu
         ? localize('Jurisdiction for your DMT5 CFDs account')
         : localize('Choose a jurisdiction for your DMT5 {{account_type}} account', {
-              account_type: account_type === 'synthetic' ? 'Synthetic' : 'Financial',
-          });
+            account_type: account_type === 'synthetic' ? 'Synthetic' : 'Financial',
+        });
 
     const poa_status = authentication_status?.document_status;
     const poi_status = authentication_status?.identity_status;
@@ -97,6 +99,21 @@ const JurisdictionModal = ({
         };
         openPasswordModal(account_type);
     };
+
+    const onNextButtonHandler = () => {
+        console.log(jurisdiction_selected_card);
+
+        if (jurisdiction_selected_card === 'SVG') {
+            onSelectRealSynthetic();
+        }
+        else if (jurisdiction_selected_card === 'BVI') {
+
+            toggleJurisdictionModal();
+            openVerificationModal();
+        }
+
+    }
+
 
     return (
         <>
@@ -136,11 +153,7 @@ const JurisdictionModal = ({
                                         (is_eu && is_fully_authenticated && !checked)
                                     }
                                     primary
-                                    onClick={() => {
-                                        if (jurisdiction_selected_card === 'SVG') {
-                                            onSelectRealSynthetic();
-                                        }
-                                    }}
+                                    onClick={onNextButtonHandler}
                                 >
                                     Next
                                 </Button>
@@ -192,4 +205,6 @@ export default connect(({ modules, ui, client }: RootStore) => ({
     residence: client.residence,
     jurisdiction_selected_card: modules.cfd.jurisdiction_selected_card,
     toggleJurisdictionModal: modules.cfd.toggleJurisdictionModal,
+    openVerificationModal: modules.cfd.openVerificationModal
+
 }))(JurisdictionModal);
