@@ -154,33 +154,32 @@ const POISubmission = ({
                 default:
                     return null;
             }
-    }
         case submission_status_code.complete: {
-    switch (submission_service) {
-        case service_code.idv:
-            return (
-                <IdvUploadComplete
-                    is_from_external={is_from_external}
-                    needs_poa={needs_poa}
-                    redirect_button={redirect_button}
-                />
-            );
-        // This will be replaced in the next Manual Upload Project
-        case service_code.manual:
-        case service_code.onfido:
-            return (
-                <UploadComplete
-                    is_from_external={is_from_external}
-                    needs_poa={needs_poa}
-                    redirect_button={redirect_button}
-                />
-            );
+            switch (submission_service) {
+                case service_code.idv:
+                    return (
+                        <IdvUploadComplete
+                            is_from_external={is_from_external}
+                            needs_poa={needs_poa}
+                            redirect_button={redirect_button}
+                        />
+                    );
+                // This will be replaced in the next Manual Upload Project
+                case service_code.manual:
+                case service_code.onfido:
+                    return (
+                        <UploadComplete
+                            is_from_external={is_from_external}
+                            needs_poa={needs_poa}
+                            redirect_button={redirect_button}
+                        />
+                    );
+                default:
+                    return null;
+            }
+        }
         default:
             return null;
-    }
-}
-        default:
-return null;
     }
 };
 

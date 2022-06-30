@@ -30,17 +30,15 @@ export const ProofOfIdentityFormOnSignup = ({
     residence_list,
     citizen,
 }) => {
-    const selected_country = residence_list.find(residence => residence.value === citizen);
+    const citizen_data = residence_list.find(residence => residence.value === citizen);
 
     const handleCancel = values => {
-        console.log(values);
         const current_step = getCurrentStep() - 1;
         onSave(current_step, values);
         onCancel(current_step, goToPreviousStep);
     }
 
     const handleSubmit = (values, actions) => {
-        console.log(values, actions);
         values.country_code = citizen;
         onSubmit(getCurrentStep() - 1, values, actions.setSubmitting, goToNextStep);
     }
@@ -48,7 +46,7 @@ export const ProofOfIdentityFormOnSignup = ({
     return (
         <IdvContainerWithoutRoute
             residence_list={residence_list}
-            selected_country={selected_country}
+            citizen_data={citizen_data}
             value={value}
             has_previous={true}
             onPrevious={handleCancel}

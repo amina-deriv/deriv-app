@@ -59,6 +59,7 @@ module.exports = function (env) {
             'proof-of-identity-form-on-signup': 'Components/poi/poi-form-on-signup',
             'idv-document-submit': 'Components/poi/idv-document-submit',
             'idv-container-without-route': 'Components/poi/poi-form-on-signup/idv-doc',
+            'populate-verification-status': 'Sections/Verification/Helpers',
         },
         mode: IS_RELEASE ? 'production' : 'development',
         module: {

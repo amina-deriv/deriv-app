@@ -21,7 +21,7 @@ import DocumentSubmitLogo from '../../../../Assets/ic-document-submit-icon.svg';
 
 
 export const IdvContainerWithoutRoute = ({
-    selected_country,
+    citizen_data,
     has_previous,
     onPrevious,
     onNext,
@@ -32,7 +32,7 @@ export const IdvContainerWithoutRoute = ({
     const [is_input_disable, setInputDisable] = React.useState(true);
     const [is_doc_selected, setDocSelected] = React.useState(false);
 
-    const document_data = selected_country.identity.services.idv.documents_supported;
+    const document_data = citizen_data.identity.services.idv.documents_supported;
     const {
         value: country_code,
         identity: {
@@ -40,7 +40,7 @@ export const IdvContainerWithoutRoute = ({
                 idv: { has_visual_sample },
             },
         },
-    } = selected_country;
+    } = citizen_data;
 
     React.useEffect(() => {
         const document_types = Object.keys(document_data);
@@ -69,8 +69,7 @@ export const IdvContainerWithoutRoute = ({
         document_number: value ? value.document_number : '',
     };
 
-    console.log(value ? value.document_type.text : '');
-    console.log(value ? value.document_number : '');
+
     const validateFields = values => {
         const errors = {};
         const { document_type, document_number } = values;
