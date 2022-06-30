@@ -33,7 +33,7 @@ const JurisdictionModalContent = ({
     checked,
     setChecked,
 }: TJurisdictionModalContent) => {
-    console.log(jurisdiction_selected_card);
+
     const number_of_synthetic_accounts_to_be_shown = synthetic_available_accounts.length;
     const number_of_financial_accounts_to_be_shown = financial_available_accounts.length;
 
