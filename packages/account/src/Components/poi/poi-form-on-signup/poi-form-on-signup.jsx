@@ -41,7 +41,7 @@ export const ProofOfIdentityFormOnSignup = ({
 
     const handleSubmit = (values, actions) => {
         console.log(values, actions);
-        values.country_code = country_code;
+        values.country_code = citizen;
         onSubmit(getCurrentStep() - 1, values, actions.setSubmitting, goToNextStep);
     }
 

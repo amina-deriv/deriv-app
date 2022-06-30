@@ -4,12 +4,9 @@ import { localize } from '@deriv/translations';
 import RootStore from 'Stores/index';
 import { IdvContainerWithoutRoute, populateVerificationStatus } from '@deriv/account';
 import { connect } from 'Stores/connect';
-import { ResidenceList, GetSettings } from '@deriv/api-types';
+import { ResidenceList, GetSettings, GetAccountStatus } from '@deriv/api-types';
 import OnfidoUpload from './onfido-sdk-view.jsx';
-import { GetAccountStatus } from '@deriv/api-types';
-import { AutoHeightWrapper, Div100vhContainer, FormSubmitButton, } from '@deriv/components';
-import { isDesktop, isMobile } from '@deriv/shared';
-import { Formik, FormikHelpers as FormikActions } from 'formik';
+
 type TVerificationModalProps = {
     disableApp: () => void;
     enableApp: () => void;
@@ -17,6 +14,7 @@ type TVerificationModalProps = {
     openVerificationModal: () => void;
     residence_list: ResidenceList;
     account_settings: GetSettings;
+    account_status: GetAccountStatus
 };
 
 
@@ -27,7 +25,8 @@ const VerificationModal = ({
     is_verification_modal_open,
     openVerificationModal,
     residence_list,
-    account_settings
+    account_settings,
+    account_status
 }: TVerificationModalProps) => {
 
     const handleBack = () => {
@@ -37,17 +36,12 @@ const VerificationModal = ({
 
     const handleNext = () => {
         console.log('handleNext');
-
     }
     console.log(residence_list);
     console.log(account_settings);
     const [poi_state, setPOIState] = React.useState<string>('none');
     const citizenship = account_settings.citizen;
     const selected_country = residence_list.find(residence => residence.value === citizenship);
-
-    // const is_idv_supported = selected_country.identity.services.idv.is_country_supported;
-    // const is_onfido_supported = selected_country.identity.services.onfido.is_country_supported;
-
 
     const country_code = selected_country.value;
     const doc_obj = selected_country.identity.services.onfido.documents_supported;
@@ -81,8 +75,6 @@ const VerificationModal = ({
                 residence_list={residence_list}
                 citizen={citizenship}
                 // value={value}
-                // has_previous={true}
-                // onPrevious={handleCancel}
                 onNext={handleNext}
             />
         )
@@ -135,6 +127,7 @@ export default connect(({ modules, ui, client }: RootStore) => ({
     is_verification_modal_open: modules.cfd.is_verification_modal_open,
     openVerificationModal: modules.cfd.openVerificationModal,
     residence_list: client.residence_list,
-    account_settings: client.account_settings
+    account_settings: client.account_settings,
+    account_status: client.account_status,
 
 }))(VerificationModal);

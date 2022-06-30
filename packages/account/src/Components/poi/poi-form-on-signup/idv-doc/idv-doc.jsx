@@ -65,9 +65,12 @@ export const IdvContainerWithoutRoute = ({
     }, [country_code, document_data]);
 
     const initial_form_values = {
-        document_type: value ? value.document_type : '',
+        document_type: value ? value.document_type : {},
         document_number: value ? value.document_number : '',
     };
+
+    console.log(value ? value.document_type.text : '');
+    console.log(value ? value.document_number : '');
     const validateFields = values => {
         const errors = {};
         const { document_type, document_number } = values;
