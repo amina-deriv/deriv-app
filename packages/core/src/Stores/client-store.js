@@ -1032,6 +1032,7 @@ export default class ClientStore extends BaseStore {
         const is_samoa_account = this.root_store.ui.real_account_signup_target === 'samoa';
         let currency = '';
         form_values.residence = this.residence;
+        form_values.citizen = this.account_settings.citizen || this.residence;
 
         if (is_maltainvest_account) {
             currency = form_values.currency;
@@ -1039,7 +1040,6 @@ export default class ClientStore extends BaseStore {
         }
 
         const { document_number, document_type, country_code, ...required_form_values } = form_values;
-        required_form_values.citizen = country_code;
         const response = is_maltainvest_account
             ? await WS.newAccountRealMaltaInvest(required_form_values)
             : await WS.newAccountReal(required_form_values);
