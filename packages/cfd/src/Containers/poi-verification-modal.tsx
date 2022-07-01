@@ -50,7 +50,7 @@ const POIVerificationModal = ({
                 is_open={is_poi_verification_modal_visible}
                 title={localize('Submit your proof of identity and address')}
                 toggleModal={togglePOIVerificationModal}
-                height='620px'
+                height='700px'
                 width='996px'
             >
                 <IdvOnfidoSelector

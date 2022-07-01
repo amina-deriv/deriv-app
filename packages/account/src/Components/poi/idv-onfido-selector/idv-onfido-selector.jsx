@@ -2,6 +2,11 @@
 import React from 'react';
 import IdvContainerWithoutRoute from '../poi-form-on-signup/idv-doc'
 import { populateVerificationStatus } from '../../../Sections/Verification/Helpers/verification';
+import OnfidoUpload from '../../../Sections/Verification/ProofOfIdentity/onfido-sdk-view.jsx';
+import { Button, Modal } from '@deriv/components';
+import { localize } from '@deriv/translations';
+
+
 
 const IdvOnfidoSelector = ({
     residence_list,
@@ -43,31 +48,49 @@ const IdvOnfidoSelector = ({
             const is_idv_supported = citizen_data.identity.services.idv.is_country_supported;
             const is_onfido_supported = citizen_data.identity.services.onfido.is_country_supported;
 
+            const handleIdvSubmit = () => {
+                console.log('next');
+            }
+            const [is_onfido_next_button_disabled, setOnfidoNextButtonEnabled] = React.useState(true);
             const handleNext = () => {
+                setOnfidoNextButtonEnabled(false)
                 console.log('next');
             }
 
-
-            if (is_idv_supported && Number(idv_submissions_left) > 0) {
+            console.log(is_idv_disallowed);
+            if (is_idv_supported && Number(idv_submissions_left) > 0 && !is_idv_disallowed) {
                 return (
                     <IdvContainerWithoutRoute
                         residence_list={residence_list}
                         citizen_data={citizen_data}
                         // value={value}
-                        onNext={handleNext}
+                        onNext={handleIdvSubmit}
                     />
                 )
             } else if (onfido_submissions_left && is_onfido_supported) {
                 return (
-                    // <OnfidoUpload
-                    //     country_code={'ke'}
-                    //     documents_supported={documents_supported}
-                    //     handleViewComplete={handleNext}
-                    //     height={200}
-                    //     is_from_external={true}
-                    //     refreshNotifications={refreshNotifications}
-                    // />
-                    <>hi</>
+                    <>
+                        <OnfidoUpload
+                            country_code={citizen}
+                            documents_supported={documents_supported}
+                            handleViewComplete={handleNext}
+                            height={500}
+                            is_from_external={true}
+                            refreshNotifications={refreshNotifications}
+                        />
+                        <Modal.Footer has_separator is_bypassed={isMobile()}>
+                            <Button
+                                className='proof-of-identity__submit-button'
+                                type='submit'
+                                onClick={handleNext}
+                                has_effect
+                                is_disabled={is_onfido_next_button_disabled}
+                                text={localize('Next')}
+                                large
+                                primary
+                            />
+                        </Modal.Footer>
+                    </>
                 )
             }
             else {
@@ -85,14 +108,5 @@ const IdvOnfidoSelector = ({
 }
 export default IdvOnfidoSelector;
 
-
-
-// export default connect(({ client, ui }) => ({
-//     residence_list: client.residence_list,
-//     account_settings: client.account_settings,
-//     account_status: client.account_status,
-//     residence: client.residence,
-//     refreshNotifications: notifications.refreshNotifications,
-// }))(IdvOnfidoSelector);
 
 

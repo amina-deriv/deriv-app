@@ -167,7 +167,7 @@ export const IdvContainerWithoutRoute = ({ citizen_data, has_previous, onPreviou
                                                                                 onItemSelection={item => {
                                                                                     if (
                                                                                         item.text ===
-                                                                                            'No results found' ||
+                                                                                        'No results found' ||
                                                                                         !item.text
                                                                                     ) {
                                                                                         setDocSelected(false);
@@ -259,10 +259,10 @@ export const IdvContainerWithoutRoute = ({ citizen_data, has_previous, onPreviou
                                                                             '-'
                                                                         )
                                                                             ? formatInput(
-                                                                                  example_format,
-                                                                                  current_input || e.target.value,
-                                                                                  '-'
-                                                                              )
+                                                                                example_format,
+                                                                                current_input || e.target.value,
+                                                                                '-'
+                                                                            )
                                                                             : e.target.value;
                                                                         setFieldValue(
                                                                             'document_number',

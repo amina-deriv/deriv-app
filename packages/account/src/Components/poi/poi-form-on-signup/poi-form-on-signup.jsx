@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import IdvContainerWithoutRoute from './idv-doc';
-
 export const ProofOfIdentityFormOnSignup = ({
     getCurrentStep,
     goToPreviousStep,

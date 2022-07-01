@@ -112,6 +112,17 @@ const JurisdictionModal = ({
         }
 
     }
+    const isNextButtonDisabled = () => {
+
+        const document_verification_pending = (poi_status === 'pending') || (poa_status === 'pending');
+        if (jurisdiction_selected_card === undefined || (is_eu && is_fully_authenticated && !checked)) {
+            return true
+        }
+        else if ((jurisdiction_selected_card === 'BVI') && document_verification_pending) {
+            return true
+        }
+        return false
+    }
 
     return (
         <>
@@ -146,10 +157,7 @@ const JurisdictionModal = ({
                             />
                             <Modal.Footer>
                                 <Button
-                                    disabled={
-                                        jurisdiction_selected_card === undefined ||
-                                        (is_eu && is_fully_authenticated && !checked)
-                                    }
+                                    disabled={isNextButtonDisabled()}
                                     primary
                                     onClick={onNextButtonHandler}
                                 >
