@@ -10,8 +10,8 @@ import { ResidenceList, GetSettings, GetAccountStatus } from '@deriv/api-types';
 type TVerificationModalProps = {
     disableApp: () => void;
     enableApp: () => void;
-    is_poi_verification_modal_visible: boolean;
-    togglePOIVerificationModal: () => void;
+    is_cfd_verification_modal_visible: boolean;
+    toggleCFDVerificationModal: () => void;
     residence_list: ResidenceList;
     account_settings: GetSettings;
     account_status: GetAccountStatus;
@@ -24,8 +24,8 @@ type TVerificationModalProps = {
 const POIVerificationModal = ({
     disableApp,
     enableApp,
-    is_poi_verification_modal_visible,
-    togglePOIVerificationModal,
+    is_cfd_verification_modal_visible,
+    toggleCFDVerificationModal,
     residence_list,
     account_settings,
     account_status,
@@ -42,26 +42,14 @@ const POIVerificationModal = ({
 
     return (
 
-        <React.Suspense fallback={<UILoader />}>
-            <Modal
-                className='cfd-verification-modal'
-                disableApp={disableApp}
-                enableApp={enableApp}
-                is_open={is_poi_verification_modal_visible}
-                title={localize('Submit your proof of identity and address')}
-                toggleModal={togglePOIVerificationModal}
-                height='700px'
-                width='996px'
-            >
-                <IdvOnfidoSelector
-                    residence_list={residence_list}
-                    account_settings={account_settings}
-                    account_status={account_status}
-                    residence={residence}
-                    refreshNotifications={refreshNotifications}
-                />
-            </Modal>
-        </React.Suspense>
+        <IdvOnfidoSelector
+            residence_list={residence_list}
+            account_settings={account_settings}
+            account_status={account_status}
+            residence={residence}
+            refreshNotifications={refreshNotifications}
+        />
+
     )
 }
 
@@ -75,8 +63,8 @@ const POIVerificationModal = ({
 export default connect(({ modules, ui, client, notifications }: RootStore) => ({
     disableApp: ui.disableApp,
     enableApp: ui.enableApp,
-    is_poi_verification_modal_visible: modules.cfd.is_poi_verification_modal_visible,
-    togglePOIVerificationModal: modules.cfd.togglePOIVerificationModal,
+    is_cfd_verification_modal_visible: modules.cfd.is_cfd_verification_modal_visible,
+    toggleCFDVerificationModal: modules.cfd.toggleCFDVerificationModal,
     residence_list: client.residence_list,
     account_settings: client.account_settings,
     account_status: client.account_status,

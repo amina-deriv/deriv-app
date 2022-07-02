@@ -22,7 +22,7 @@ type TRemoveNotificationMessage = {
 };
 
 type TIndexLookupObject = {
-    CFDPersonalDetailsForm: number;
+    // CFDPersonalDetailsForm: number;
     CFDPOI: number;
     CFDPOA: number;
 };
@@ -75,9 +75,9 @@ type TItemsProps =
 
 type TgetCurrentProps = 'header' | 'body' | 'props' | 'form_value';
 const index_lookup: TIndexLookupObject = {
-    CFDPersonalDetailsForm: 0,
-    CFDPOI: 1,
-    CFDPOA: 2,
+    // CFDPersonalDetailsForm: 0,
+    CFDPOI: 0,
+    CFDPOA: 1,
 };
 
 const CFDFinancialStpRealAccountSignup = (props: TCFDFinancialStpRealAccountSignupProps) => {
@@ -86,20 +86,6 @@ const CFDFinancialStpRealAccountSignup = (props: TCFDFinancialStpRealAccountSign
     const [form_error, setFormError] = React.useState<string>('');
     const [is_loading, setIsLoading] = React.useState<boolean>(false);
     const [items, setItems] = React.useState<TItemsState[]>([
-        {
-            header: {
-                active_title: localize('Complete your personal details'),
-                title: localize('Personal details'),
-            },
-            body: CFDPersonalDetailsForm,
-            form_value: {
-                citizen: '',
-                tax_residence: '',
-                tax_identification_number: '',
-                account_opening_reason: '',
-            },
-            props: ['residence_list', 'is_fully_authenticated', 'landing_company'],
-        },
         {
             header: {
                 active_title: localize('Complete your proof of identity'),
@@ -257,32 +243,6 @@ const CFDFinancialStpRealAccountSignup = (props: TCFDFinancialStpRealAccountSign
             height_offset='40px'
         >
             <div className='cfd-financial-stp-modal__heading'>
-                {getCurrent() && (
-                    <>
-                        <DesktopWrapper>
-                            <FormProgress steps={items} current_step={step} />
-                        </DesktopWrapper>
-                        <MobileWrapper>
-                            <div className='cfd-financial-stp-modal__header-steps'>
-                                <h4 className='cfd-financial-stp-modal__header-steps-title'>
-                                    <Localize
-                                        i18n_default_text='Step {{step}}: {{step_title}} ({{step}} of {{steps}})'
-                                        values={{
-                                            step: step + 1,
-                                            steps: items.length,
-                                            step_title: items[step].header.title,
-                                        }}
-                                    />
-                                </h4>
-                                {items[step].header.active_title && (
-                                    <h4 className='cfd-financial-stp-modal__header-steps-subtitle'>
-                                        {items[step].header.active_title}
-                                    </h4>
-                                )}
-                            </div>
-                        </MobileWrapper>
-                    </>
-                )}
             </div>
             <div className='cfd-financial-stp-modal__body'>
                 <BodyComponent

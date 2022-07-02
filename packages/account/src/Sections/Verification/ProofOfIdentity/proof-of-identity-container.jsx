@@ -29,6 +29,7 @@ const ProofOfIdentityContainer = ({
     refreshNotifications,
     routeBackInApp,
     should_allow_authentication,
+    citizen_data,
 }) => {
     const history = useHistory();
     const [api_error, setAPIError] = React.useState();
@@ -41,7 +42,7 @@ const ProofOfIdentityContainer = ({
 
     const routeBackTo = redirect_route => routeBackInApp(history, [redirect_route]);
     const handleRequireSubmission = () => setHasRequireSubmission(true);
-
+    console.log(citizen_data);
     React.useEffect(() => {
         // only re-mount logic when switching is done
         if (!is_switching) {
@@ -97,6 +98,7 @@ const ProofOfIdentityContainer = ({
     );
 
     if (identity_status === identity_status_codes.none || has_require_submission || allow_poi_resubmission) {
+        console.log('going');
         return (
             <POISubmission
                 allow_poi_resubmission={allow_poi_resubmission}
@@ -114,6 +116,7 @@ const ProofOfIdentityContainer = ({
                 redirect_button={redirect_button}
                 refreshNotifications={refreshNotifications}
                 residence_list={residence_list}
+                citizen_data={citizen_data}
             />
         );
     } else if (

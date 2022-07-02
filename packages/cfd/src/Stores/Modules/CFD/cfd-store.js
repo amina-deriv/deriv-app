@@ -6,7 +6,7 @@ import { getDxCompanies, getMtCompanies } from './Helpers/cfd-config';
 export default class CFDStore extends BaseStore {
     @observable is_compare_accounts_visible = false;
     @observable is_jurisdiction_modal_visible = false;
-    @observable is_poi_verification_modal_visible = false;
+    @observable is_cfd_verification_modal_visible = false;
     @observable account_type = {
         category: undefined,
         type: undefined,
@@ -416,8 +416,8 @@ export default class CFDStore extends BaseStore {
     }
 
     @action.bound
-    togglePOIVerificationModal() {
-        this.is_poi_verification_modal_visible = !this.is_poi_verification_modal_visible;
+    toggleCFDVerificationModal() {
+        this.is_cfd_verification_modal_visible = !this.is_cfd_verification_modal_visible;
     }
 
     @action.bound

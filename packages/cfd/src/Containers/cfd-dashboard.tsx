@@ -19,7 +19,8 @@ import LoadingCFDRealAccountDisplay from './loading-cfd-real-account-display';
 import MT5AccountOpeningRealFinancialStpModal from './mt5-account-opening-real-financial-stp-modal';
 import CompareAccountsModal from './compare-accounts-modal';
 import JurisdictionModal from './jurisdiction-modal';
-import POIVerificationModal from './poi-verification-modal';
+// import POIVerificationModal from './poi-verification-modal';
+import CFDDbViOnBoarding from './cfd-dbvi-onboarding';
 import CFDDashboardContainer from './cfd-dashboard-container';
 import CFDPasswordManagerModal from './cfd-password-manager-modal';
 import CFDPasswordModal from './cfd-password-modal';
@@ -558,7 +559,8 @@ const CFDDashboard = (props: TCFDDashboardProps) => {
                             </LoadTab>
                             <CompareAccountsModal platform={platform} is_demo_tab={is_demo_tab} />
                             <JurisdictionModal platform={platform} openPasswordModal={openRealPasswordModal} />
-                            <POIVerificationModal></POIVerificationModal>
+                            {/* <POIVerificationModal></POIVerificationModal> */}
+                            <CFDDbViOnBoarding />
                             <div className='cfd-dashboard__maintenance'>
                                 <Icon
                                     icon='IcAlertWarning'

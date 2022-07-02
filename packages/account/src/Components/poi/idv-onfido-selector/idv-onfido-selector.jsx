@@ -5,7 +5,7 @@ import { populateVerificationStatus } from '../../../Sections/Verification/Helpe
 import OnfidoUpload from '../../../Sections/Verification/ProofOfIdentity/onfido-sdk-view.jsx';
 import { Button, Modal } from '@deriv/components';
 import { localize } from '@deriv/translations';
-
+import { Formik } from 'formik';
 
 
 const IdvOnfidoSelector = ({
@@ -48,23 +48,44 @@ const IdvOnfidoSelector = ({
             const is_idv_supported = citizen_data.identity.services.idv.is_country_supported;
             const is_onfido_supported = citizen_data.identity.services.onfido.is_country_supported;
 
-            const handleIdvSubmit = () => {
-                console.log('next');
-            }
-            const [is_onfido_next_button_disabled, setOnfidoNextButtonEnabled] = React.useState(true);
+            // const handleIdvSubmit = (values) => {
+            //     // const { document_number, document_type } = values
+            //     // if (document_number && document_type) {
+            //     //     const submit_data = {
+            //     //         identity_verification_document_add: 1,
+            //     //         document_number,
+            //     //         document_type: document_type.id,
+            //     //         issuing_country: citizen,
+            //     //     };
+            //     //     console.log(submit_data);
+
+            //     // WS.send(submit_data).then(response => {
+            //     //     setSubmitting(false);
+            //     //     if (response.error) {
+            //     //         setStatus(response.error);
+            //     //         return;
+            //     //     }
+            //     // });
+            //     console.log(values);
+            // }
+
+
+
+            // }
+            const [is_onfido_next_button_disabled, setOnfidoNextButtonDisabled] = React.useState(true);
             const handleNext = () => {
-                setOnfidoNextButtonEnabled(false)
+                // setOnfidoNextButtonDisabled(false)
+                // setPOIState('status')
                 console.log('next');
             }
 
-            console.log(is_idv_disallowed);
             if (is_idv_supported && Number(idv_submissions_left) > 0 && !is_idv_disallowed) {
                 return (
                     <IdvContainerWithoutRoute
                         residence_list={residence_list}
                         citizen_data={citizen_data}
                         // value={value}
-                        onNext={handleIdvSubmit}
+                        onNext={handleNext}
                     />
                 )
             } else if (onfido_submissions_left && is_onfido_supported) {
@@ -74,7 +95,7 @@ const IdvOnfidoSelector = ({
                             country_code={citizen}
                             documents_supported={documents_supported}
                             handleViewComplete={handleNext}
-                            height={500}
+                            height={560}
                             is_from_external={true}
                             refreshNotifications={refreshNotifications}
                         />
@@ -101,9 +122,30 @@ const IdvOnfidoSelector = ({
         }
     }
 
-    return (
-        <SupportedProvider></SupportedProvider>
 
+
+    // const identity_status = account_status?.authentication?.identity;
+    // const [poi_state, setPOIState] = React.useState('none');
+    // const validateForm = React.useCallback(() => {
+    //     const errors = {};
+    //     if (!['pending'].includes(poi_state) || !['pending', 'verified'].includes(identity_status)) {
+    //         errors.poi_state = true;
+    //     }
+    //     return errors;
+    // }, [poi_state, identity_status]);
+
+    return (
+        // <Formik
+        //     initialValues={{
+        //         poi_state: value.poi_state,
+        //     }}
+        //     validate={validateForm}
+        //     onSubmit={(_values, actions) =>
+        //         onSubmit(index, { poi_state }, actions.setSubmitting)
+        //     }
+        // >
+        <SupportedProvider></SupportedProvider>
+        // </Formik>
     )
 }
 export default IdvOnfidoSelector;
