@@ -47,6 +47,7 @@ type TJurisdictionCard = {
     account_type: string;
     poa_status: string;
     poi_status: string;
+    is_fully_authenticated: boolean;
     poi_poa_pending: boolean;
     setJurisdictionSelectedShortcode: (card_type: string) => void;
     type_of_card: string;
@@ -62,6 +63,7 @@ const JurisdictionCard = ({
     account_type,
     poa_status,
     poi_status,
+    is_fully_authenticated,
     poi_poa_pending,
     setJurisdictionSelectedShortcode,
     type_of_card,
@@ -432,6 +434,7 @@ const JurisdictionModalContent = ({
                         synthetic_available_accounts={synthetic_available_accounts}
                         financial_available_accounts={financial_available_accounts}
                         account_type={account_type}
+                        is_fully_authenticated={is_fully_authenticated}
                         poi_poa_pending={poi_poa_pending}
                         poa_status={poa_status}
                         poi_status={poi_status}
@@ -448,6 +451,7 @@ const JurisdictionModalContent = ({
                         jurisdiction_selected_shortcode={jurisdiction_selected_shortcode}
                         synthetic_available_accounts={synthetic_available_accounts}
                         financial_available_accounts={financial_available_accounts}
+                        is_fully_authenticated={is_fully_authenticated}
                         poi_poa_pending={poi_poa_pending}
                         account_type={account_type}
                         poa_status={poa_status}
@@ -465,6 +469,7 @@ const JurisdictionModalContent = ({
                         jurisdiction_selected_shortcode={jurisdiction_selected_shortcode}
                         synthetic_available_accounts={synthetic_available_accounts}
                         financial_available_accounts={financial_available_accounts}
+                        is_fully_authenticated={is_fully_authenticated}
                         poi_poa_pending={poi_poa_pending}
                         account_type={account_type}
                         poa_status={poa_status}
@@ -481,6 +486,7 @@ const JurisdictionModalContent = ({
                         jurisdiction_selected_shortcode={jurisdiction_selected_shortcode}
                         synthetic_available_accounts={synthetic_available_accounts}
                         financial_available_accounts={financial_available_accounts}
+                        is_fully_authenticated={is_fully_authenticated}
                         poi_poa_pending={poi_poa_pending}
                         account_type={account_type}
                         poa_status={poa_status}
@@ -498,6 +504,7 @@ const JurisdictionModalContent = ({
                         jurisdiction_selected_shortcode={jurisdiction_selected_shortcode}
                         synthetic_available_accounts={synthetic_available_accounts}
                         financial_available_accounts={financial_available_accounts}
+                        is_fully_authenticated={is_fully_authenticated}
                         poi_poa_pending={poi_poa_pending}
                         account_type={account_type}
                         poa_status={poa_status}

@@ -49,7 +49,7 @@ type TFormValuesInputs = {
 };
 
 type TDocumentFile = {
-    document_file?: Array<TObjDocumentFile>;
+    document_file: Array<TObjDocumentFile>;
     files?: Array<TObjDocumentFile>;
 };
 
@@ -193,8 +193,7 @@ const CFDPOA = ({ onSave, index, onSubmit, refreshNotifications, ...props }: TCF
     };
 
     const onSubmitValues = async (values: TFormValues, actions: FormikHelpers<TFormValues>) => {
-        const uploadables = { ...values };
-        delete uploadables.document_file;
+        const { document_file, ...uploadables } = values;
 
         actions.setSubmitting(true);
         const data = await WS.setSettings(uploadables);

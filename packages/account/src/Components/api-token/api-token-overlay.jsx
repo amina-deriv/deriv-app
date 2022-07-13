@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Popup } from '@deriv/components';
 import { Localize, localize } from '@deriv/translations';
 import ApiTokenContext from './api-token-context';

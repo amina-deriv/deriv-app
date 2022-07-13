@@ -1,5 +1,5 @@
 import React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router';
+import { withRouter } from 'react-router';
 import { Redirect } from 'react-router-dom';
 import { DesktopWrapper, Icon, MobileWrapper, Tabs, PageError, Loading, Text } from '@deriv/components';
 import {
@@ -35,6 +35,7 @@ import { getPlatformMt5DownloadLink, getPlatformDXTradeDownloadLink } from '../H
 import 'Sass/cfd-dashboard.scss';
 import RootStore from 'Stores/index';
 import { DetailsOfEachMT5Loginid, LandingCompany, ResidenceList } from '@deriv/api-types';
+import { History } from 'history';
 
 declare module 'react' {
     interface HTMLAttributes<T> extends React.AriaAttributes, React.DOMAttributes<T> {
@@ -88,7 +89,7 @@ type TMt5StatusServer = Record<'demo' | 'real', TMt5StatusServerType[]>;
 
 export type TObjectCFDAccount = { category: string; type: string; set_password?: number; platform?: string };
 
-type TCFDDashboardProps = RouteComponentProps & {
+type TCFDDashboardProps = {
     account_settings: { residence: string };
     account_status: object;
     beginRealSignupForMt5: () => void;
@@ -159,6 +160,7 @@ type TCFDDashboardProps = RouteComponentProps & {
     disableCFDPasswordModal: () => void;
     openPasswordModal: (account_type?: TOpenAccountTransferMeta) => void;
     openTopUpModal: () => void;
+    history: History;
     setCurrentAccount: (data: DetailsOfEachMT5Loginid, meta: TOpenAccountTransferMeta) => void;
     setAccountType: (account_type: TOpenAccountTransferMeta) => void;
     mt5_status_server: TMt5StatusServer;

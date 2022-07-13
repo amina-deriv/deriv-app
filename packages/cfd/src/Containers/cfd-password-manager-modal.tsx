@@ -43,20 +43,15 @@ const CountdownComponent = ({ count_from = 60, onTimeout }: TCountdownComponent)
     const [count, setCount] = React.useState<number>(count_from);
 
     React.useEffect(() => {
-        let interval: ReturnType<typeof setTimeout>;
-
         if (count !== 0) {
-            interval = setTimeout(() => {
+            const interval = setTimeout(() => {
                 setCount(count - 1);
             }, 1000);
-        } else {
-            onTimeout();
+
+            return () => clearTimeout(interval);
         }
 
-        return () => {
-            clearTimeout(interval);
-        };
-
+        onTimeout();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [count]);
     return <span className='countdown'>{count}</span>;
@@ -401,16 +396,11 @@ const CFDPasswordManagerModal = ({
 };
 
 CFDPasswordManagerModal.propTypes = {
-    disableApp: PropTypes.func,
-    enableApp: PropTypes.func,
     email: PropTypes.string,
     is_visible: PropTypes.bool,
     selected_account: PropTypes.string,
-    selected_account_type: PropTypes.string,
-    selected_account_group: PropTypes.string,
     selected_server: PropTypes.string,
     selected_login: PropTypes.string,
-    sendVerifyEmail: PropTypes.func,
     toggleModal: PropTypes.func,
     platform: PropTypes.string,
 };

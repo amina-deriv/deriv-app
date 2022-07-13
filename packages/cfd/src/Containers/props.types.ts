@@ -1,4 +1,4 @@
-import { RouteComponentProps } from 'react-router';
+import { History } from 'history';
 import {
     DetailsOfEachMT5Loginid,
     GetSettings,
@@ -79,7 +79,7 @@ export type TError = {
     message: string;
 };
 
-export type TCFDResetPasswordModal = RouteComponentProps & {
+export type TCFDResetPasswordModal = {
     current_list: Array<DetailsOfEachMT5Loginid> & Record<string, DetailsOfEachMT5Loginid>;
     email: string;
     is_cfd_reset_password_modal_enabled: boolean;
@@ -87,6 +87,7 @@ export type TCFDResetPasswordModal = RouteComponentProps & {
     is_logged_in: boolean;
     platform: CFD_Platform;
     setCFDPasswordResetModal: (value: boolean) => void;
+    history: History;
 };
 
 export type TCFDPasswordSuccessMessage = {
