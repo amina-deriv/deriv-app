@@ -119,8 +119,8 @@ const JurisdictionModal = ({
     const modal_title = is_eu
         ? localize('Jurisdiction for your DMT5 CFDs account')
         : localize('Choose a jurisdiction for your DMT5 {{account_type}} account', {
-              account_type: account_type.type === 'synthetic' ? 'Synthetic' : 'Financial',
-          });
+            account_type: account_type.type === 'synthetic' ? 'Synthetic' : 'Financial',
+        });
 
     const poa_status = authentication_status?.document_status;
     const poi_status = authentication_status?.identity_status;
@@ -231,6 +231,7 @@ const JurisdictionModal = ({
                                     disabled={!is_next_button_enabled}
                                     primary
                                     onClick={() => {
+                                        console.log('account_type', account_type);
                                         toggleJurisdictionModal();
                                         setTimeout(() => {
                                             onSelectRealAccount();
