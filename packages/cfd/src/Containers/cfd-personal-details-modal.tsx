@@ -34,6 +34,7 @@ const CFDPersonalDetailsModal = ({
         tax_identification_number: '',
         account_opening_reason: '',
     });
+    let transition_timeout_id: NodeJS.Timeout;
 
     const initiatePersonalDetails = async (setSubmitting?: TSetSubmiting) => {
         // force request to update settings cache since settings have been updated
@@ -90,10 +91,18 @@ const CFDPersonalDetailsModal = ({
         });
     };
 
+    const switchToAnotherModalWithTimeout = (callback: () => void) => {
+        toggleCFDPersonalDetailsModal();
+        // timeout is to ensure no jumpy animation when modals are overlapping enter/exit transitions
+        if (transition_timeout_id) clearTimeout(transition_timeout_id);
+        transition_timeout_id = setTimeout(() => {
+            callback();
+        }, 250);
+    };
+
     const prevStep = () => {
         setFormError('');
-        toggleCFDPersonalDetailsModal();
-        toggleJurisdictionModal();
+        switchToAnotherModalWithTimeout(toggleJurisdictionModal);
     };
 
     const updateValue = async (index: number, value: TFormValues, setSubmitting: TSetSubmiting, is_dirty = true) => {
@@ -108,9 +117,8 @@ const CFDPersonalDetailsModal = ({
             initiatePersonalDetails(setSubmitting);
         }
         saveFormData(index, value);
-        toggleCFDPersonalDetailsModal();
         setAccountSettings({ ...account_settings, ...value });
-        openPasswordModal();
+        switchToAnotherModalWithTimeout(openPasswordModal);
     };
 
     const getPersonalDetailsForm = () => (

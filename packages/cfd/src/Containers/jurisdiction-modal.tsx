@@ -68,6 +68,7 @@ const JurisdictionModal = ({
 }: TJurisdictionModalProps) => {
     const [checked, setChecked] = React.useState(false);
     const [has_submitted_personal_details, setHasSubmittedPersonalDetails] = React.useState(false);
+    let transition_timeout_id: NodeJS.Timeout;
 
     const poa_status = authentication_status?.document_status;
     const poi_status = authentication_status?.identity_status;
@@ -162,6 +163,15 @@ const JurisdictionModal = ({
         }
     };
 
+    const onNextButtonClick = () => {
+        toggleJurisdictionModal();
+        // timeout is to ensure no jumpy animation when modals are overlapping enter/exit transitions
+        if (transition_timeout_id) clearTimeout(transition_timeout_id);
+        transition_timeout_id = setTimeout(() => {
+            onSelectRealAccount();
+        }, 250);
+    };
+
     const buttonText = () => {
         const is_non_svg_selected = jurisdiction_selected_shortcode !== 'svg' && jurisdiction_selected_shortcode;
         if (poa_failed && is_non_svg_selected && !poi_poa_not_submitted) {
@@ -207,14 +217,7 @@ const JurisdictionModal = ({
                                 poa_failed={poa_failed}
                             />
                             <Modal.Footer has_separator>
-                                <Button
-                                    disabled={!is_next_button_enabled}
-                                    primary
-                                    onClick={() => {
-                                        toggleJurisdictionModal();
-                                        onSelectRealAccount();
-                                    }}
-                                >
+                                <Button disabled={!is_next_button_enabled} primary onClick={onNextButtonClick}>
                                     {buttonText()}
                                 </Button>
                             </Modal.Footer>
@@ -231,10 +234,7 @@ const JurisdictionModal = ({
                                     style={{ width: '100%' }}
                                     disabled={!is_next_button_enabled}
                                     primary
-                                    onClick={() => {
-                                        toggleJurisdictionModal();
-                                        onSelectRealAccount();
-                                    }}
+                                    onClick={onNextButtonClick}
                                 >
                                     {buttonText()}
                                 </Button>

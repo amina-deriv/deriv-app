@@ -34,9 +34,15 @@ const CFDDbViOnBoarding = ({
     toggleJurisdictionModal,
 }: TVerificationModalProps) => {
     const [showSubmittedModal, setShowSubmittedModal] = React.useState(false);
+    let transition_timeout_id: NodeJS.Timeout;
+
     const handleOpenJurisditionModal = () => {
         toggleCFDVerificationModal();
-        toggleJurisdictionModal();
+        // timeout is to ensure no jumpy animation when modals are overlapping enter/exit transitions
+        if (transition_timeout_id) clearTimeout(transition_timeout_id);
+        transition_timeout_id = setTimeout(() => {
+            toggleJurisdictionModal();
+        }, 250);
     };
     const getAccountStausFromAPI = () => {
         WS.authorized.getAccountStatus().then((response: AccountStatusResponse) => {
