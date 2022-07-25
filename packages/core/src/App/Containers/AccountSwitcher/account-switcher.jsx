@@ -211,30 +211,17 @@ const AccountSwitcher = props => {
     // mt_financial_company: { financial: {}, financial_stp: {}, swap_free: {} }
     // mt_gaming_company: { financial: {}, swap_free: {} }
     const getRemainingAccounts = (existing_cfd_accounts, platform, is_eu) => {
-        const gaming_config =
+        const gaming_config = getCFDConfig(
+            'gaming',
             platform === CFD_PLATFORMS.MT5
-                ? getCFDConfig(
-                      'synthetic',
-                      platform === CFD_PLATFORMS.MT5
-                          ? props.landing_companies?.mt_gaming_company
-                          : props.landing_companies?.dxtrade_gaming_company,
-                      existing_cfd_accounts,
-                      props.mt5_trading_servers,
-                      platform,
-                      is_eu,
-                      props.trading_platform_available_accounts
-                  )
-                : getCFDConfig(
-                      'gaming',
-                      platform === CFD_PLATFORMS.MT5
-                          ? props.landing_companies?.mt_gaming_company
-                          : props.landing_companies?.dxtrade_gaming_company,
-                      existing_cfd_accounts,
-                      props.mt5_trading_servers,
-                      platform,
-                      is_eu,
-                      props.trading_platform_available_accounts
-                  );
+                ? props.landing_companies?.mt_gaming_company
+                : props.landing_companies?.dxtrade_gaming_company,
+            existing_cfd_accounts,
+            props.mt5_trading_servers,
+            platform,
+            is_eu,
+            props.trading_platform_available_accounts
+        );
         const financial_config = getCFDConfig(
             'financial',
             platform === CFD_PLATFORMS.MT5
@@ -589,57 +576,61 @@ const AccountSwitcher = props => {
                 </React.Fragment>
             )}
             {isDxtradeAllowed() && (
-                <AccountWrapper
-                    header={localize('{{platform_name_dxtrade}} Accounts', { platform_name_dxtrade })}
-                    is_visible={is_dxtrade_demo_visible}
-                    toggleVisibility={() => {
-                        toggleVisibility('demo_dxtrade');
-                    }}
-                >
-                    <React.Fragment>
-                        {!!getDemoDXTrade().length && (
-                            <div className='acc-switcher__accounts'>
-                                {getDemoDXTrade().map(account => (
-                                    <AccountList
-                                        is_dark_mode_on={props.is_dark_mode_on}
-                                        key={account.account_id}
-                                        market_type={account.market_type}
-                                        balance={account.balance}
-                                        currency={account.currency}
-                                        currency_icon={`IcDxtrade-${getCFDAccount({
-                                            market_type: account.market_type,
-                                            platform: CFD_PLATFORMS.DXTRADE,
-                                        })}`}
-                                        country_standpoint={props.country_standpoint}
-                                        has_balance={'balance' in account}
-                                        loginid={account.display_login}
-                                        redirectAccount={() => redirectToDXTradeDemo(account.market_type)}
-                                        platform={CFD_PLATFORMS.DXTRADE}
-                                    />
-                                ))}
-                            </div>
-                        )}
-                        {getRemainingDemoDXTrade().map(account => (
-                            <div key={account.title} className='acc-switcher__new-account'>
-                                <Icon icon={`IcDxtrade-${account.icon}`} size={24} />
-                                <Text size='xs' color='general' className='acc-switcher__new-account-text'>
-                                    {account.title}
-                                </Text>
-                                <Button
-                                    onClick={() => openDXTradeDemoAccount(account.type)}
-                                    className='acc-switcher__new-account-btn'
-                                    secondary
-                                    small
-                                    is_disabled={
-                                        props.dxtrade_disabled_signup_types.demo || !!props.dxtrade_accounts_list_error
-                                    }
-                                >
-                                    {localize('Add')}
-                                </Button>
-                            </div>
-                        ))}
-                    </React.Fragment>
-                </AccountWrapper>
+                <>
+                    <div className='acc-switcher__separator acc-switcher__separator--no-padding' />
+                    <AccountWrapper
+                        header={localize('{{platform_name_dxtrade}} Accounts', { platform_name_dxtrade })}
+                        is_visible={is_dxtrade_demo_visible}
+                        toggleVisibility={() => {
+                            toggleVisibility('demo_dxtrade');
+                        }}
+                    >
+                        <React.Fragment>
+                            {!!getDemoDXTrade().length && (
+                                <div className='acc-switcher__accounts'>
+                                    {getDemoDXTrade().map(account => (
+                                        <AccountList
+                                            is_dark_mode_on={props.is_dark_mode_on}
+                                            key={account.account_id}
+                                            market_type={account.market_type}
+                                            balance={account.balance}
+                                            currency={account.currency}
+                                            currency_icon={`IcDxtrade-${getCFDAccount({
+                                                market_type: account.market_type,
+                                                platform: CFD_PLATFORMS.DXTRADE,
+                                            })}`}
+                                            country_standpoint={props.country_standpoint}
+                                            has_balance={'balance' in account}
+                                            loginid={account.display_login}
+                                            redirectAccount={() => redirectToDXTradeDemo(account.market_type)}
+                                            platform={CFD_PLATFORMS.DXTRADE}
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                            {getRemainingDemoDXTrade().map(account => (
+                                <div key={account.title} className='acc-switcher__new-account'>
+                                    <Icon icon={`IcDxtrade-${account.icon}`} size={24} />
+                                    <Text size='xs' color='general' className='acc-switcher__new-account-text'>
+                                        {account.title}
+                                    </Text>
+                                    <Button
+                                        onClick={() => openDXTradeDemoAccount(account.type)}
+                                        className='acc-switcher__new-account-btn'
+                                        secondary
+                                        small
+                                        is_disabled={
+                                            props.dxtrade_disabled_signup_types.demo ||
+                                            !!props.dxtrade_accounts_list_error
+                                        }
+                                    >
+                                        {localize('Add')}
+                                    </Button>
+                                </div>
+                            ))}
+                        </React.Fragment>
+                    </AccountWrapper>
+                </>
             )}
         </div>
     );

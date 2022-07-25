@@ -110,7 +110,7 @@ const JurisdictionModal = ({
         if (jurisdiction_selected_shortcode) {
             setChecked(false);
         }
-    }, [jurisdiction_selected_shortcode]);
+    }, [jurisdiction_selected_shortcode, is_jurisdiction_modal_visible]);
 
     const financial_available_accounts = trading_platform_available_accounts.filter(
         available_account => available_account.market_type === 'financial'
@@ -229,16 +229,6 @@ const JurisdictionModal = ({
                             title={modal_title}
                             visible={is_jurisdiction_modal_visible}
                             onClose={toggleJurisdictionModal}
-                            footer={
-                                <Button
-                                    style={{ width: '100%' }}
-                                    disabled={!is_next_button_enabled}
-                                    primary
-                                    onClick={onNextButtonClick}
-                                >
-                                    {buttonText()}
-                                </Button>
-                            }
                         >
                             <JurisdictionModalContent
                                 financial_available_accounts={financial_available_accounts}
@@ -257,6 +247,16 @@ const JurisdictionModal = ({
                                 poi_failed={poi_failed}
                                 poa_failed={poa_failed}
                             />
+                            <Modal.Footer has_separator>
+                                <Button
+                                    style={{ width: '100%' }}
+                                    disabled={!is_next_button_enabled}
+                                    primary
+                                    onClick={onNextButtonClick}
+                                >
+                                    {buttonText()}
+                                </Button>
+                            </Modal.Footer>
                         </MobileDialog>
                     </MobileWrapper>
                 </React.Suspense>
