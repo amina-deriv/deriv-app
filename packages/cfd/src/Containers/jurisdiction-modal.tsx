@@ -3,9 +3,9 @@ import { Button, Modal, DesktopWrapper, MobileDialog, MobileWrapper, UILoader } 
 import { localize, Localize } from '@deriv/translations';
 import { connect } from 'Stores/connect';
 import RootStore from 'Stores/index';
-import { GetAccountSettingsResponse, GetSettings, LandingCompany } from '@deriv/api-types';
+import { GetAccountStatus, GetAccountSettingsResponse, GetSettings, LandingCompany } from '@deriv/api-types';
 import JurisdictionModalContent from './jurisdiction-modal-content';
-import { WS } from '@deriv/shared';
+import { WS, shouldVerifyPOIForVanuatu } from '@deriv/shared';
 import { TTradingPlatformAvailableAccount } from '../Components/props.types';
 
 type TCompareAccountsReusedProps = {
@@ -46,9 +46,12 @@ type TJurisdictionModalProps = TCompareAccountsReusedProps & {
     setAccountSettings: (get_settings_response: GetSettings) => void;
     setJurisdictionSelectedShortcode: (shortcode: string) => void;
     toggleCFDVerificationModal: () => void;
+    account_status?: GetAccountStatus;
+    idv_supported_country: boolean;
 };
 
 const JurisdictionModal = ({
+    account_status,
     account_settings,
     account_type,
     authentication_status,
@@ -69,8 +72,12 @@ const JurisdictionModal = ({
     const [checked, setChecked] = React.useState(false);
     const [has_submitted_personal_details, setHasSubmittedPersonalDetails] = React.useState(false);
 
+
+    console.log(account_status?.authentication?.identity?.services?.idv?.status);
+
     const poa_status = authentication_status?.document_status;
     const poi_status = authentication_status?.identity_status;
+
     const poi_poa_pending = poi_status === 'pending' && poa_status === 'pending';
     const poi_poa_verified = poi_status === 'verified' && poa_status === 'verified';
     const poi_failed = poi_status === 'suspected' || poi_status === 'rejected' || poi_status === 'expired';
@@ -100,6 +107,7 @@ const JurisdictionModal = ({
                 if (citizen && place_of_birth && tax_residence && tax_identification_number && account_opening_reason) {
                     setHasSubmittedPersonalDetails(true);
                 }
+
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -122,15 +130,19 @@ const JurisdictionModal = ({
     const modal_title = is_eu
         ? localize('Jurisdiction for your DMT5 CFDs account')
         : localize('Choose a jurisdiction for your DMT5 {{account_type}} account', {
-              account_type: account_type.type === 'synthetic' ? 'Synthetic' : 'Financial',
-          });
+            account_type: account_type.type === 'synthetic' ? 'Synthetic' : 'Financial',
+        });
+
+
 
     const is_next_button_enabled =
         jurisdiction_selected_shortcode === 'svg' ||
         (jurisdiction_selected_shortcode &&
             jurisdiction_selected_shortcode !== 'svg' &&
             (poi_poa_not_submitted || poi_poa_failed || (poi_poa_verified && checked)) &&
-            !poi_poa_pending);
+            !poi_poa_pending) || shouldVerifyPOIForVanuatu(jurisdiction_selected_shortcode, account_status?.authentication?.identity);
+
+
 
     const onSelectRealAccount = () => {
         const type_of_account = {
@@ -150,8 +162,24 @@ const JurisdictionModal = ({
             } else {
                 openPasswordModal(type_of_account);
             }
+
+        } else if (jurisdiction_selected_shortcode === 'vanuatu') {
+            if (shouldVerifyPOIForVanuatu(jurisdiction_selected_shortcode, account_status?.authentication?.identity)) {
+                toggleCFDVerificationModal();
+            } else {
+                if (poi_poa_verified) {
+                    // for bvi, labuan & vanuatu:
+                    if (!has_submitted_personal_details) {
+                        toggleCFDPersonalDetailsModal();
+                    } else {
+                        openPasswordModal(type_of_account);
+                    }
+                } else {
+                    toggleCFDVerificationModal();
+                }
+            }
         } else if (poi_poa_verified) {
-            // for bvi, labuan & vanuatu:
+            // for bvi, labuan:
             if (!has_submitted_personal_details) {
                 toggleCFDPersonalDetailsModal();
             } else {
@@ -286,4 +314,5 @@ export default connect(({ modules, ui, client }: RootStore) => ({
     residence: client.residence,
     toggleCFDVerificationModal: modules.cfd.toggleCFDVerificationModal,
     setJurisdictionSelectedShortcode: modules.cfd.setJurisdictionSelectedShortcode,
+    account_status: client.account_status,
 }))(JurisdictionModal);

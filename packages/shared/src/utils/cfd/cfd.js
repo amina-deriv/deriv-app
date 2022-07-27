@@ -156,3 +156,16 @@ export const isLandingCompanyEnabled = ({ landing_companies, platform, type }) =
     }
     return false;
 };
+
+export const shouldVerifyPOIForVanuatu = (type_of_card, identity_info) => {
+    const onfido = identity_info?.services?.onfido;
+    if (type_of_card === 'vanuatu') {
+        if (onfido.status === 'verified') return false;
+        else if (onfido.status === 'none' && onfido.is_country_supported && onfido.submissions_left) return true;
+        else if (
+            onfido.status !== 'pending' &&
+            (onfido.submissions_left || identity_info?.services?.manual !== 'verified')
+        )
+            return true;
+    } else return false;
+};

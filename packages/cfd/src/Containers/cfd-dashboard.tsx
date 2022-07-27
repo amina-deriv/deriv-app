@@ -494,8 +494,8 @@ const CFDDashboard = (props: TCFDDashboardProps) => {
                                                     platform === CFD_PLATFORMS.MT5
                                                         ? is_suspended_mt5_real_server || mt5_disabled_signup_types.real
                                                         : is_suspended_mt5_real_server ||
-                                                          dxtrade_disabled_signup_types.real ||
-                                                          !!dxtrade_accounts_list_error
+                                                        dxtrade_disabled_signup_types.real ||
+                                                        !!dxtrade_accounts_list_error
                                                 }
                                                 current_list={current_list}
                                                 account_status={account_status}
@@ -532,8 +532,8 @@ const CFDDashboard = (props: TCFDDashboardProps) => {
                                                 platform === CFD_PLATFORMS.MT5
                                                     ? is_suspended_mt5_demo_server || mt5_disabled_signup_types.demo
                                                     : is_suspended_mt5_demo_server ||
-                                                      dxtrade_disabled_signup_types.demo ||
-                                                      !!dxtrade_accounts_list_error
+                                                    dxtrade_disabled_signup_types.demo ||
+                                                    !!dxtrade_accounts_list_error
                                             }
                                             openAccountNeededModal={openAccountNeededModal}
                                             standpoint={standpoint}

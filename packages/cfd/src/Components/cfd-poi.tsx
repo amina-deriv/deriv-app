@@ -50,6 +50,7 @@ const CFDPOI = ({ index, onSave, onSubmit, height, ...props }: TCFDPOIProps) => 
         onSave(index, { poi_state: status });
         onSubmit(index, { poi_state }, false);
     };
+
     return (
         <ProofOfIdentityContainerforMt5
             {...props}

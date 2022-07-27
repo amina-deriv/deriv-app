@@ -33,6 +33,7 @@ const ProofOfIdentityContainerforMt5 = ({
     refreshNotifications,
     citizen_data,
     jurisdiction_selected_shortcode,
+    is_vanuatu_onfido
 }) => {
     const [api_error, setAPIError] = React.useState();
     const [residence_list, setResidenceList] = React.useState();
@@ -87,7 +88,7 @@ const ProofOfIdentityContainerforMt5 = ({
     const has_idv_error =
         identity_last_attempt?.service && service_code.idv && poi_resubmission_cases.includes(idv.status);
 
-    if (identity_status === identity_status_codes.none || allow_poi_resubmission || has_idv_error || resubmit_poi) {
+    if (identity_status === identity_status_codes.none || allow_poi_resubmission || has_idv_error || resubmit_poi || is_vanuatu_onfido) {
         return (
             <POISubmissionForMT5
                 has_attempted_idv={has_attempted_idv}

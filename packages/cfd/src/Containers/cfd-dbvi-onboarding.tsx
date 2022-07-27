@@ -4,7 +4,7 @@ import { localize } from '@deriv/translations';
 import RootStore from 'Stores/index';
 import { PoiPoaSubmitted } from '@deriv/account';
 import { connect } from 'Stores/connect';
-import { WS } from '@deriv/shared';
+import { WS, shouldVerifyPOIForVanuatu } from '@deriv/shared';
 import { AccountStatusResponse, DetailsOfEachMT5Loginid } from '@deriv/api-types';
 import CFDFinancialStpRealAccountSignup from './cfd-financial-stp-real-account-signup';
 
@@ -22,6 +22,7 @@ type TVerificationModalProps = {
     };
     mt5_login_list: TExtendedDetailsOfEachMT5Loginid[];
     toggleJurisdictionModal: () => void;
+    jurisdiction_selected_shortcode: string;
 };
 
 const CFDDbViOnBoarding = ({
@@ -32,9 +33,14 @@ const CFDDbViOnBoarding = ({
     account_type,
     mt5_login_list,
     toggleJurisdictionModal,
+    jurisdiction_selected_shortcode
 }: TVerificationModalProps) => {
     const [is_loading, setIsLoading] = React.useState(true);
     const [showSubmittedModal, setShowSubmittedModal] = React.useState(false);
+
+
+    const [is_vanuatu_onfido, setVanuatuOnfido] = React.useState(false);
+
     const handleOpenJurisditionModal = () => {
         toggleCFDVerificationModal();
         toggleJurisdictionModal();
@@ -45,8 +51,12 @@ const CFDDbViOnBoarding = ({
             if (get_account_status?.authentication) {
                 const identity_status = get_account_status?.authentication?.identity?.status;
                 const document_status = get_account_status?.authentication?.document?.status;
-                setIsLoading(false);
-                if (
+
+                if (shouldVerifyPOIForVanuatu(jurisdiction_selected_shortcode, get_account_status?.authentication?.identity)) {
+                    setVanuatuOnfido(true)
+                    setShowSubmittedModal(false);
+                }
+                else if (
                     (identity_status === 'pending' || identity_status === 'verified') &&
                     (document_status === 'pending' || document_status === 'verified')
                 ) {
@@ -54,6 +64,7 @@ const CFDDbViOnBoarding = ({
                 } else {
                     setShowSubmittedModal(false);
                 }
+                setIsLoading(false);
             }
         });
     };
@@ -67,6 +78,7 @@ const CFDDbViOnBoarding = ({
     if (is_cfd_verification_modal_visible && is_loading) {
         return <Loading is_fullscreen={false} />;
     }
+
 
     return (
         <React.Suspense fallback={<UILoader />}>
@@ -95,6 +107,7 @@ const CFDDbViOnBoarding = ({
                             onFinish={() => {
                                 setShowSubmittedModal(true);
                             }}
+                            is_vanuatu_onfido={is_vanuatu_onfido}
                         />
                     )}
                 </Modal>
@@ -135,4 +148,5 @@ export default connect(({ client, modules, ui }: RootStore) => ({
     account_type: modules.cfd.account_type,
     mt5_login_list: client.mt5_login_list,
     toggleJurisdictionModal: modules.cfd.toggleJurisdictionModal,
+    jurisdiction_selected_shortcode: modules.cfd.jurisdiction_selected_shortcode,
 }))(CFDDbViOnBoarding);

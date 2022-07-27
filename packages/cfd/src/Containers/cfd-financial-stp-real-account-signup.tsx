@@ -42,6 +42,7 @@ type TCFDFinancialStpRealAccountSignupProps = {
     account_status: GetAccountStatus;
     onFinish: () => void;
     jurisdiction_selected_shortcode: string;
+    is_vanuatu_onfido: boolean;
 };
 
 type TSetSubmiting = (isSubmitting: boolean) => void;
@@ -76,6 +77,7 @@ const CFDFinancialStpRealAccountSignup = (props: TCFDFinancialStpRealAccountSign
             'removeNotificationMessage',
             'removeNotificationByKey',
             'jurisdiction_selected_shortcode',
+            'is_vanuatu_onfido'
         ],
     };
 
@@ -96,13 +98,24 @@ const CFDFinancialStpRealAccountSignup = (props: TCFDFinancialStpRealAccountSign
         forwarded_props: ['states_list', 'get_settings', 'storeProofOfAddress', 'refreshNotifications'],
     };
 
-    const should_show_poi = !(
-        authentication_status.identity_status === 'pending' || authentication_status.identity_status === 'verified'
-    );
+
+
+    console.log(props.is_vanuatu_onfido);
+
+    const should_show_poi = () => {
+        if (props.is_vanuatu_onfido) {
+            return true
+        }
+        else
+            return !(
+                authentication_status.identity_status === 'pending' || authentication_status.identity_status === 'verified');
+    }
+
+
     const should_show_poa = !(
         authentication_status.document_status === 'pending' || authentication_status.document_status === 'verified'
     );
-    const verification_configs = [...(should_show_poi ? [poi_config] : []), ...(should_show_poa ? [poa_config] : [])];
+    const verification_configs = [...(should_show_poi() ? [poi_config] : []), ...(should_show_poa ? [poa_config] : [])];
 
     const [items, setItems] = React.useState<TItemsState[]>(verification_configs);
 

@@ -1,12 +1,14 @@
 import React from 'react';
 import { Icon, Text, Checkbox, Popover, StaticUrl } from '@deriv/components';
 import { Localize, localize } from '@deriv/translations';
-import { isMobile } from '@deriv/shared';
+import { isMobile, shouldVerifyPOIForVanuatu } from '@deriv/shared';
 import classNames from 'classnames';
 import { jurisdiction_contents } from 'Constants/jurisdiction-contents';
 import RootStore from 'Stores/index';
 import { connect } from 'Stores/connect';
-import { TExistingData } from 'Components/props.types';
+import { TExistingData, TIdentityInfo } from 'Components/props.types';
+import { GetAccountStatus } from '@deriv/api-types';
+
 
 type TAvailableAccountAPI = [
     {
@@ -39,6 +41,7 @@ type TJurisdictionModalContent = {
     poa_failed: boolean;
     poi_failed: boolean;
     is_virtual: boolean;
+    account_status?: GetAccountStatus;
 };
 
 type TJurisdictionCard = {
@@ -58,6 +61,8 @@ type TJurisdictionCard = {
     poi_acknowledged: boolean;
     is_fully_authenticated: boolean;
     is_virtual: boolean;
+    should_submit_poi_for_vanuatu?: boolean;
+    identity_info?: TIdentityInfo;
 };
 const StatusCodes = {
     none: 'none',
@@ -85,6 +90,8 @@ const JurisdictionCard = ({
     poi_acknowledged,
     is_fully_authenticated,
     is_virtual,
+    should_submit_poi_for_vanuatu,
+    identity_info
 }: TJurisdictionCard) => {
     const card_classname = `cfd-jurisdiction-card--${account_type}`;
     const number_of_synthetic_accounts_to_be_shown = synthetic_available_accounts?.length;
@@ -134,6 +141,13 @@ const JurisdictionCard = ({
         }
     };
     const VerificationStatuses = () => {
+
+        const onfido_status = identity_info?.services?.onfido?.status;
+        const manual_status = identity_info?.services?.manual?.status;
+        const idv_status = identity_info?.services?.manual?.status;
+        const poi_failed_cases = ['suspected', 'rejected', 'expired'];
+        const poi_acknowledged_cases = ['pending', 'verified'];
+
         if (is_virtual && type_of_card !== 'svg') {
             return (
                 <div className={`${card_classname}__footer--none`}>
@@ -179,17 +193,6 @@ const JurisdictionCard = ({
             ) {
                 //if both verified
                 return null;
-            } else if (!poi_poa_none && poi_failed && poa_acknowledged) {
-                // poi is rejected,suspected, failed-resubmit
-                return (
-                    <div className={`${card_classname}__verification-status`}>
-                        <div className={`${card_classname}__verification-status--POA_POI`}>
-                            <Text size='xxxs' color={'white'}>
-                                <Localize i18n_default_text='Check your proof of identity' />
-                            </Text>
-                        </div>
-                    </div>
-                );
             } else if (!poi_poa_none && poa_failed && poi_acknowledged) {
                 // poa is rejected,suspected, failed-resubmit
                 return (
@@ -197,6 +200,70 @@ const JurisdictionCard = ({
                         <div className={`${card_classname}__verification-status--POA_POI`}>
                             <Text size='xxxs' color={'white'}>
                                 <Localize i18n_default_text='Check your proof of address' />
+                            </Text>
+                        </div>
+                    </div>
+                );
+            } else
+                if (type_of_card === 'vanuatu') {
+                    if (!poi_poa_none &&
+                        ((onfido_status && poi_failed_cases.includes(onfido_status)) ||
+                            (manual_status && poi_failed_cases.includes(manual_status)))
+                        && poa_acknowledged) {
+                        // poi is rejected,suspected, failed-resubmit
+                        return (
+                            <div className={`${card_classname}__verification-status`}>
+                                <div className={`${card_classname}__verification-status--POA_POI`}>
+                                    <Text size='xxxs' color={'white'}>
+                                        <Localize i18n_default_text='Check your proof of identity' />
+                                    </Text>
+                                </div>
+                            </div>
+                        );
+                    }
+                    else if (poa_failed &&
+                        ((onfido_status && poi_failed_cases.includes(onfido_status)) ||
+                            (manual_status && poi_failed_cases.includes(manual_status))) &&
+                        !poi_acknowledged && !poa_acknowledged) {
+                        // both failed
+                        return (
+                            <div className={`${card_classname}__verification-status`}>
+                                <div className={`${card_classname}__verification-status--POA_POI`}>
+                                    <Text size='xxxs' color={'white'}>
+                                        <Localize i18n_default_text='Check your proof of identity and address' />
+                                    </Text>
+                                </div>
+                            </div>
+                        );
+                    }
+                    else if (poa_acknowledged &&
+                        ((onfido_status && poi_acknowledged_cases.includes(onfido_status)) ||
+                            (manual_status && poi_acknowledged_cases.includes(manual_status)))) {
+                        // both are pending or verified
+                        return (
+                            <div className={`${card_classname}__verification-status`}>
+                                <div className={`${card_classname}__verification-status--pending`}>
+                                    <Text size='xxxs' color={'prominent'}>
+                                        <Localize i18n_default_text='Pending verification' />
+                                    </Text>
+                                </div>
+                            </div>
+                        );
+                    }
+                }
+                else {
+                    // if(idv_status==='verified'){
+
+                    // }
+                      else {
+
+            if (!poi_poa_none && poi_failed && poa_acknowledged) {
+                // poi is rejected,suspected, failed-resubmit
+                return (
+                    <div className={`${card_classname}__verification-status`}>
+                        <div className={`${card_classname}__verification-status--POA_POI`}>
+                            <Text size='xxxs' color={'white'}>
+                                <Localize i18n_default_text='Check your proof of identity' />
                             </Text>
                         </div>
                     </div>
@@ -224,94 +291,98 @@ const JurisdictionCard = ({
                     </div>
                 );
             }
-            return null;
         }
-        // account added
-        return (
-            <div className={`${card_classname}__verification-status`}>
-                <div className={`${card_classname}__verification-status--verified`}>
-                    <Text size='xxxs' className={`${card_classname}__verification-status--verified-text`} weight='bold'>
-                        <Localize i18n_default_text='Account added' />
-                    </Text>
-                </div>
-            </div>
-        );
-    };
+    }
 
-    return (
-        <>
-            <div
-                className={classNames(card_classname, {
-                    [`${card_classname}--selected`]: jurisdiction_selected_shortcode === type_of_card,
-                })}
-                onClick={disabled ? () => undefined : () => cardSelection(`${type_of_card}`)}
-                style={OneOrTwoCards ? { width: '32em' } : { width: '27.6em' }}
-            >
-                {jurisdiction_contents[type_of_card as keyof typeof jurisdiction_contents].is_over_header_available && (
-                    <div className={classNames(`${card_classname}__over-header`)}>
-                        <Text as='p' color={'info-blue'} line_height='xxl' weight='bold'>
-                            <Localize
-                                i18n_default_text={
-                                    jurisdiction_contents[type_of_card as keyof typeof jurisdiction_contents]
-                                        .over_header
-                                }
-                            />
-                        </Text>
-                    </div>
-                )}
-                <div className={`${card_classname}__info-container`}>
-                    <Text as='p' color={'prominent'} weight='bold' size='sm' className={`${card_classname}__h2-header`}>
+}
+
+return null;
+        }
+// account added
+return (
+    <div className={`${card_classname}__verification-status`}>
+        <div className={`${card_classname}__verification-status--verified`}>
+            <Text size='xxxs' className={`${card_classname}__verification-status--verified-text`} weight='bold'>
+                <Localize i18n_default_text='Account added' />
+            </Text>
+        </div>
+    </div>
+);
+    };
+return (
+    <>
+        <div
+            className={classNames(card_classname, {
+                [`${card_classname}--selected`]: jurisdiction_selected_shortcode === type_of_card,
+            })}
+            onClick={disabled ? () => undefined : () => cardSelection(`${type_of_card}`)}
+            style={OneOrTwoCards ? { width: '32em' } : { width: '27.6em' }}
+        >
+            {jurisdiction_contents[type_of_card as keyof typeof jurisdiction_contents].is_over_header_available && (
+                <div className={classNames(`${card_classname}__over-header`)}>
+                    <Text as='p' color={'info-blue'} line_height='xxl' weight='bold'>
                         <Localize
                             i18n_default_text={
-                                jurisdiction_contents[type_of_card as keyof typeof jurisdiction_contents].header
+                                jurisdiction_contents[type_of_card as keyof typeof jurisdiction_contents]
+                                    .over_header
                             }
                         />
                     </Text>
-                    {account_type === 'synthetic'
-                        ? jurisdiction_contents[
-                              type_of_card as keyof typeof jurisdiction_contents
-                          ].synthetic_contents.map((item, index) => (
-                              <div className={`${card_classname}__bullet-wrapper`} key={index}>
-                                  <div>
-                                      <Checkmark />
-                                  </div>
-                                  <Text as='p' size='xs' color={'prominent'}>
-                                      <Localize i18n_default_text={item} />
-                                  </Text>
-                              </div>
-                          ))
-                        : jurisdiction_contents[
-                              type_of_card as keyof typeof jurisdiction_contents
-                          ].financial_contents.map((item, index) => (
-                              <div className={`${card_classname}__bullet-wrapper`} key={index}>
-                                  <div>
-                                      <Checkmark />
-                                  </div>
-                                  <Text as='p' size='xs' color={'prominent'}>
-                                      <Localize i18n_default_text={item} />
-                                  </Text>
-                                  {/* TODO: find a better solution */}
-                                  {/Straight-through processing/.test(item) && (
-                                      <Popover
-                                          alignment='left'
-                                          className='cfd-compare-accounts-tooltip'
-                                          classNameBubble='cfd-compare-accounts-tooltip--msg'
-                                          icon='info'
-                                          disable_message_icon
-                                          is_bubble_hover_enabled
-                                          message={localize(
-                                              'Choosing this jurisdiction will give you a Financial STP account. Your trades will go directly to the market and have tighter spreads.'
-                                          )}
-                                          zIndex={9999}
-                                      />
-                                  )}
-                              </div>
-                          ))}
                 </div>
-                <VerificationStatuses />
+            )}
+            <div className={`${card_classname}__info-container`}>
+                <Text as='p' color={'prominent'} weight='bold' size='sm' className={`${card_classname}__h2-header`}>
+                    <Localize
+                        i18n_default_text={
+                            jurisdiction_contents[type_of_card as keyof typeof jurisdiction_contents].header
+                        }
+                    />
+                </Text>
+                {account_type === 'synthetic'
+                    ? jurisdiction_contents[
+                        type_of_card as keyof typeof jurisdiction_contents
+                    ].synthetic_contents.map((item, index) => (
+                        <div className={`${card_classname}__bullet-wrapper`} key={index}>
+                            <div>
+                                <Checkmark />
+                            </div>
+                            <Text as='p' size='xs' color={'prominent'}>
+                                <Localize i18n_default_text={item} />
+                            </Text>
+                        </div>
+                    ))
+                    : jurisdiction_contents[
+                        type_of_card as keyof typeof jurisdiction_contents
+                    ].financial_contents.map((item, index) => (
+                        <div className={`${card_classname}__bullet-wrapper`} key={index}>
+                            <div>
+                                <Checkmark />
+                            </div>
+                            <Text as='p' size='xs' color={'prominent'}>
+                                <Localize i18n_default_text={item} />
+                            </Text>
+                            {/* TODO: find a better solution */}
+                            {/Straight-through processing/.test(item) && (
+                                <Popover
+                                    alignment='left'
+                                    className='cfd-compare-accounts-tooltip'
+                                    classNameBubble='cfd-compare-accounts-tooltip--msg'
+                                    icon='info'
+                                    disable_message_icon
+                                    is_bubble_hover_enabled
+                                    message={localize(
+                                        'Choosing this jurisdiction will give you a Financial STP account. Your trades will go directly to the market and have tighter spreads.'
+                                    )}
+                                    zIndex={9999}
+                                />
+                            )}
+                        </div>
+                    ))}
             </div>
-        </>
-    );
+            <VerificationStatuses />
+        </div>
+    </>
+);
 };
 
 const JurisdictionModalContent = ({
@@ -331,6 +402,7 @@ const JurisdictionModalContent = ({
     poa_failed,
     poi_failed,
     is_virtual,
+    account_status,
 }: TJurisdictionModalContent) => {
     const card_classname = `cfd-jurisdiction-card--${account_type}`;
 
@@ -342,6 +414,9 @@ const JurisdictionModalContent = ({
     const poi_acknowledged = poi_status === StatusCodes.pending || poi_status === StatusCodes.verified;
 
     const poi_poa_verified = poi_status === StatusCodes.verified && poa_status === StatusCodes.verified;
+
+    const identity_info = account_status?.authentication?.identity;
+    const should_submit_poi_for_vanuatu = shouldVerifyPOIForVanuatu(jurisdiction_selected_shortcode, identity_info);
 
     const cardsToBeShown = (type_of_card: string) => {
         const is_available =
@@ -359,8 +434,8 @@ const JurisdictionModalContent = ({
             account_type === 'synthetic'
                 ? real_synthetic_accounts_existing_data?.some(account => account.landing_company_short === type_of_card)
                 : real_financial_accounts_existing_data?.some(
-                      account => account.landing_company_short === type_of_card
-                  );
+                    account => account.landing_company_short === type_of_card
+                );
 
         return is_available;
     };
@@ -391,7 +466,37 @@ const JurisdictionModalContent = ({
                         </Text>
                     </div>
                 )}
-                {is_fully_authenticated && jurisdiction_selected_shortcode === 'vanuatu' && (
+
+                {jurisdiction_selected_shortcode === 'vanuatu' && should_submit_poi_for_vanuatu && !poi_acknowledged &&
+                    (
+                        <Text
+                            as='p'
+                            color='prominent'
+                            align='center'
+                            size='xs'
+                            weight='bold'
+                            line_height='xs'
+                            className={`${card_classname}__footnote`}
+                        >
+                            <Localize i18n_default_text='To create this account first we need your proof of identity and address.' />
+                        </Text>
+                    )}
+                {jurisdiction_selected_shortcode === 'vanuatu' && should_submit_poi_for_vanuatu && poi_acknowledged &&
+                    (
+                        <Text
+                            as='p'
+                            color='prominent'
+                            align='center'
+                            size='xs'
+                            weight='bold'
+                            line_height='xs'
+                            className={`${card_classname}__footnote`}
+                        >
+                            <Localize i18n_default_text='To create this account first we need your proof of identity.' />
+                        </Text>
+                    )}
+
+                {is_fully_authenticated && !should_submit_poi_for_vanuatu && jurisdiction_selected_shortcode === 'vanuatu' && (
                     <div className={`${card_classname}__footnote`}>
                         <Text as='p' color='prominent' weight='bold' align='center' size='xs' line_height='xs'>
                             <Localize
@@ -548,6 +653,8 @@ const JurisdictionModalContent = ({
                         poi_acknowledged={poi_acknowledged}
                         is_fully_authenticated={is_fully_authenticated}
                         is_virtual={is_virtual}
+                        should_submit_poi_for_vanuatu={should_submit_poi_for_vanuatu}
+                        identity_info={identity_info}
                     />
                 )}
 
@@ -569,6 +676,8 @@ const JurisdictionModalContent = ({
                         poi_acknowledged={poi_acknowledged}
                         is_fully_authenticated={is_fully_authenticated}
                         is_virtual={is_virtual}
+                        should_submit_poi_for_vanuatu={should_submit_poi_for_vanuatu}
+                        identity_info={identity_info}
                     />
                 )}
 
@@ -590,6 +699,8 @@ const JurisdictionModalContent = ({
                         poi_acknowledged={poi_acknowledged}
                         is_fully_authenticated={is_fully_authenticated}
                         is_virtual={is_virtual}
+                        should_submit_poi_for_vanuatu={should_submit_poi_for_vanuatu}
+                        identity_info={identity_info}
                     />
                 )}
                 {cardsToBeShown('labuan') && (
@@ -610,6 +721,8 @@ const JurisdictionModalContent = ({
                         poi_acknowledged={poi_acknowledged}
                         is_fully_authenticated={is_fully_authenticated}
                         is_virtual={is_virtual}
+                        should_submit_poi_for_vanuatu={should_submit_poi_for_vanuatu}
+                        identity_info={identity_info}
                     />
                 )}
 
@@ -631,6 +744,8 @@ const JurisdictionModalContent = ({
                         poi_acknowledged={poi_acknowledged}
                         is_fully_authenticated={is_fully_authenticated}
                         is_virtual={is_virtual}
+                        should_submit_poi_for_vanuatu={should_submit_poi_for_vanuatu}
+                        identity_info={identity_info}
                     />
                 )}
             </div>
@@ -638,7 +753,14 @@ const JurisdictionModalContent = ({
             {is_fully_authenticated &&
                 poi_poa_verified &&
                 jurisdiction_selected_shortcode &&
-                jurisdiction_selected_shortcode !== 'svg' && (
+                jurisdiction_selected_shortcode !== 'svg' && jurisdiction_selected_shortcode !== 'vanuatu' && (
+                    <ModalCheckbox is_checked={checked} onCheck={setChecked} />
+                )}
+
+            {is_fully_authenticated &&
+                poi_poa_verified &&
+                jurisdiction_selected_shortcode &&
+                jurisdiction_selected_shortcode === 'vanuatu' && !should_submit_poi_for_vanuatu && (
                     <ModalCheckbox is_checked={checked} onCheck={setChecked} />
                 )}
         </>

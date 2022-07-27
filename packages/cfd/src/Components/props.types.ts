@@ -141,3 +141,34 @@ export type TTradingPlatformAccounts = {
      */
     platform?: 'dxtrade';
 };
+
+export type TIdentityInfo = {
+    expiry_date?: number;
+    services?: {
+        idv?: {
+            expiry_date?: number;
+            last_rejected?: string[];
+            reported_properties?: {
+                [k: string]: unknown;
+            };
+            status?: 'none' | 'pending' | 'rejected' | 'verified' | 'expired';
+            submissions_left?: number;
+        };
+        manual?: {
+            status?: 'none' | 'pending' | 'rejected' | 'verified' | 'expired' | 'suspected';
+        };
+        onfido?: {
+            country_code?: string;
+            documents?: string[];
+            documents_supported?: string[];
+            is_country_supported?: 1 | 0;
+            last_rejected?: string[];
+            reported_properties?: {
+                [k: string]: unknown;
+            };
+            status?: 'none' | 'pending' | 'rejected' | 'verified' | 'expired' | 'suspected';
+            submissions_left?: number;
+        };
+    };
+    status?: 'none' | 'pending' | 'rejected' | 'verified' | 'expired' | 'suspected';
+};
