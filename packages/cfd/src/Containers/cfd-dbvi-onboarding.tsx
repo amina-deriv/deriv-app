@@ -71,9 +71,22 @@ const CFDDbViOnBoarding = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [is_cfd_verification_modal_visible]);
 
-    return is_loading ? (
-        <Loading />
+    const modal_content = showSubmittedModal ? (
+        <PoiPoaSubmitted
+            onClickOK={toggleCFDVerificationModal}
+            account_type={account_type}
+            mt5_login_list={mt5_login_list}
+            onClickYes={handleOpenJurisditionModal}
+        />
     ) : (
+        <CFDFinancialStpRealAccountSignup
+            onFinish={() => {
+                setShowSubmittedModal(true);
+            }}
+        />
+    );
+
+    return (
         <React.Suspense fallback={<UILoader />}>
             <DesktopWrapper>
                 <Modal
@@ -88,20 +101,7 @@ const CFDDbViOnBoarding = ({
                     onMount={() => getAccountStatusFromAPI()}
                     exit_classname='cfd-modal--custom-exit'
                 >
-                    {showSubmittedModal ? (
-                        <PoiPoaSubmitted
-                            onClickOK={toggleCFDVerificationModal}
-                            account_type={account_type}
-                            mt5_login_list={mt5_login_list}
-                            onClickYes={handleOpenJurisditionModal}
-                        />
-                    ) : (
-                        <CFDFinancialStpRealAccountSignup
-                            onFinish={() => {
-                                setShowSubmittedModal(true);
-                            }}
-                        />
-                    )}
+                    {is_loading ? <Loading /> : modal_content}
                 </Modal>
             </DesktopWrapper>
             <MobileWrapper>
@@ -112,20 +112,7 @@ const CFDDbViOnBoarding = ({
                     visible={is_cfd_verification_modal_visible}
                     onClose={toggleCFDVerificationModal}
                 >
-                    {showSubmittedModal ? (
-                        <PoiPoaSubmitted
-                            onClickOK={toggleCFDVerificationModal}
-                            account_type={account_type}
-                            mt5_login_list={mt5_login_list}
-                            onClickYes={handleOpenJurisditionModal}
-                        />
-                    ) : (
-                        <CFDFinancialStpRealAccountSignup
-                            onFinish={() => {
-                                setShowSubmittedModal(true);
-                            }}
-                        />
-                    )}
+                    {is_loading ? <Loading /> : modal_content}
                 </MobileDialog>
             </MobileWrapper>
         </React.Suspense>
