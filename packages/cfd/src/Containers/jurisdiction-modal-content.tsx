@@ -53,25 +53,10 @@ type TJurisdictionCard = {
     synthetic_available_accounts: TAvailableAccountAPI;
     financial_available_accounts: TAvailableAccountAPI;
     account_type: string;
-    poa_status: string;
-    poi_status: string;
-    poi_poa_none: boolean;
     setJurisdictionSelectedShortcode: (card_type: string) => void;
     type_of_card: string;
     disabled: boolean;
-    poa_failed: boolean;
-    poi_failed: boolean;
-    poa_acknowledged: boolean;
-    poi_acknowledged: boolean;
-    is_fully_authenticated: boolean;
-    is_virtual: boolean;
-    poi_verified_for_vanuatu: boolean;
-    poi_verified_for_labuan_bvi: boolean;
-    poa_verified: boolean;
-    poi_acknowledged_for_bvi_labuan: boolean;
-    need_poi_for_vanuatu: boolean;
-    need_poi_for_bvi_labuan: boolean;
-    poi_acknowledged_for_vanuatu: boolean;
+    children: React.ReactNode;
 };
 const StatusCodes = {
     none: 'none',
@@ -87,22 +72,10 @@ const JurisdictionCard = ({
     synthetic_available_accounts,
     financial_available_accounts,
     account_type,
-    poi_poa_none,
     setJurisdictionSelectedShortcode,
     type_of_card,
     disabled,
-    poa_failed,
-    poa_acknowledged,
-    poi_acknowledged,
-    is_fully_authenticated,
-    is_virtual,
-    poi_verified_for_vanuatu,
-    poi_verified_for_labuan_bvi,
-    poa_verified,
-    poi_acknowledged_for_bvi_labuan,
-    need_poi_for_vanuatu,
-    need_poi_for_bvi_labuan,
-    poi_acknowledged_for_vanuatu,
+    children,
 }: TJurisdictionCard) => {
     const card_classname = `cfd-jurisdiction-card--${account_type}`;
     const number_of_synthetic_accounts_to_be_shown = synthetic_available_accounts?.length;
@@ -127,166 +100,6 @@ const JurisdictionCard = ({
     );
 
     const OneOrTwoCards = number_of_cards === 1 || number_of_cards === 2;
-
-    const getAccountTitle = () => {
-        switch (account_type) {
-            case 'synthetic':
-                return 'Synthetic';
-            case 'financial':
-                return 'Financial';
-            default:
-                return '';
-        }
-    };
-
-    const getTypeTitle = () => {
-        switch (type_of_card) {
-            case 'bvi':
-                return 'BVI';
-            case 'vanuatu':
-                return 'Vanuatu';
-            case 'labuan':
-                return 'STP';
-            default:
-                return '';
-        }
-    };
-    const VerificationStatuses = () => {
-        if (is_virtual && type_of_card !== 'svg') {
-            return (
-                <div className={`${card_classname}__footer--none`}>
-                    <Text as='p' size='xxxs' align='center' color={'prominent'}>
-                        <Localize
-                            i18n_default_text='Switch to your real account to create a DMT5 {{account_title}} {{type_title}} account.'
-                            values={{
-                                account_title: getAccountTitle(),
-                                type_title: getTypeTitle(),
-                            }}
-                        />
-                    </Text>
-                </div>
-            );
-        }
-        if (!disabled && type_of_card) {
-            // account not added
-            if (type_of_card === 'svg') {
-                if (!is_fully_authenticated)
-                    return (
-                        <div className={`${card_classname}__footer`}>
-                            <Text size={OneOrTwoCards ? 'xxxs' : 'xxxxs'} color={'less-prominent'}>
-                                <Localize i18n_default_text='You will need to submit proof of identity and address once you reach certain thresholds' />
-                            </Text>
-                        </div>
-                    );
-
-                return null;
-            }
-            if (poi_poa_none) {
-                // if poi or poa is not submitted
-                return (
-                    <div className={`${card_classname}__footer--none`}>
-                        <Text as='p' size='xxs' align='center' color={'prominent'}>
-                            <Localize i18n_default_text='Proof of identity and address are required' />
-                        </Text>
-                    </div>
-                );
-            } else if (type_of_card === 'vanuatu' && poa_verified && poi_verified_for_vanuatu) {
-                //if both verified for vanuatu
-                return null;
-            } else if (
-                (type_of_card === 'bvi' || type_of_card === 'labuan' || type_of_card === 'maltainvest') &&
-                poa_verified &&
-                poi_verified_for_labuan_bvi
-            ) {
-                //if both verified for bvi and labuan
-                return null;
-            } else if (!poi_poa_none && poa_failed && poi_acknowledged) {
-                // poa is rejected,suspected, failed-resubmit
-                return (
-                    <div className={`${card_classname}__verification-status`}>
-                        <div className={`${card_classname}__verification-status--POA_POI`}>
-                            <Text size='xxxs' color={'white'}>
-                                <Localize i18n_default_text='Check your proof of address' />
-                            </Text>
-                        </div>
-                    </div>
-                );
-            } else if (type_of_card === 'vanuatu') {
-                if (poi_acknowledged_for_vanuatu && poa_acknowledged) {
-                    return (
-                        <div className={`${card_classname}__verification-status`}>
-                            <div className={`${card_classname}__verification-status--pending`}>
-                                <Text size='xxxs' color={'prominent'}>
-                                    <Localize i18n_default_text='Pending verification' />
-                                </Text>
-                            </div>
-                        </div>
-                    );
-                } else if (need_poi_for_vanuatu && poa_acknowledged) {
-                    return (
-                        <div className={`${card_classname}__footer--none`}>
-                            <Text as='p' size='xxs' align='center' color={'prominent'}>
-                                <Localize i18n_default_text='Proof of identity required' />
-                            </Text>
-                        </div>
-                    );
-                } else if (need_poi_for_vanuatu && !poa_acknowledged) {
-                    return (
-                        <div className={`${card_classname}__verification-status`}>
-                            <div className={`${card_classname}__verification-status--POA_POI`}>
-                                <Text size='xxxs' color={'white'}>
-                                    <Localize i18n_default_text='Check your proof of identity and address' />
-                                </Text>
-                            </div>
-                        </div>
-                    );
-                }
-            } else if (type_of_card === 'bvi' || type_of_card === 'labuan' || type_of_card === 'maltainvest') {
-                if (poi_acknowledged_for_bvi_labuan && poa_acknowledged) {
-                    return (
-                        <div className={`${card_classname}__verification-status`}>
-                            <div className={`${card_classname}__verification-status--pending`}>
-                                <Text size='xxxs' color={'prominent'}>
-                                    <Localize i18n_default_text='Pending verification' />
-                                </Text>
-                            </div>
-                        </div>
-                    );
-                } else if (need_poi_for_bvi_labuan && poa_acknowledged) {
-                    return (
-                        <div className={`${card_classname}__verification-status`}>
-                            <div className={`${card_classname}__verification-status--POA_POI`}>
-                                <Text size='xxxs' color={'white'}>
-                                    <Localize i18n_default_text='Check your proof of identity' />
-                                </Text>
-                            </div>
-                        </div>
-                    );
-                } else if (need_poi_for_bvi_labuan && !poa_acknowledged) {
-                    return (
-                        <div className={`${card_classname}__verification-status`}>
-                            <div className={`${card_classname}__verification-status--POA_POI`}>
-                                <Text size='xxxs' color={'white'}>
-                                    <Localize i18n_default_text='Check your proof of identity and address' />
-                                </Text>
-                            </div>
-                        </div>
-                    );
-                }
-            }
-            return null;
-        }
-        // account added
-        return (
-            <div className={`${card_classname}__verification-status`}>
-                <div className={`${card_classname}__verification-status--verified`}>
-                    <Text size='xxxs' className={`${card_classname}__verification-status--verified-text`} weight='bold'>
-                        <Localize i18n_default_text='Account added' />
-                    </Text>
-                </div>
-            </div>
-        );
-    };
 
     return (
         <>
@@ -358,7 +171,7 @@ const JurisdictionCard = ({
                               </div>
                           ))}
                 </div>
-                <VerificationStatuses />
+                {children}
             </div>
         </>
     );
@@ -421,6 +234,169 @@ const JurisdictionModalContent = (props: TJurisdictionModalContent) => {
                   );
 
         return is_available;
+    };
+    const getAccountTitle = () => {
+        switch (account_type) {
+            case 'synthetic':
+                return 'Synthetic';
+            case 'financial':
+                return 'Financial';
+            default:
+                return '';
+        }
+    };
+
+    const getTypeTitle = () => {
+        switch (jurisdiction_selected_shortcode) {
+            case 'bvi':
+                return 'BVI';
+            case 'vanuatu':
+                return 'Vanuatu';
+            case 'labuan':
+                return 'STP';
+            default:
+                return '';
+        }
+    };
+    const VerificationBanner = (card: string) => {
+        if (is_virtual && card !== 'svg') {
+            return (
+                <div className={`${card_classname}__footer--none`}>
+                    <Text as='p' size='xxxs' align='center' color={'prominent'}>
+                        <Localize
+                            i18n_default_text='Switch to your real account to create a DMT5 {{account_title}} {{type_title}} account.'
+                            values={{
+                                account_title: getAccountTitle(),
+                                type_title: getTypeTitle(),
+                            }}
+                        />
+                    </Text>
+                </div>
+            );
+        } else if (!disableCard(card) && card) {
+            // account not added
+            if (card === 'svg') {
+                if (!is_fully_authenticated)
+                    return (
+                        <div className={`${card_classname}__footer`}>
+                            <Text size={'xxxxs'} color={'less-prominent'}>
+                                <Localize i18n_default_text='You will need to submit proof of identity and address once you reach certain thresholds' />
+                            </Text>
+                        </div>
+                    );
+
+                return null;
+            }
+            if (poi_poa_none) {
+                // if poi or poa is not submitted
+                return (
+                    <div className={`${card_classname}__footer--none`}>
+                        <Text as='p' size='xxs' align='center' color={'prominent'}>
+                            <Localize i18n_default_text='Proof of identity and address are required' />
+                        </Text>
+                    </div>
+                );
+            } else if (card === 'vanuatu' && poa_verified && poi_verified_for_vanuatu) {
+                //if both verified for vanuatu
+                return null;
+            } else if (
+                (card === 'bvi' || card === 'labuan' || card === 'maltainvest') &&
+                poa_verified &&
+                poi_verified_for_labuan_bvi
+            ) {
+                //if both verified for bvi and labuan
+                return null;
+            } else if (!poi_poa_none && poa_failed && poi_acknowledged) {
+                // poa is rejected,suspected, failed-resubmit
+                return (
+                    <div className={`${card_classname}__verification-status`}>
+                        <div className={`${card_classname}__verification-status--POA_POI`}>
+                            <Text size='xxxs' color={'white'}>
+                                <Localize i18n_default_text='Check your proof of address' />
+                            </Text>
+                        </div>
+                    </div>
+                );
+            } else if (card === 'vanuatu') {
+                if (poi_acknowledged_for_vanuatu && poa_acknowledged) {
+                    return (
+                        <div className={`${card_classname}__verification-status`}>
+                            <div className={`${card_classname}__verification-status--pending`}>
+                                <Text size='xxxs' color={'prominent'}>
+                                    <Localize i18n_default_text='Pending verification' />
+                                </Text>
+                            </div>
+                        </div>
+                    );
+                } else if (need_poi_for_vanuatu && poa_acknowledged) {
+                    return (
+                        <div className={`${card_classname}__footer--none`}>
+                            <Text as='p' size='xxs' align='center' color={'prominent'}>
+                                <Localize i18n_default_text='Proof of identity required' />
+                            </Text>
+                        </div>
+                    );
+                } else if (need_poi_for_vanuatu && !poa_acknowledged) {
+                    return (
+                        <div className={`${card_classname}__verification-status`}>
+                            <div className={`${card_classname}__verification-status--POA_POI`}>
+                                <Text size='xxxs' color={'white'}>
+                                    <Localize i18n_default_text='Check your proof of identity and address' />
+                                </Text>
+                            </div>
+                        </div>
+                    );
+                }
+            } else if (card === 'bvi' || card === 'labuan' || jurisdictioncard_selected_shortcode === 'maltainvest') {
+                if (poi_acknowledged_for_bvi_labuan && poa_acknowledged) {
+                    return (
+                        <div className={`${card_classname}__verification-status`}>
+                            <div className={`${card_classname}__verification-status--pending`}>
+                                <Text size='xxxs' color={'prominent'}>
+                                    <Localize i18n_default_text='Pending verification' />
+                                </Text>
+                            </div>
+                        </div>
+                    );
+                } else if (need_poi_for_bvi_labuan && poa_acknowledged) {
+                    return (
+                        <div className={`${card_classname}__verification-status`}>
+                            <div className={`${card_classname}__verification-status--POA_POI`}>
+                                <Text size='xxxs' color={'white'}>
+                                    <Localize i18n_default_text='Check your proof of identity' />
+                                </Text>
+                            </div>
+                        </div>
+                    );
+                } else if (need_poi_for_bvi_labuan && !poa_acknowledged) {
+                    return (
+                        <div className={`${card_classname}__verification-status`}>
+                            <div className={`${card_classname}__verification-status--POA_POI`}>
+                                <Text size='xxxs' color={'white'}>
+                                    <Localize i18n_default_text='Check your proof of identity and address' />
+                                </Text>
+                            </div>
+                        </div>
+                    );
+                }
+            }
+            return <></>;
+        } else if (disableCard(card)) {
+            return (
+                <div className={`${card_classname}__verification-status`}>
+                    <div className={`${card_classname}__verification-status--verified`}>
+                        <Text
+                            size='xxxs'
+                            className={`${card_classname}__verification-status--verified-text`}
+                            weight='bold'
+                        >
+                            <Localize i18n_default_text='Account added' />
+                        </Text>
+                    </div>
+                </div>
+            );
+        }
+        return <></>;
     };
 
     const ModalFootNote = () => {
@@ -679,6 +655,7 @@ const JurisdictionModalContent = (props: TJurisdictionModalContent) => {
                     card =>
                         cardsToBeShown(card) && (
                             <JurisdictionCard
+                                key={`${account_type}${card}`}
                                 type_of_card={card}
                                 disabled={disableCard(card)}
                                 jurisdiction_selected_shortcode={jurisdiction_selected_shortcode}
@@ -702,7 +679,9 @@ const JurisdictionModalContent = (props: TJurisdictionModalContent) => {
                                 need_poi_for_vanuatu={need_poi_for_vanuatu}
                                 need_poi_for_bvi_labuan={need_poi_for_bvi_labuan}
                                 poi_acknowledged_for_vanuatu={poi_acknowledged_for_vanuatu}
-                            />
+                            >
+                                {VerificationBanner(card)}
+                            </JurisdictionCard>
                         )
                 )}
             </div>
