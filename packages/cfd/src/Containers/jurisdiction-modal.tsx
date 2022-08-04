@@ -84,6 +84,7 @@ const JurisdictionModal = ({
         poa_verified,
         poi_acknowledged_for_bvi_labuan,
         poi_acknowledged_for_vanuatu,
+        poa_acknowledged,
     } = getIdentityStatusInfo(account_status);
 
     const poi_poa_pending = poi_status === 'pending' && poa_status === 'pending';
@@ -263,6 +264,7 @@ const JurisdictionModal = ({
                                 poi_acknowledged_for_vanuatu={poi_acknowledged_for_vanuatu}
                                 need_poi_for_vanuatu={need_poi_for_vanuatu}
                                 need_poi_for_bvi_labuan={need_poi_for_bvi_labuan}
+                                poa_acknowledged={poa_acknowledged}
                             />
                             <Modal.Footer has_separator>
                                 <Button
@@ -308,6 +310,7 @@ const JurisdictionModal = ({
                                 poi_acknowledged_for_vanuatu={poi_acknowledged_for_vanuatu}
                                 need_poi_for_vanuatu={need_poi_for_vanuatu}
                                 need_poi_for_bvi_labuan={need_poi_for_bvi_labuan}
+                                poa_acknowledged={poa_acknowledged}
                             />
                             <Modal.Footer has_separator>
                                 <Button

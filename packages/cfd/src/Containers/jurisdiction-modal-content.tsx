@@ -46,6 +46,7 @@ type TJurisdictionModalContent = {
     need_poi_for_vanuatu: boolean;
     need_poi_for_bvi_labuan: boolean;
     poi_acknowledged_for_vanuatu: boolean;
+    poa_acknowledged: boolean;
 };
 
 type TJurisdictionCard = {
@@ -202,16 +203,12 @@ const JurisdictionModalContent = (props: TJurisdictionModalContent) => {
         need_poi_for_vanuatu,
         need_poi_for_bvi_labuan,
         poi_acknowledged_for_vanuatu,
+        poa_acknowledged,
     } = props;
     const card_classname = `cfd-jurisdiction-card--${account_type}`;
 
-    const poa_none = poa_status === StatusCodes.none;
-    const poi_none = poi_status === StatusCodes.none;
-    const poi_poa_none = poi_none || poa_none;
-
-    const poa_acknowledged = poa_status === StatusCodes.pending || poa_status === StatusCodes.verified;
+    const poi_poa_none = poi_status === StatusCodes.none || poa_status === StatusCodes.none;
     const poi_acknowledged = poi_status === StatusCodes.pending || poi_status === StatusCodes.verified;
-
     const poi_poa_verified = poi_status === StatusCodes.verified && poa_status === StatusCodes.verified;
 
     const cardsToBeShown = (type_of_card: string) => {
@@ -662,23 +659,7 @@ const JurisdictionModalContent = (props: TJurisdictionModalContent) => {
                                 synthetic_available_accounts={synthetic_available_accounts}
                                 financial_available_accounts={financial_available_accounts}
                                 account_type={account_type}
-                                poa_status={poa_status}
-                                poi_status={poi_status}
                                 setJurisdictionSelectedShortcode={setJurisdictionSelectedShortcode}
-                                poa_failed={poa_failed}
-                                poi_failed={poi_failed}
-                                poi_poa_none={poi_poa_none}
-                                poa_acknowledged={poa_acknowledged}
-                                poi_acknowledged={poi_acknowledged}
-                                is_fully_authenticated={is_fully_authenticated}
-                                is_virtual={is_virtual}
-                                poi_verified_for_vanuatu={poi_verified_for_vanuatu}
-                                poi_verified_for_labuan_bvi={poi_verified_for_labuan_bvi}
-                                poa_verified={poa_verified}
-                                poi_acknowledged_for_bvi_labuan={poi_acknowledged_for_bvi_labuan}
-                                need_poi_for_vanuatu={need_poi_for_vanuatu}
-                                need_poi_for_bvi_labuan={need_poi_for_bvi_labuan}
-                                poi_acknowledged_for_vanuatu={poi_acknowledged_for_vanuatu}
                             >
                                 {VerificationBanner(card)}
                             </JurisdictionCard>
