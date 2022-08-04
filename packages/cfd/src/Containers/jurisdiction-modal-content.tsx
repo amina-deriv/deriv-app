@@ -344,7 +344,7 @@ const JurisdictionModalContent = (props: TJurisdictionModalContent) => {
                         </div>
                     );
                 }
-            } else if (card === 'bvi' || card === 'labuan' || jurisdictioncard_selected_shortcode === 'maltainvest') {
+            } else if (card === 'bvi' || card === 'labuan' || card === 'maltainvest') {
                 if (poi_acknowledged_for_bvi_labuan && poa_acknowledged) {
                     return (
                         <div className={`${card_classname}__verification-status`}>
