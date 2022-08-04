@@ -377,7 +377,7 @@ const JurisdictionModalContent = (props: TJurisdictionModalContent) => {
                     );
                 }
             }
-            return <></>;
+            return null;
         } else if (disableCard(card)) {
             return (
                 <div className={`${card_classname}__verification-status`}>
@@ -393,7 +393,7 @@ const JurisdictionModalContent = (props: TJurisdictionModalContent) => {
                 </div>
             );
         }
-        return <></>;
+        return null;
     };
 
     const ModalFootNote = () => {
