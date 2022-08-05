@@ -57,7 +57,7 @@ type TJurisdictionCard = {
     setJurisdictionSelectedShortcode: (card_type: string) => void;
     type_of_card: string;
     disabled: boolean;
-    children: React.ReactNode;
+    banner: React.ReactNode;
 };
 const StatusCodes = {
     none: 'none',
@@ -76,7 +76,7 @@ const JurisdictionCard = ({
     setJurisdictionSelectedShortcode,
     type_of_card,
     disabled,
-    children,
+    banner,
 }: TJurisdictionCard) => {
     const card_classname = `cfd-jurisdiction-card--${account_type}`;
     const number_of_synthetic_accounts_to_be_shown = synthetic_available_accounts?.length;
@@ -172,7 +172,7 @@ const JurisdictionCard = ({
                               </div>
                           ))}
                 </div>
-                {children}
+                {banner}
             </div>
         </>
     );
@@ -660,9 +660,8 @@ const JurisdictionModalContent = (props: TJurisdictionModalContent) => {
                                 financial_available_accounts={financial_available_accounts}
                                 account_type={account_type}
                                 setJurisdictionSelectedShortcode={setJurisdictionSelectedShortcode}
-                            >
-                                {VerificationBanner(card)}
-                            </JurisdictionCard>
+                                banner={VerificationBanner(card)}
+                            />
                         )
                 )}
             </div>
