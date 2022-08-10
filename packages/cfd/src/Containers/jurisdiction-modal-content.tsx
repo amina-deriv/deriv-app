@@ -8,6 +8,7 @@ import { connect } from 'Stores/connect';
 import { TExistingData } from 'Components/props.types';
 import CfdCheckBoxForAccounts from '../Components/cfd-checkbox-for-accounts';
 import { general_messages } from '../Constants/cfd-shared-strings';
+import ModalFootNote from '../Components/cfd-modal-footnote';
 
 type TAvailableAccountAPI = [
     {
@@ -423,183 +424,6 @@ const JurisdictionModalContent = ({
         return is_available;
     };
 
-    const ModalFootNote = () => {
-        const account_type_name = account_type === 'synthetic' ? 'Synthetics' : 'Financial';
-
-        return (
-            <>
-                {jurisdiction_selected_shortcode === 'svg' && (
-                    <div className={`${card_classname}__footnote`}>
-                        <Text as='p' color='prominent' weight='bold' align='center' size='xs' line_height='xs'>
-                            {general_messages.getMT5LicenceNotes(account_type_name, 'svg')}
-                        </Text>
-                    </div>
-                )}
-
-                {poi_verified_for_labuan_bvi && poa_verified && jurisdiction_selected_shortcode === 'bvi' && (
-                    <div className={`${card_classname}__footnote`}>
-                        <Text as='p' color='prominent' weight='bold' align='center' size='xs' line_height='xs'>
-                            {general_messages.getMT5LicenceNotes(account_type_name, 'bvi')}
-                        </Text>
-                    </div>
-                )}
-                {poi_verified_for_vanuatu && poa_verified && jurisdiction_selected_shortcode === 'vanuatu' && (
-                    <div className={`${card_classname}__footnote`}>
-                        <Text as='p' color='prominent' weight='bold' align='center' size='xs' line_height='xs'>
-                            {general_messages.getMT5LicenceNotes(account_type_name, 'vanuatu')}
-                        </Text>
-                    </div>
-                )}
-                {poi_verified_for_labuan_bvi && poa_verified && jurisdiction_selected_shortcode === 'labuan' && (
-                    <div className={`${card_classname}__footnote`}>
-                        <Text as='p' color='prominent' weight='bold' align='center' size='xs' line_height='xs'>
-                            {general_messages.getMT5LicenceNotes(account_type_name, 'labuan')}
-                        </Text>
-                    </div>
-                )}
-                {is_fully_authenticated && jurisdiction_selected_shortcode === 'maltainvest' && (
-                    <div className={`${card_classname}__footnote`}>
-                        <Text as='p' color='prominent' weight='bold' align='center' size='xs' line_height='xs'>
-                            {general_messages.getMT5LicenceNotes(account_type_name, 'maltainvest')}
-                        </Text>
-                    </div>
-                )}
-                {poi_poa_none && jurisdiction_selected_shortcode && jurisdiction_selected_shortcode !== 'svg' && (
-                    <Text
-                        as='p'
-                        color='prominent'
-                        align='center'
-                        size='xs'
-                        weight='bold'
-                        line_height='xs'
-                        className={`${card_classname}__footnote`}
-                    >
-                        <Localize i18n_default_text='To create this account first we need your proof of identity and address.' />
-                    </Text>
-                )}
-
-                {jurisdiction_selected_shortcode &&
-                    jurisdiction_selected_shortcode === 'vanuatu' &&
-                    need_poi_for_vanuatu &&
-                    poa_acknowledged &&
-                    !poi_poa_none && (
-                        <Text
-                            as='p'
-                            color='prominent'
-                            align='center'
-                            size='xs'
-                            weight='bold'
-                            line_height='xs'
-                            className={`${card_classname}__footnote`}
-                        >
-                            <Localize i18n_default_text='To create this account first we need you to resubmit your proof of identity.' />
-                        </Text>
-                    )}
-                {jurisdiction_selected_shortcode &&
-                    (jurisdiction_selected_shortcode === 'bvi' ||
-                        jurisdiction_selected_shortcode === 'labuan' ||
-                        jurisdiction_selected_shortcode === 'maltainvest') &&
-                    need_poi_for_bvi_labuan &&
-                    poa_acknowledged &&
-                    !poi_poa_none && (
-                        <Text
-                            as='p'
-                            color='prominent'
-                            align='center'
-                            size='xs'
-                            weight='bold'
-                            line_height='xs'
-                            className={`${card_classname}__footnote`}
-                        >
-                            <Localize i18n_default_text='To create this account first we need you to resubmit your proof of identity.' />
-                        </Text>
-                    )}
-                {poa_failed &&
-                    !poa_acknowledged &&
-                    !poi_failed &&
-                    !poi_poa_none &&
-                    jurisdiction_selected_shortcode &&
-                    jurisdiction_selected_shortcode !== 'svg' && (
-                        <Text
-                            as='p'
-                            color='prominent'
-                            align='center'
-                            size='xs'
-                            weight='bold'
-                            line_height='xs'
-                            className={`${card_classname}__footnote`}
-                        >
-                            <Localize i18n_default_text='To create this account first we need you to resubmit your proof of address.' />
-                        </Text>
-                    )}
-
-                {poa_failed &&
-                    !poa_acknowledged &&
-                    jurisdiction_selected_shortcode &&
-                    jurisdiction_selected_shortcode === 'vanuatu' &&
-                    need_poi_for_vanuatu && (
-                        <Text
-                            as='p'
-                            color='prominent'
-                            align='center'
-                            size='xs'
-                            weight='bold'
-                            line_height='xs'
-                            className={`${card_classname}__footnote`}
-                        >
-                            <Localize i18n_default_text='To create this account first we need you to resubmit your proof of identity and address.' />
-                        </Text>
-                    )}
-
-                {poa_failed &&
-                    !poa_acknowledged &&
-                    jurisdiction_selected_shortcode &&
-                    (jurisdiction_selected_shortcode === 'bvi' ||
-                        jurisdiction_selected_shortcode === 'labuan' ||
-                        jurisdiction_selected_shortcode === 'maltainvest') &&
-                    need_poi_for_bvi_labuan && (
-                        <Text
-                            as='p'
-                            color='prominent'
-                            align='center'
-                            size='xs'
-                            weight='bold'
-                            line_height='xs'
-                            className={`${card_classname}__footnote`}
-                        >
-                            <Localize i18n_default_text='To create this account first we need you to resubmit your proof of identity and address.' />
-                        </Text>
-                    )}
-
-                {poa_acknowledged &&
-                    poi_acknowledged_for_vanuatu &&
-                    !poi_poa_verified &&
-                    jurisdiction_selected_shortcode &&
-                    jurisdiction_selected_shortcode === 'vanuatu' && (
-                        <div className={`${card_classname}__footnote--pending`}>
-                            <Text as='p' align='center' color='yellow' weight='bold' size='xs' line_height='xs'>
-                                <Localize i18n_default_text='You will be able to open this account once your submitted documents have been verified.' />
-                            </Text>
-                        </div>
-                    )}
-
-                {poa_acknowledged &&
-                    poi_acknowledged_for_bvi_labuan &&
-                    !poi_poa_verified &&
-                    jurisdiction_selected_shortcode &&
-                    (jurisdiction_selected_shortcode === 'bvi' ||
-                        jurisdiction_selected_shortcode === 'labuan' ||
-                        jurisdiction_selected_shortcode === 'maltainvest') && (
-                        <div className={`${card_classname}__footnote--pending`}>
-                            <Text as='p' align='center' color='yellow' weight='bold' size='xs' line_height='xs'>
-                                <Localize i18n_default_text='You will be able to open this account once your submitted documents have been verified.' />
-                            </Text>
-                        </div>
-                    )}
-            </>
-        );
-    };
-
     return (
         <>
             <div className={`${card_classname}__wrapper`}>
@@ -742,7 +566,9 @@ const JurisdictionModalContent = ({
                     />
                 )}
             </div>
-            <ModalFootNote />
+            <div>
+                <ModalFootNote card_classname={`${card_classname}__footnote`} />
+            </div>
             <CfdCheckBoxForAccounts
                 is_checked={checked}
                 onCheck={() => setChecked(!checked)}

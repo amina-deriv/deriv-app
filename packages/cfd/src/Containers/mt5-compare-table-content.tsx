@@ -333,53 +333,34 @@ const DMT5CompareModalContent = ({
             case 'synthetic_bvi':
             case 'financial_bvi':
                 setJurisdictionSelectedShortcode('bvi');
-                if (poi_poa_verified) {
-                    if (!has_submitted_personal_details) {
-                        toggleCFDPersonalDetailsModal();
-                    } else {
-                        toggleCFDTncModal();
-                    }
+                if (poi_poa_verified && !has_submitted_personal_details) {
+                    toggleCFDPersonalDetailsModal();
                 } else {
-                    toggleCFDVerificationModal();
+                    toggleCFDTncModal();
                 }
                 break;
             case 'financial_maltainvest':
                 setJurisdictionSelectedShortcode('maltainvest');
-                if (poi_poa_verified) {
-                    toggleCFDTncModal();
-                } else {
-                    toggleCFDVerificationModal();
-                }
+                toggleCFDTncModal();
                 break;
 
             case 'financial_labuan':
                 setJurisdictionSelectedShortcode('labuan');
-                if (poi_poa_verified) {
-                    if (!has_submitted_personal_details) {
-                        toggleCFDPersonalDetailsModal();
-                    } else {
-                        toggleCFDTncModal();
-                    }
+                if (poi_poa_verified && !has_submitted_personal_details) {
+                    toggleCFDPersonalDetailsModal();
                 } else {
-                    toggleCFDVerificationModal();
+                    toggleCFDTncModal();
                 }
                 break;
 
             case 'financial_vanuatu':
                 setJurisdictionSelectedShortcode('vanuatu');
-                if (need_poi_for_vanuatu) {
-                    toggleCFDVerificationModal();
-                } else if (poi_poa_verified) {
-                    if (!has_submitted_personal_details) {
-                        toggleCFDPersonalDetailsModal();
-                    } else {
-                        toggleCFDTncModal();
-                    }
+                if (poi_poa_verified && !has_submitted_personal_details) {
+                    toggleCFDPersonalDetailsModal();
                 } else {
-                    toggleCFDVerificationModal();
+                    toggleCFDTncModal();
                 }
                 break;
-
             default:
         }
     };

@@ -192,6 +192,11 @@ export const getIdentityStatusInfo = account_status => {
         idv_status === 'verified' || onfido_status === 'verified' || manual_status === 'verified';
     const poa_verified = poa_status === 'verified';
 
+    const poa_poi_verified_for_labuan_bvi = poi_verified_for_vanuatu && poa_verified;
+    const poa_poi_verified_for_vanuatu = poi_verified_for_labuan_bvi && poa_verified;
+
+    const poi_poa_none = poi_status === 'none' || poa_status === 'none';
+
     return {
         poa_status,
         poi_status,
@@ -211,5 +216,8 @@ export const getIdentityStatusInfo = account_status => {
         poi_verified_for_vanuatu,
         poi_verified_for_labuan_bvi,
         poa_verified,
+        poa_poi_verified_for_labuan_bvi,
+        poa_poi_verified_for_vanuatu,
+        poi_poa_none,
     };
 };

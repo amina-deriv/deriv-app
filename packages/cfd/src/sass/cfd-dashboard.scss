@@ -555,10 +555,19 @@
         @include desktop {
             width: 99.2rem;
         }
+        
+        .dc-text{
+            text-align: center;
+            font-weight:bold ;
+            font-size: 1.4rem;
+            line-height: 1.4rem;;
+        }
 
         &--pending {
-            color: #ffad3a;
             margin-top: 2.4rem;
+            .dc-text{
+                color: #ffad3a;
+            }
         }
     }
 
@@ -2259,6 +2268,13 @@
             gap: 0.8rem;
         }
     }
+}
+
+.amina{
+    // {/* <Text as='p' align='left' size='xs' line_height='m'>
+    //                 {general_messages.getMT5LicenceNotes(account_type_name, jurisdiction_selected_shortcode)}
+    //             </Text> */}
+
 }
 
 /* stylelint-enable */

@@ -2,11 +2,13 @@ import React from 'react';
 import classNames from 'classnames';
 import RootStore from 'Stores/index';
 import { connect } from 'Stores/connect';
-import { Dialog, Text, Button } from '@deriv/components';
+import { Dialog, Button } from '@deriv/components';
 import { TOpenAccountTransferMeta } from '../Components/props.types';
 import { localize } from '@deriv/translations';
-import { general_messages } from '../Constants/cfd-shared-strings';
+import { getIdentityStatusInfo } from '@deriv/shared';
 import CfdCheckBoxForAccounts from '../Components/cfd-checkbox-for-accounts';
+import ModalFootNote from '../Components/cfd-modal-footnote';
+import { GetAccountStatus } from '@deriv/api-types';
 
 type TCFDTncModalProps = {
     disableApp: () => void;
@@ -20,6 +22,7 @@ type TCFDTncModalProps = {
         category: string;
     };
     jurisdiction_selected_shortcode: string;
+    account_status: GetAccountStatus;
 };
 
 const CFDTncModal = ({
@@ -31,6 +34,7 @@ const CFDTncModal = ({
     openPasswordModal,
     account_type,
     jurisdiction_selected_shortcode,
+    account_status,
 }: TCFDTncModalProps) => {
     const [is_checked, setIsChecked] = React.useState(false);
 
@@ -43,32 +47,23 @@ const CFDTncModal = ({
     };
     const handleNext = () => {
         toggleCFDTncModal();
-        openPasswordModal(account_type);
     };
-    const account_type_name = account_type && account_type.type;
+
     const ModalContentForTncModal = () => (
         <>
             <div className='cfd-tnc-dialog-content'>
-                <Text as='p' align='left' size='xs' line_height='m'>
-                    {general_messages.getMT5LicenceNotes(account_type_name, jurisdiction_selected_shortcode)}
-                </Text>
+                <ModalFootNote />
                 <div>
                     <CfdCheckBoxForAccounts
                         is_checked={is_checked}
                         onCheck={() => setIsChecked(!is_checked)}
-                        class_name={`jurisdiction-checkbox`}
+                        class_name='jurisdiction-checkbox'
                     />
                 </div>
             </div>
             <div className='cfd-tnc-dialog-content--footer'>
                 <Button text={localize('Back')} onClick={handleCancel} large secondary />
-                <Button
-                    text={localize('Next')}
-                    onClick={handleNext}
-                    disabled={jurisdiction_selected_shortcode !== 'svg' && !is_checked}
-                    large
-                    primary
-                />
+                <Button text={localize('Next')} onClick={handleNext} disabled={!isNextButtonEnabled()} large primary />
             </div>
         </>
     );
@@ -87,7 +82,7 @@ const CFDTncModal = ({
         </Dialog>
     );
 };
-export default connect(({ ui, modules }: RootStore) => ({
+export default connect(({ client, ui, modules }: RootStore) => ({
     disableApp: ui.disableApp,
     enableApp: ui.enableApp,
     is_cfd_tnc_modal_visible: modules.cfd.is_cfd_tnc_modal_visible,
@@ -95,4 +90,5 @@ export default connect(({ ui, modules }: RootStore) => ({
     toggleCompareAccounts: modules.cfd.toggleCompareAccountsModal,
     account_type: modules.cfd.account_type,
     jurisdiction_selected_shortcode: modules.cfd.jurisdiction_selected_shortcode,
+    account_status: client.account_status,
 }))(CFDTncModal);
