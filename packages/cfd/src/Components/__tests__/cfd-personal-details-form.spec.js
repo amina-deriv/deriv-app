@@ -115,7 +115,7 @@ describe('<CFDPersonalDetailsForm />', () => {
         expect(screen.getByRole('textbox', { name: /tax residence/i })).toBeInTheDocument();
         expect(screen.getByRole('textbox', { name: /tax identification number/i })).toBeInTheDocument();
         expect(screen.getByText(/account opening reason/i)).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /next/i })).toBeEnabled();
+        expect(screen.getByRole('button', { name: /next/i })).toBeDisabled();
     });
 
     it('should not render scrollbars or modal footer wrapper on mobile', () => {
@@ -141,20 +141,20 @@ describe('<CFDPersonalDetailsForm />', () => {
         expect(screen.queryByTestId('dt_cfd_details_form_description')).not.toBeInTheDocument();
     });
 
-    it('should disable Citizenship and Tax residence fields if they were submitted earlier & is_fully_authenticated is true', () => {
+    it('should disable Citizenship and Tax residence fields if they were submitted earlier ', () => {
         const values = {
             citizen: 'Indonesia',
             tax_residence: 'Indonesia',
             tax_identification_number: '',
             account_opening_reason: '',
         };
-        render(<CFDPersonalDetailsForm {...props} is_fully_authenticated value={values} />);
+        render(<CFDPersonalDetailsForm {...props} value={values} />);
 
         expect(screen.getByRole('textbox', { name: /citizenship/i })).toBeDisabled();
         expect(screen.getByRole('textbox', { name: /tax residence/i })).toBeDisabled();
         expect(screen.getByRole('textbox', { name: /tax identification number/i })).toBeEnabled();
         expect(screen.getByText(/account opening reason/i)).toBeEnabled();
-        expect(screen.getByRole('button', { name: /next/i })).toBeEnabled();
+        expect(screen.getByRole('button', { name: /next/i })).toBeDisabled();
     });
 
     it('should show an error message received from server that is passed via props as form_error', () => {
@@ -163,7 +163,7 @@ describe('<CFDPersonalDetailsForm />', () => {
 
         expect(screen.getByTestId('form_submit_error')).toHaveClass('dc-icon');
         expect(screen.getByText(form_error)).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /next/i })).toBeEnabled();
+        expect(screen.getByRole('button', { name: /next/i })).toBeDisabled();
     });
 
     it('should enable the Next button for form submission when all required fields are filled', async () => {

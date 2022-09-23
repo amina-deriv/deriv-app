@@ -24,7 +24,6 @@ import { Localize, localize } from '@deriv/translations';
 type TCFDPersonalDetailsFormProps = {
     changeable_fields?: string[];
     has_previous_button?: boolean;
-    is_fully_authenticated: boolean;
     is_in_personal_details_modal?: boolean;
     is_loading: boolean;
     landing_company: LandingCompany;
@@ -222,7 +221,6 @@ const submitForm: TSubmitForm = (values, actions, idx, onSubmitFn, is_dirty, res
 const CFDPersonalDetailsForm = ({
     changeable_fields,
     has_previous_button,
-    is_fully_authenticated,
     is_in_personal_details_modal,
     is_loading,
     landing_company,
@@ -273,17 +271,22 @@ const CFDPersonalDetailsForm = ({
                 values,
                 setFieldValue,
                 isValid,
+                dirty,
             }: FormikProps<TFormValues>) => {
                 const citizenship_error = touched.citizen && errors.citizen;
                 const place_of_birth_error =
                     is_in_personal_details_modal && touched.place_of_birth && errors.place_of_birth;
                 const tax_residence_error = touched.tax_residence && errors.tax_residence;
                 const account_opening_reason_error = touched.account_opening_reason && errors.account_opening_reason;
-                const is_citizenship_disabled = !!(value.citizen && !changeable_fields?.includes('citizen'));
-                const is_place_of_birth_disabled =
-                    !!(value.place_of_birth && is_fully_authenticated) ||
-                    changeable_fields?.every(field => field !== 'place_of_birth');
-                const is_tax_residence_disabled = !!(value.tax_residence && is_fully_authenticated);
+                const is_citizenship_disabled = !!value.citizen && !changeable_fields?.includes('citizen');
+                const is_place_of_birth_disabled = !!(
+                    value.place_of_birth && !changeable_fields?.includes('place_of_birth')
+                );
+                const is_tax_residence_disabled = !!(
+                    value.tax_residence && !changeable_fields?.includes('tax_residence')
+                );
+                const is_account_opening_reason_disabled =
+                    !!value.account_opening_reason && !changeable_fields?.includes('account_opening_reason');
                 const handleItemSelection = (item: ResidenceList[0], _field: string) => {
                     const item_value = item.value ? item.text : '';
                     setFieldValue(_field, item_value, true);
@@ -307,6 +310,7 @@ const CFDPersonalDetailsForm = ({
                                 ref={setRef}
                                 onSubmit={handleSubmit}
                                 autoComplete='off'
+                                noValidate
                             >
                                 <Div100vhContainer
                                     className='details-form'
@@ -491,6 +495,7 @@ const CFDPersonalDetailsForm = ({
                                                                 name={field.name}
                                                                 list={account_opening_reason}
                                                                 value={values.account_opening_reason}
+                                                                disabled={is_account_opening_reason_disabled}
                                                                 onChange={handleChange}
                                                                 handleBlur={handleBlur}
                                                                 error={account_opening_reason_error}
@@ -505,6 +510,7 @@ const CFDPersonalDetailsForm = ({
                                                                 label={localize('Account opening reason')}
                                                                 list_items={account_opening_reason}
                                                                 value={values.account_opening_reason}
+                                                                disabled={is_account_opening_reason_disabled}
                                                                 error={account_opening_reason_error}
                                                                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                                                                     handleChange(e);
@@ -526,7 +532,9 @@ const CFDPersonalDetailsForm = ({
                                     {form_error && <FormSubmitErrorMessage message={form_error} />}
                                     <FormSubmitButton
                                         cancel_label={localize('Previous')}
-                                        is_disabled={isSubmitting || !isValid}
+                                        is_disabled={
+                                            isSubmitting || !isValid || Object.keys(errors).length > 0 || !dirty
+                                        }
                                         is_absolute={isMobile()}
                                         label={localize('Next')}
                                         onCancel={() => handleCancel(values)}
