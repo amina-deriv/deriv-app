@@ -39,7 +39,6 @@ export default class TradersHubStore extends BaseStore {
     };
     is_account_transfer_modal_open = false;
     selected_account = {};
-    show_reset_investor_password = false;
 
     constructor(root_store) {
         super({ root_store });
@@ -108,7 +107,6 @@ export default class TradersHubStore extends BaseStore {
             toggleRegulatorsCompareModal: action.bound,
             updatePlatformBalance: action.bound,
             showTopUpModal: action.bound,
-            setShowResetInvestorPassword: action.bound,
         });
 
         reaction(
@@ -755,10 +753,5 @@ export default class TradersHubStore extends BaseStore {
             type: data.market_type,
         });
         openTopUpModal();
-    }
-    setShowResetInvestorPassword(value) {
-        const { client, modules } = this.root_store;
-        const { setCFDPasswordResetModal } = modules.cfd;
-        setCFDPasswordResetModal(!!value);
     }
 }

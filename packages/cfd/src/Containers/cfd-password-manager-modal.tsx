@@ -305,10 +305,6 @@ const CFDPasswordManagerModal = ({
     selected_server,
     sendVerifyEmail,
 }: TCFDPasswordManagerModal) => {
-    if (is_visible) {
-        console.log('password  manager modal ');
-    }
-
     const multi_step_ref: React.MutableRefObject<undefined> = React.useRef();
     const [index, setIndex] = React.useState<number>(0);
 

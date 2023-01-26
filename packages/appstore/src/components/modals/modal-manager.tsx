@@ -123,7 +123,6 @@ const ModalManager = () => {
 
     getRealSyntheticAccountsExistingData(existing_accounts_data('synthetic'));
     getRealFinancialAccountsExistingData(existing_accounts_data('financial'));
-    console.log(trading_platform_mt5_password_reset);
 
     return (
         <React.Fragment>

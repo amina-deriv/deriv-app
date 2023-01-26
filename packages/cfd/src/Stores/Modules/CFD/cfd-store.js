@@ -591,7 +591,6 @@ export default class CFDStore extends BaseStore {
 
     setCFDPasswordResetModal(val) {
         this.is_cfd_reset_password_modal_enabled = !!val;
-        console.log(('is_cfd_reset_password_modal_enabled', val));
     }
 
     setDxtradeToken(response, server) {
