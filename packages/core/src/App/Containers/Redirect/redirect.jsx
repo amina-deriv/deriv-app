@@ -19,6 +19,7 @@ const Redirect = ({
     setNewEmail,
     toggleResetEmailModal,
     toggleUpdateEmailModal,
+    setShowResetInvestorPassword,
 }) => {
     const url_query_string = window.location.search;
     const url_params = new URLSearchParams(url_query_string);
@@ -150,6 +151,7 @@ const Redirect = ({
         case 'trading_platform_investor_password_reset': {
             localStorage.setItem('cfd_reset_password_code', code_param);
             const is_demo = localStorage.getItem('cfd_reset_password_intent')?.includes('demo');
+            setShowResetInvestorPassword(true);
             history.push(`${routes.mt5}#${is_demo ? 'demo' : 'real'}#reset-password`);
             redirected_to_route = true;
             break;
@@ -185,6 +187,7 @@ Redirect.propTypes = {
     history: PropTypes.object,
     openRealAccountSignup: PropTypes.func,
     setResetTradingPasswordModalOpen: PropTypes.func,
+    setShowResetInvestorPassword: PropTypes.func,
     setVerificationCode: PropTypes.func,
     setNewEmail: PropTypes.func,
     toggleAccountSignupModal: PropTypes.func,
@@ -195,7 +198,7 @@ Redirect.propTypes = {
 };
 
 export default withRouter(
-    connect(({ client, ui }) => ({
+    connect(({ client, ui, traders_hub }) => ({
         currency: client.currency,
         loginid: client.loginid,
         is_eu: client.is_eu,
@@ -210,5 +213,6 @@ export default withRouter(
         setNewEmail: client.setNewEmail,
         toggleResetEmailModal: ui.toggleResetEmailModal,
         toggleUpdateEmailModal: ui.toggleUpdateEmailModal,
+        setShowResetInvestorPassword: traders_hub.setShowResetInvestorPassword,
     }))(Redirect)
 );

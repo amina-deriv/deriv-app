@@ -132,6 +132,8 @@ const CFDResetPasswordModal = ({
         };
 
         WS.tradingPlatformInvestorPasswordReset(request).then((response: { error: TError; password_type: string }) => {
+            console.log(response);
+
             if (response?.error?.code) {
                 renderErrorBox(response.error);
             } else {
@@ -143,6 +145,7 @@ const CFDResetPasswordModal = ({
                 clearAddressBar();
             }
             setSubmitting(false);
+            console.log('state', state);
         });
     };
     const getIsListFetched = () => {
@@ -150,6 +153,9 @@ const CFDResetPasswordModal = ({
     };
 
     const is_invalid_investor_token = !getIsListFetched() && localStorage.getItem('cfd_reset_password_code');
+    if (is_cfd_reset_password_modal_enabled && !is_invalid_investor_token) {
+        console.log('reset');
+    }
 
     return (
         <Modal
