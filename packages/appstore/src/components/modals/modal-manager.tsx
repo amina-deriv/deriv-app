@@ -129,7 +129,6 @@ const ModalManager = () => {
             <JurisdictionModal context={store} openPasswordModal={openRealPasswordModal} />
             <CFDPasswordModal context={store} platform={platform} />
             <CFDDbviOnBoarding context={store} />
-            <CFDResetPasswordModal context={store} platform={'mt5'} />
             <CFDServerErrorDialog context={store} />
             <CFDTopUpDemoModal
                 context={store}

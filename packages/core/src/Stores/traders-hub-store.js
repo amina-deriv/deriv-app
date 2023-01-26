@@ -66,7 +66,6 @@ export default class TradersHubStore extends BaseStore {
             selected_account_type: observable,
             selected_platform_type: observable,
             selected_region: observable,
-            show_reset_investor_password: observable,
             open_failed_verification_for: observable,
             can_get_more_cfd_mt5_accounts: computed,
             closeModal: action.bound,
