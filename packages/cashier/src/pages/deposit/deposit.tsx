@@ -13,14 +13,14 @@ import RecentTransaction from '../../components/recent-transaction';
 import CryptoDeposit from './crypto-deposit';
 import DepositLocked from './deposit-locked';
 import SideNote from '../../components/side-note';
+import { useCashierStore } from '../../stores/useCashierStores';
 
 type TDeposit = {
     setSideNotes: (notes: object | null) => void;
 };
 
 const Deposit = observer(({ setSideNotes }: TDeposit) => {
-    const is_deposit_locked = useDepositLocked();
-    const { client, modules } = useStore();
+    const { client } = useStore();
     const {
         can_change_fiat_currency,
         currency,
@@ -31,8 +31,7 @@ const Deposit = observer(({ setSideNotes }: TDeposit) => {
         landing_company_shortcode,
         is_pre_appstore,
     } = client;
-    const { cashier } = modules;
-    const { iframe, deposit, transaction_history, general_store } = cashier;
+    const { iframe, deposit, transaction_history, general_store } = useCashierStore();
     const { clearIframe, iframe_height, iframe_url } = iframe;
     const { container, error, onMountDeposit: onMount } = deposit;
     const {
@@ -51,6 +50,7 @@ const Deposit = observer(({ setSideNotes }: TDeposit) => {
         setIsDeposit,
         cashier_route_tab_index: tab_index,
     } = general_store;
+    const is_deposit_locked = useDepositLocked();
 
     const is_fiat_currency_banner_visible_for_MF_clients =
         landing_company_shortcode === 'maltainvest' && !is_crypto && !can_change_fiat_currency && !!iframe_height;

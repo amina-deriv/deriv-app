@@ -16,8 +16,9 @@ import { localize } from '@deriv/translations';
 import AccountPromptDialog from '../../components/account-prompt-dialog';
 import ErrorDialog from '../../components/error-dialog';
 import { TCommonStore, TRoute, TUiStore } from '../../types';
-import './cashier.scss';
 import { observer, useStore } from '@deriv/stores';
+import { useCashierStore } from '../../stores/useCashierStores';
+import './cashier.scss';
 
 type TCashierProps = RouteComponentProps & {
     routes: TRoute[];
@@ -42,8 +43,7 @@ type TCashierOptions = {
 };
 
 const Cashier = observer(({ history, location, routes: routes_config }: TCashierProps) => {
-    const { common, ui, client, modules } = useStore();
-    const { cashier } = modules;
+    const { common, ui, client } = useStore();
     const {
         withdraw,
         general_store,
@@ -53,7 +53,7 @@ const Cashier = observer(({ history, location, routes: routes_config }: TCashier
         payment_agent_transfer,
         payment_agent,
         account_prompt_dialog,
-    } = cashier;
+    } = useCashierStore();
     const { error } = withdraw;
     const {
         is_cashier_onboarding,
