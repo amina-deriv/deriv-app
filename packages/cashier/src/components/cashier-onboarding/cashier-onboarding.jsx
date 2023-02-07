@@ -26,7 +26,6 @@ const CashierOnboarding = observer(({ setSideNotes }) => {
     const {
         has_set_currency,
         onMountCashierOnboarding,
-        is_cashier_onboarding,
         setIsCashierOnboarding,
         setIsDeposit,
         setDepositTarget,
@@ -84,7 +83,7 @@ const CashierOnboarding = observer(({ setSideNotes }) => {
             setSideNotes([<CashierOnboardingSideNote key={0} is_crypto={is_crypto} />]);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [is_switching, accounts, is_landing_company_loaded, is_cashier_onboarding]);
+    }, [is_switching, accounts, is_landing_company_loaded]);
 
     const openRealAccount = target => {
         openRealAccountSignup('choose');
