@@ -68,11 +68,8 @@ const PersonalDetailsForm = ({
     const getNameAndDobLabels = () => {
         const is_asterisk_needed = is_svg || is_eu_user || is_rendered_for_onfido || is_qualified_for_idv;
         const first_name_label = is_appstore || is_asterisk_needed ? localize('First name*') : localize('First name');
-        const last_name_label = is_appstore
-            ? localize('Family name*')
-            : is_asterisk_needed
-            ? localize('Last name*')
-            : localize('Last name');
+        const last_name_text = is_asterisk_needed ? localize('Last name*') : localize('Last name');
+        const last_name_label = is_appstore ? localize('Family name*') : last_name_text;
         const dob_label = is_appstore || is_asterisk_needed ? localize('Date of birth*') : localize('Date of birth');
 
         return {
@@ -436,7 +433,7 @@ const PersonalDetailsForm = ({
                                         onClick={e => {
                                             setIsTaxResidencePopoverOpen(false);
                                             setIsTinPopoverOpen(true);
-                                            e.stopPropagation();
+                                            if (e.target.tagName !== 'A') e.stopPropagation();
                                         }}
                                     >
                                         <Popover
