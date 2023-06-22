@@ -286,6 +286,7 @@ const mock = (): TStores & { is_mock: boolean } => {
             setTwoFAChangedStatus: jest.fn(),
             real_account_creation_unlock_date: 0,
             setPrevAccountType: jest.fn(),
+            prev_account_type: 'demo',
         },
         common: {
             error: {
@@ -321,6 +322,7 @@ const mock = (): TStores & { is_mock: boolean } => {
             is_cashier_visible: false,
             is_closing_create_real_account_modal: false,
             is_dark_mode_on: false,
+            is_from_signup_account: false,
             is_language_settings_modal_on: false,
             is_mobile: false,
             is_reports_visible: false,
@@ -335,6 +337,7 @@ const mock = (): TStores & { is_mock: boolean } => {
             notification_messages_ui: null,
             openRealAccountSignup: jest.fn(),
             setIsClosingCreateRealAccountModal: jest.fn(),
+            setIsFromSignupAccount: jest.fn(),
             setRealAccountSignupEnd: jest.fn(),
             shouldNavigateAfterChooseCrypto: jest.fn(),
             toggleLanguageSettingsModal: jest.fn(),
@@ -377,6 +380,7 @@ const mock = (): TStores & { is_mock: boolean } => {
             toggleRegulatorsCompareModal: jest.fn(),
             selected_region: '',
             is_demo: false,
+            is_demo_low_risk: false,
             financial_restricted_countries: false,
             selected_account_type: 'real',
             no_CR_account: false,
@@ -385,6 +389,7 @@ const mock = (): TStores & { is_mock: boolean } => {
             openFailedVerificationModal: jest.fn(),
             setTogglePlatformType: jest.fn(),
             toggleAccountTransferModal: jest.fn(),
+            toggleIsTourOpen: jest.fn(),
             selectAccountType: jest.fn(),
         },
         menu: {

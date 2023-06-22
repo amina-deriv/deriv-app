@@ -217,6 +217,7 @@ type TClientStore = {
     };
     loginid?: string;
     pre_switch_broadcast: boolean;
+    prev_account_type: string;
     residence: string;
     responseMt5LoginList: ({
         mt5_login_list,
@@ -317,6 +318,7 @@ type TUiStore = {
     has_real_account_signup_ended: boolean;
     is_cashier_visible: boolean;
     is_closing_create_real_account_modal: boolean;
+    is_from_signup_account: boolean;
     is_dark_mode_on: boolean;
     is_reports_visible: boolean;
     is_language_settings_modal_on: boolean;
@@ -331,6 +333,7 @@ type TUiStore = {
     setDarkMode: (is_dark_mode_on: boolean) => boolean;
     setReportsTabIndex: (value: number) => void;
     setIsClosingCreateRealAccountModal: (value: boolean) => void;
+    setIsFromSignupAccount: (value: boolean) => void;
     setRealAccountSignupEnd: (status: boolean) => void;
     setSubSectionIndex: (index: number) => void;
     shouldNavigateAfterChooseCrypto: (value: string) => void;
@@ -409,8 +412,10 @@ type TTradersHubStore = {
     is_eu_user: boolean;
     setTogglePlatformType: (platform_type: string) => void;
     is_real: boolean;
+    is_demo_low_risk: boolean;
     selectRegion: (region: string) => void;
     toggleRegulatorsCompareModal: () => void;
+    toggleIsTourOpen: (is_tour_open: boolean) => void;
     selected_region: string;
     openFailedVerificationModal: (selected_account_type: string) => void;
     multipliers_account_status: string;
