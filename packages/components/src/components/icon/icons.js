@@ -380,6 +380,7 @@ import './common/ic-email-changed.svg';
 import './common/ic-email-firewall.svg';
 import './common/ic-email-outline-new.svg';
 import './common/ic-email-outline.svg';
+import './common/ic-email-send.svg';
 import './common/ic-email-sent-dashboard.svg';
 import './common/ic-email-sent-expired.svg';
 import './common/ic-email-sent-p2p.svg';

@@ -586,6 +586,7 @@ type TUiStore = {
     is_closing_create_real_account_modal: boolean;
     is_kyc_information_submitted_modal_open: boolean;
     is_dark_mode_on: boolean;
+    is_email_verification_required: boolean;
     is_loading: boolean;
     is_reports_visible: boolean;
     is_route_modal_on: boolean;
@@ -621,6 +622,7 @@ type TUiStore = {
     setAppContentsScrollRef: (ref: React.MutableRefObject<null | HTMLDivElement>) => void;
     setCurrentFocus: (value: string | null) => void;
     setDarkMode: (is_dark_mode_on: boolean) => boolean;
+    setIsEmailVerificationRequired(value: boolean): void;
     setIsWalletModalVisible: (value: boolean) => void;
     setHasOnlyForwardingContracts: (has_only_forward_starting_contracts?: boolean) => void;
     setMobileLanguageMenuOpen: (is_mobile_language_menu_open: boolean) => void;

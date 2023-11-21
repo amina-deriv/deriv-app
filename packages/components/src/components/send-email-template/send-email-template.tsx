@@ -7,6 +7,7 @@ import Text from '../text';
 
 type TSendEmailTemplate = {
     className?: string;
+    icon?: string;
     lbl_no_receive: string;
     live_chat?: React.ReactNode;
     onClickSendEmail: () => void;
@@ -20,6 +21,7 @@ type TSendEmailTemplate = {
 const SendEmailTemplate = ({
     children,
     className,
+    icon,
     lbl_no_receive,
     live_chat,
     onClickSendEmail,
@@ -68,15 +70,10 @@ const SendEmailTemplate = ({
             }
         }, 1000);
     };
-
     return (
         <div className={classNames('send-email-template', { 'send-email-template-dashboard': is_appstore })}>
             <div className='send-email-template__sent'>
-                <Icon
-                    icon={is_appstore ? 'IcEmailSentDashboard' : 'IcEmailSent'}
-                    className='send-email-template__icon'
-                    size={128}
-                />
+                <Icon icon={icon ?? 'IcEmailSent'} className='send-email-template__icon' size={128} />
                 <Text as='h1' align='center' className='send-email-template__title' color='prominent' weight='bold'>
                     {title}
                 </Text>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { DesktopWrapper, MobileWrapper, Button, Text } from '@deriv/components';
+import { useNeedEmailVerification } from '@deriv/hooks';
 import { Localize, localize } from '@deriv/translations';
 import './add-options-account.scss';
 import { useStore, observer } from '@deriv/stores';
@@ -8,14 +9,14 @@ import { isMobile, ContentFlag } from '@deriv/shared';
 const AddOptions = observer(() => {
     const { client, traders_hub, ui } = useStore();
     const { is_real, content_flag } = traders_hub;
-    const { setShouldShowCooldownModal, openRealAccountSignup } = ui;
+    const { setShouldShowCooldownModal, openRealAccountSignup, setIsEmailVerificationRequired } = ui;
     const { real_account_creation_unlock_date } = client;
 
     const add_deriv_account_text = localize('You need a Deriv account to create a CFD account.');
     const add_deriv_account_btn = localize('Get a Deriv account');
 
     const eu_user = content_flag === ContentFlag.LOW_RISK_CR_EU || content_flag === ContentFlag.EU_REAL;
-
+    const need_user_email_verification = useNeedEmailVerification();
     return (
         <React.Fragment>
             <div className='add-options-account__title'>
@@ -35,6 +36,8 @@ const AddOptions = observer(() => {
                             } else {
                                 openRealAccountSignup('maltainvest');
                             }
+                        } else if (need_user_email_verification) {
+                            setIsEmailVerificationRequired(true);
                         } else {
                             openRealAccountSignup('svg');
                         }

@@ -10,6 +10,9 @@ type TSentEmailModal = {
     has_live_chat?: boolean;
     onClickSendEmail: (prop?: string) => void;
     onClose: () => void;
+    title?: React.ReactNode;
+    subtitle?: React.ReactNode;
+    icon?: string;
 };
 
 type TNoEmailContentItem = {
@@ -57,6 +60,9 @@ const SentEmailModal = ({
     has_live_chat = false,
     onClickSendEmail,
     onClose,
+    title,
+    subtitle,
+    icon,
 }: TSentEmailModal) => {
     const getSubtitle = () => {
         let subtitle: string | React.ReactElement = '';
@@ -117,13 +123,14 @@ const SentEmailModal = ({
     const sent_email_template: React.ReactElement = (
         <SendEmailTemplate
             className='sent-email'
-            subtitle={getSubtitle()}
-            title={localize('We’ve sent you an email')}
+            subtitle={subtitle ?? getSubtitle()}
+            title={title ?? localize('We’ve sent you an email')}
             lbl_no_receive={localize("Didn't receive the email?")}
             txt_resend={localize('Resend email')}
             txt_resend_in={localize('Resend email in')}
             onClickSendEmail={onClickSendEmail}
             live_chat={live_chat}
+            icon={icon}
         >
             {getNoEmailContentStrings().map(item => (
                 <div className='sent-email__content' key={item.key}>

@@ -9,6 +9,7 @@ import PlatformLoader from 'Components/pre-loader/platform-loader';
 import TradingAppCard from 'Components/containers/trading-app-card';
 import { BrandConfig } from 'Constants/platform-config';
 import { getHasDivider } from 'Constants/utils';
+import { useNeedEmailVerification } from '@deriv/hooks';
 
 const OptionsAndMultipliersListing = observer(() => {
     const { traders_hub, client, ui } = useStore();
@@ -16,7 +17,7 @@ const OptionsAndMultipliersListing = observer(() => {
         traders_hub;
     const { is_landing_company_loaded, is_eu, has_maltainvest_account, real_account_creation_unlock_date } = client;
 
-    const { setShouldShowCooldownModal, openRealAccountSignup, is_mobile } = ui;
+    const { setShouldShowCooldownModal, openRealAccountSignup, is_mobile, setIsEmailVerificationRequired } = ui;
 
     const low_risk_cr_non_eu = content_flag === ContentFlag.LOW_RISK_CR_NON_EU;
 
@@ -25,6 +26,7 @@ const OptionsAndMultipliersListing = observer(() => {
     const high_risk_cr = content_flag === ContentFlag.HIGH_RISK_CR;
 
     const cr_demo = content_flag === ContentFlag.CR_DEMO;
+    const need_user_email_verification = useNeedEmailVerification();
 
     const OptionsTitle = () => {
         if (is_mobile) return null;
@@ -86,9 +88,9 @@ const OptionsAndMultipliersListing = observer(() => {
                                 } else {
                                     openRealAccountSignup('maltainvest');
                                 }
-                            } else {
-                                openRealAccountSignup('svg');
-                            }
+                            } else if (need_user_email_verification) {
+                                setIsEmailVerificationRequired(true);
+                            } else openRealAccountSignup('svg');
                         }}
                     />
                 </div>

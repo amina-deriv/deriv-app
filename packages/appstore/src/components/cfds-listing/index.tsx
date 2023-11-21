@@ -11,7 +11,7 @@ import CompareAccount from 'Components/compare-account';
 import GetMoreAccounts from 'Components/get-more-accounts';
 import { getHasDivider } from 'Constants/utils';
 import './cfds-listing.scss';
-import { useCFDCanGetMoreMT5Accounts } from '@deriv/hooks';
+import { useCFDCanGetMoreMT5Accounts, useNeedEmailVerification } from '@deriv/hooks';
 
 const CFDsListing = observer(() => {
     const {
@@ -49,12 +49,13 @@ const CFDsListing = observer(() => {
     const { setAccountType } = cfd;
     const { is_landing_company_loaded, real_account_creation_unlock_date, account_status } = client;
     const { setAppstorePlatform } = common;
-    const { openDerivRealAccountNeededModal, setShouldShowCooldownModal } = ui;
+    const { openDerivRealAccountNeededModal, setShouldShowCooldownModal, setIsEmailVerificationRequired } = ui;
     const has_no_real_account = !has_any_real_account;
     const accounts_sub_text =
         !is_eu_user || is_demo_low_risk ? localize('Compare accounts') : localize('Account Information');
 
     const can_get_more_cfd_mt5_accounts = useCFDCanGetMoreMT5Accounts();
+    const need_user_email_verification = useNeedEmailVerification(); //TODO: change to correct BE status when BE is ready
     const {
         poi_pending_for_bvi_labuan_vanuatu,
         poi_resubmit_for_bvi_labuan_vanuatu,
@@ -202,6 +203,8 @@ const CFDsListing = observer(() => {
                                     if (existing_account.action_type === 'get') {
                                         if (real_account_creation_unlock_date && no_real_mf_account_eu_regulator) {
                                             setShouldShowCooldownModal(true);
+                                        } else if (need_user_email_verification) {
+                                            setIsEmailVerificationRequired(true);
                                         } else if (no_real_cr_non_eu_regulator || no_real_mf_account_eu_regulator) {
                                             openDerivRealAccountNeededModal();
                                         } else {
@@ -306,7 +309,9 @@ const CFDsListing = observer(() => {
                               platform={account.platform}
                               description={account.description}
                               onAction={() => {
-                                  if ((has_no_real_account || no_CR_account) && is_real) {
+                                  if (need_user_email_verification) {
+                                      setIsEmailVerificationRequired(true);
+                                  } else if ((has_no_real_account || no_CR_account) && is_real) {
                                       openDerivRealAccountNeededModal();
                                   } else {
                                       setAccountType({
@@ -381,7 +386,9 @@ const CFDsListing = observer(() => {
                             platform={account.platform}
                             description={account.description}
                             onAction={() => {
-                                if ((has_no_real_account || no_CR_account) && is_real) {
+                                if (need_user_email_verification) {
+                                    setIsEmailVerificationRequired(true);
+                                } else if ((has_no_real_account || no_CR_account) && is_real) {
                                     openDerivRealAccountNeededModal();
                                 } else {
                                     setAccountType({

@@ -173,6 +173,7 @@ export default class UIStore extends BaseStore {
 
     is_additional_kyc_info_modal_open = false;
     is_kyc_information_submitted_modal_open = false;
+    is_email_verification_required = false;
 
     getDurationFromUnit = unit => this[`duration_${unit}`];
 
@@ -256,6 +257,7 @@ export default class UIStore extends BaseStore {
             is_closing_create_real_account_modal: observable,
             is_dark_mode_on: observable,
             is_deriv_account_needed_modal_visible: observable,
+            is_email_verification_required: observable,
             is_wallet_modal_visible: observable,
 
             is_history_tab_active: observable,
@@ -379,6 +381,7 @@ export default class UIStore extends BaseStore {
             setShouldShowTradeAssessmentForm: action.bound,
             setShouldShowTradingAssessmentModal: action.bound,
             setShouldShowWarningModal: action.bound,
+            setIsEmailVerificationRequired: action.bound,
             setSubSectionIndex: action.bound,
             setTopUpInProgress: action.bound,
             setMT5MigrationModalEnabled: action.bound,
@@ -948,5 +951,9 @@ export default class UIStore extends BaseStore {
 
     toggleMT5MigrationModal() {
         this.is_mt5_migration_modal_open = !this.is_mt5_migration_modal_open;
+    }
+
+    setIsEmailVerificationRequired(value) {
+        this.is_email_verification_required = value;
     }
 }
