@@ -1,8 +1,8 @@
 import React from 'react';
 import { observer, useStore } from '@deriv/stores';
-// import { SentEmailModal } from '@deriv/account';
+import { SentEmailModal } from '@deriv/account';
 import { localize, Localize } from '@deriv/translations';
-import { Dialog, Text, SentEmailModal } from '@deriv/components';
+import { Dialog, Text } from '@deriv/components';
 
 const EmailVerificationRequiredModal = observer(() => {
     const { ui, client } = useStore();
