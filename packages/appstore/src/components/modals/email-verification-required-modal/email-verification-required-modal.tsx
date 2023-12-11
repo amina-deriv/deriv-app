@@ -10,6 +10,7 @@ const EmailVerificationRequiredModal = observer(() => {
     const { is_email_verification_required, setIsEmailVerificationRequired, disableApp, enableApp, is_mobile } = ui;
 
     const [should_show_sent_email_modal, setIsSentEmailModalOpen] = React.useState(false);
+
     if (should_show_sent_email_modal) {
         return (
             <SentEmailModal
@@ -35,7 +36,6 @@ const EmailVerificationRequiredModal = observer(() => {
 
     return (
         <Dialog
-            className='open-real-account-dialog'
             title={<Localize i18n_default_text='First, verify your email' />}
             confirm_button_text={localize('Verify email')}
             onConfirm={() => setIsSentEmailModalOpen(true)}
@@ -45,10 +45,16 @@ const EmailVerificationRequiredModal = observer(() => {
             disableApp={disableApp}
             enableApp={enableApp}
             is_closed_on_confirm
-            is_visible={is_email_verification_required}
+            is_visible={false}
         >
             <Text size={is_mobile ? 'xxs' : 'xs'}>
-                <Localize i18n_default_text='To get a real account and enjoy all the features on Deriv, you’ll need to confirm your email.' />
+                <Localize
+                    i18n_default_text='To create a real account on Deriv, please verify your email address <0>{{email}}</0> to access all of our features.'
+                    components={[<strong key={0} />]}
+                    values={{
+                        email,
+                    }}
+                />
             </Text>
         </Dialog>
     );
