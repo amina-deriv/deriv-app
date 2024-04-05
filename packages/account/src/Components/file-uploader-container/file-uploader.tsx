@@ -5,6 +5,7 @@ import { Localize, localize } from '@deriv/translations';
 import { getSupportedFiles, max_document_size, supported_filetypes } from '@deriv/shared';
 import { DropzoneOptions } from 'react-dropzone';
 import { observer, useStore } from '@deriv/stores';
+import UploadReminder from '../upload-reminder';
 
 type THandleRejectedFiles = DropzoneOptions['onDropRejected'];
 
@@ -39,17 +40,25 @@ const UploadMessage = observer(() => {
 const FileUploader = ({ onFileDrop, onError }: TFileUploaderProps) => {
     const [document_files, setDocumentFiles] = React.useState<File[]>([]);
     const [file_error, setFileError] = React.useState<string | null>(null);
+    const [has_shown_reminder, setHasShownReminder] = React.useState(false);
+    const [selected_files, setSelectedFiles] = React.useState<File[]>([]);
 
     React.useEffect(() => {
         if (document_files) {
-            onFileDrop(document_files);
+            // onFileDrop(document_files);
             onError?.('');
         }
     }, [document_files, onFileDrop, onError]);
 
-    const handleAcceptedFiles = (files: File[]) => {
-        if (files.length > 0) {
-            setDocumentFiles(files);
+    const handleSelectedFiles = (files: File[]) => {
+        setHasShownReminder(true);
+        setSelectedFiles(files);
+    };
+
+    const handleAcceptedFiles = () => {
+        if (selected_files.length > 0) {
+            setHasShownReminder(false);
+            setDocumentFiles(selected_files);
             setFileError(null);
             onError?.('');
         }
@@ -76,6 +85,7 @@ const FileUploader = ({ onFileDrop, onError }: TFileUploaderProps) => {
 
     return (
         <React.Fragment>
+            {has_shown_reminder && <UploadReminder handleAcceptedFiles={handleAcceptedFiles} />}
             <FileDropzone
                 accept={supported_filetypes}
                 error_message={localize('Please upload supported file type.')}
@@ -84,7 +94,7 @@ const FileUploader = ({ onFileDrop, onError }: TFileUploaderProps) => {
                 max_size={max_document_size}
                 message={<UploadMessage />}
                 multiple={false}
-                onDropAccepted={handleAcceptedFiles}
+                onDropAccepted={handleSelectedFiles}
                 onDropRejected={handleRejectedFiles}
                 validation_error_message={file_error}
                 value={document_files}
