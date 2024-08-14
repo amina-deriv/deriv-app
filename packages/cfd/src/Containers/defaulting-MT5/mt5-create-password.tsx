@@ -3,10 +3,10 @@ import { Formik, FormikErrors, FormikHelpers } from 'formik';
 import { FormSubmitButton, Icon, PasswordInput, PasswordMeter, Text } from '@deriv/components';
 import { getCFDPlatformLabel, getCFDPlatformNames, getErrorMessages } from '@deriv/shared';
 import { Localize, localize } from '@deriv/translations';
-import { useCfdStore } from '../Stores/Modules/CFD/Helpers/useCfdStores';
-import { CATEGORY, CFD_PLATFORMS } from '../Helpers/cfd-config';
-import '../sass/mt5-passwordmodal.scss';
-import CfdPasswordModalTnc from './cfd-password-modal-tnc';
+import { useCfdStore } from '../../Stores/Modules/CFD/Helpers/useCfdStores';
+import { CATEGORY, CFD_PLATFORMS } from '../../Helpers/cfd-config';
+import './mt5-passwordmodal.scss';
+import CfdPasswordModalTnc from '../cfd-password-modal-tnc';
 // first MT5 password
 
 export type TCFDPasswordFormValues = { password: string };
