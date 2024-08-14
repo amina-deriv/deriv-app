@@ -74,7 +74,7 @@ const MT5CreatePassword = ({
                             data-testid='dt_create_password'
                         >
                             <div className='cfd-password-modal__create-password-content'>
-                                <Icon icon='IcMt5OnePassword' width='100' height='100' />
+                                <Icon icon='IcMt5OnePassword' width='150' height='150' />
                             </div>
                             <Text size='xs' align='left' className='cfd-password-modal__create-password-description'>
                                 <Localize
