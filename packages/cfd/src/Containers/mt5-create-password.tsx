@@ -76,7 +76,12 @@ const MT5CreatePassword = ({
                             <div className='cfd-password-modal__create-password-content'>
                                 <Icon icon='IcMt5OnePassword' width='150' height='150' />
                             </div>
-                            <Text size='xs' align='left' className='cfd-password-modal__create-password-description'>
+                            <Text
+                                size='xs'
+                                align='left'
+                                className='cfd-password-modal__create-password-description'
+                                color='var(--text-prominent)'
+                            >
                                 <Localize
                                     i18n_default_text='Create a password for your {{platform}} account:'
                                     values={{ platform: getCFDPlatformNames(platform) }}
