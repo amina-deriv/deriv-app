@@ -38,7 +38,7 @@ import { getDxCompanies, getMtCompanies, TDxCompanies, TMtCompanies } from '../S
 import '../sass/cfd.scss';
 
 const MT5CreatePassword = makeLazyLoader(
-    () => moduleLoader(() => import('./defaulting-MT5/mt5-create-password')),
+    () => moduleLoader(() => import('./mt5-create-password/mt5-create-password')),
     () => <div />
 )();
 

@@ -5,7 +5,7 @@ import { getCFDPlatformLabel, getCFDPlatformNames, getErrorMessages } from '@der
 import { Localize, localize } from '@deriv/translations';
 import { useCfdStore } from '../../Stores/Modules/CFD/Helpers/useCfdStores';
 import { CATEGORY, CFD_PLATFORMS } from '../../Helpers/cfd-config';
-import './mt5-passwordmodal.scss';
+import './mt5-create-password.scss';
 import CfdPasswordModalTnc from '../cfd-password-modal-tnc';
 // first MT5 password
 

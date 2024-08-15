@@ -149,8 +149,8 @@ const ModalElement = ({
                 'dc-modal__container--is-confirmation-modal': is_confirmation_modal,
             })}
             style={{
-                height: height || 'auto',
-                width: width || 'auto',
+                height: height || '100%',
+                width: width || '100%',
             }}
         >
             {!is_risk_warning_visible && (header || title || rendered_title) && (
