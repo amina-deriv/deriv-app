@@ -68,11 +68,11 @@ const MT5CreatePassword = ({
                 validateForm,
             }) => (
                 <form onSubmit={handleSubmit}>
-                    <div className='mt5_password'>
-                        <div
-                            className='cfd-password-modal__content dc-modal__container_cfd-password-modal__body'
-                            data-testid='dt_create_password'
-                        >
+                    <div
+                        className='cfd-password-modal__content dc-modal__container_cfd-password-modal__body'
+                        data-testid='dt_create_password'
+                    >
+                        <div className='cfd-password-modal__create-password-body mt5-migration-modal__mobile-container'>
                             <div className='cfd-password-modal__create-password-content'>
                                 <Icon icon='IcMt5OnePassword' width='150' height='150' />
                             </div>
@@ -129,10 +129,13 @@ const MT5CreatePassword = ({
                                 onCheck={() => setChecked(prev => !prev)}
                                 need_tnc={need_tnc}
                             />
+                        </div>
+                        <div className='mt5-password-submit-button'>
                             <FormSubmitButton
                                 is_disabled={!values.password || !checked || Object.keys(errors).length > 0}
                                 is_loading={isSubmitting}
                                 label={localize('Create account')}
+                                // class='mt5-password-submit-button'
                             />
                         </div>
                     </div>
