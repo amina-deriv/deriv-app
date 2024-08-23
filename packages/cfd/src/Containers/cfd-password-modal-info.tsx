@@ -7,11 +7,15 @@ type CfdPasswordModalInfoProps = {
     jurisdiction_selected_shortcode: string;
     platform: string;
     product: string;
+    need_tnc: boolean;
 };
 
-const CfdPasswordModalInfo = ({ jurisdiction_selected_shortcode, platform, product }: CfdPasswordModalInfoProps) => {
-    const need_tnc = jurisdiction_selected_shortcode !== 'svg'; //TODO: check for default jurisdiction project
-
+const CfdPasswordModalInfo = ({
+    jurisdiction_selected_shortcode,
+    platform,
+    product,
+    need_tnc,
+}: CfdPasswordModalInfoProps) => {
     return (
         <div className='cfd-password-modal-info'>
             <div className='cfd-password-modal-info__icon'>
@@ -20,7 +24,7 @@ const CfdPasswordModalInfo = ({ jurisdiction_selected_shortcode, platform, produ
             <Text size='xxxs'>
                 {need_tnc ? (
                     <Localize
-                        i18n_default_text='You are adding your {{platform}} {{product}} account under {{company}}, regulated by the {{licence_name}}.'
+                        i18n_default_text='You are adding your {{platform}} {{product}} account under {{company}}, regulated by the {{licence_name}} .'
                         values={{
                             platform,
                             product,
