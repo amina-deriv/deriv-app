@@ -14,10 +14,9 @@
         &--pending {
             color: var(--status-warning-dark);
             background-color: var(--status-warning-transparent);
-            text-decoration: underline;
             font-weight: bold;
+            padding: 6px 7px;
         }
-
         &--needs_verification {
             background-color: var(--status-info-transparent);
             color: var(--status-info);
@@ -40,7 +39,6 @@
             border-color: var(--status-danger);
             color: var(--status-danger);
             font-weight: bold;
-            text-decoration: underline;
             background-color: var(--status-danger-transparent);
         }
 

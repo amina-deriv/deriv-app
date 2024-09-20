@@ -12,6 +12,7 @@ const getMT5StatusBadgeConfig = (mt5_account_status: TMT5AccountStatus) => {
             return {
                 text: <Localize i18n_default_text='In review' />,
                 icon: 'IcMt5Pending',
+                icon_size: '13',
             };
         case MT5_ACCOUNT_STATUS.FAILED:
             return {

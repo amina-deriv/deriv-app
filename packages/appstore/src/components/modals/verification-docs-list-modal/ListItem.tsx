@@ -29,6 +29,7 @@ const MT5BadgeStatus = (status: TAuthStatusCodes) => {
             return {
                 text: <Localize i18n_default_text='In review' />,
                 icon: 'IcMt5Pending',
+                icon_size: '13',
             };
         case AUTH_STATUS_CODES.REJECTED:
         case AUTH_STATUS_CODES.SUSPECTED:
@@ -70,7 +71,11 @@ const ListItem = observer(({ id, text, status, route }: TListItemProps) => {
             ) : (
                 <div className='verification-docs-list-modal__card'>
                     <StatusBadge account_status={status} icon={badge_icon} text={badge_text} icon_size={badge_size} />
-                    <LabelPairedChevronRightCaptionBoldIcon fill='var(--text-primary)' />
+                    {status === (AUTH_STATUS_CODES.REJECTED || AUTH_STATUS_CODES.SUSPECTED) ? (
+                        <LabelPairedChevronRightCaptionBoldIcon />
+                    ) : (
+                        <LabelPairedChevronRightCaptionBoldIcon fill='var(--text-disabled-1)' />
+                    )}
                 </div>
             )}
         </div>
