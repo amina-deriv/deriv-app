@@ -8,6 +8,7 @@
         &-list {
             width: 100%;
             &-item {
+                cursor: pointer;
                 display: flex;
                 min-height: 5.6rem;
                 align-items: center;
