@@ -34,6 +34,7 @@
         &--needs_verification {
             background-color: var(--status-info-transparent);
             color: var(--status-info);
+            text-decoration: underline;
             font-weight: bold;
         }
         &--failed,
@@ -43,6 +44,7 @@
             border-color: var(--status-danger);
             color: $color-status-danger;
             font-weight: bold;
+            text-decoration: underline;
             background-color: var(--status-danger-transparent);
         }
 
