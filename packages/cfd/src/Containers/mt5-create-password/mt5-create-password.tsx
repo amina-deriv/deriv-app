@@ -81,7 +81,7 @@ const MT5CreatePassword = ({
                                     size='xs'
                                     align='left'
                                     className='mt5-password-modal__create-password-description'
-                                    color='var(--text-prominent)'
+                                    fill='var(--text-prominent)'
                                 >
                                     <Localize
                                         i18n_default_text='Create a password for your {{platform}} account:'
